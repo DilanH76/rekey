@@ -1,4 +1,5 @@
 <?php
+session_start();
 
 // ROUTEUR DYNAMIQUE
 
@@ -6,14 +7,16 @@
 
     use App\Controller\{
         E404Controller,
-        HomeController
+        HomeController,
+        AuthController
     };
     use App\Service\{
-        DatabaseFactory
+        DatabaseFactory,
+        AuthService
     };
-    // use App\Repository\{
-
-    // };
+    use App\Repository\{
+        UserRepository
+    };
 
     $request = trim($_SERVER['REQUEST_URI'], '/');
     $params = explode('/', $request);
@@ -51,6 +54,11 @@
         },
         HomeController::class => function($pdo) {
             return new HomeController();
+        },
+        AuthController::class => function($pdo) {
+            $userRepository = new UserRepository($pdo);
+            $authService = new AuthService($userRepository);
+            return new AuthController($authService);
         }
     ];
 

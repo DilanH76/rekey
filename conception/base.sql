@@ -15,7 +15,7 @@ CREATE TABLE users(
    password VARCHAR(255) ,
    is_admin BOOLEAN,
    created_at DATETIME,
-   avatar BLOB,
+   avatar MEDIUMBLOB,
    PRIMARY KEY(id_user)
 ) ENGINE=InnoDB;
 
@@ -37,7 +37,7 @@ CREATE TABLE ads(
    title VARCHAR(100) ,
    description TEXT,
    price DECIMAL(10,2)  ,
-   cover_image BLOB,
+   cover_image MEDIUMBLOB,
    game_key VARCHAR(255) ,
    status VARCHAR(20) ,
    created_at DATETIME,
@@ -79,7 +79,7 @@ CREATE TABLE news(
    id_news INT AUTO_INCREMENT,
    title VARCHAR(255) ,
    content TEXT,
-   image_cover BLOB,
+   image_cover MEDIUMBLOB,
    created_at DATETIME,
    id_user INT NOT NULL,
    PRIMARY KEY(id_news),
