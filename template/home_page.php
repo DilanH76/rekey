@@ -1,12 +1,20 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ReKey</title>
-</head>
-<body>
-    <h1>Bienvenue !</h1>
+<?php
+$pageTitle = 'ReKey - Accueil';
+ob_start();
+?>
+
+<section class="container" style="text-align: center; padding: 150px 20px; min-height: 60vh;">
     
-</body>
-</html>
+    <h1 style="color: var(--cyan); font-size: 3rem; margin-bottom: 1.5rem;">
+        <?php if (isset($_SESSION['user_pseudo'])): ?>
+            Bienvenue, <?= htmlspecialchars($_SESSION['user_pseudo']) ?> ! 
+        <?php else: ?>
+            Bienvenue sur ReKey !
+        <?php endif; ?>
+    </h1>
+</section>
+
+<?php 
+$content = ob_get_clean(); 
+require __DIR__ . '/layout.php'; 
+?>

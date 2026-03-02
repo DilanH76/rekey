@@ -72,12 +72,59 @@ class UserRepository {
 
         return $user;
     }
+
+    public function findById(int $id): ?User
+    {
+        $sql="SELECT * FROM users WHERE id_user = :id_user";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute(['id_user'=> $id]);
+
+        $row = $stmt->fetch(\PDO::FETCH_ASSOC);
+        if (!$row) {
+            return null; // utilisateur non trouvé
+        }
+
+        // On recrée l'objet Entity User en utilisant le constructeur complet
+        $user = new User (
+            $row['last_name'],
+            $row['first_name'],
+            $row['pseudo'],
+            $row['email'],
+            $row['password'],
+            new DateTime($row['created_at']), // Reconversion en DateTime
+            $row['avatar'],
+            (bool)$row['is_admin'],          
+            $row['id_user']
+        );
+
+        return $user;
+    }
+
+    // Mettre à jour les informations du profil
+    public function updateProfile(User $user): bool {
+        $sql = "UPDATE users 
+                SET last_name = :last_name, 
+                    first_name = :first_name, 
+                    pseudo = :pseudo, 
+                    email = :email 
+                WHERE id_user = :id_user";
+                
+        $stmt = $this->pdo->prepare($sql);
+        return $stmt->execute([
+            'last_name' => $user->getLastName(),
+            'first_name' => $user->getFirstName(),
+            'pseudo' => $user->getPseudo(),
+            'email' => $user->getEmail(),
+            'id_user' => $user->getIdUser()
+        ]);
+    }
+    
 }
 
+
+
 // TODO autres fonctionnalitées à ajouter à termes : 
-// findById(int $id): ?User (Pour afficher le profil d'un membre)
 // findAll(): array (Pour le tableau de bord de Thomas l'Admin)
-// update(User $user): bool (Pour que Sarah change son avatar ou son pseudo)
 // delete(int $id): bool (Pour qu'un membre puisse supprimer son compte)
 // Autre ??? ( CRUD )
 
