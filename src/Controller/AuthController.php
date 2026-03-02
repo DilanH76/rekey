@@ -12,24 +12,37 @@ class AuthController {
         $this->authService = $authService;
     }
 
+    public function index(?array $params) {
+        header('Location: /Auth/login');
+        exit;
+    }
+
     // --- INSCRIPTION ---
 
     // Affiche le formulaire d'inscription
-    // URL: /Auth ou /Auth/index
-    public function index(?array $params) {
+    // URL: /Auth/register 
+    public function register(?array $params) {
+        // On initialise $errorMessage à null pour que le fichier HTML ne plante pas en essayant de l'afficher
+        $errorMessage = null;
         include __DIR__.'/../../template/register.php';
     }
 
     // Traite le formulaire d'inscription
-    // URL: /Auth/register
-    public function register(?array $params) {
-        // On tente directement l'action
+    // URL: /Auth/processRegister
+    public function processRegister(?array $params) {
+
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header('Location: /Auth/register');
+            exit;
+        }
+        
         try {
             // Le service fait tout le travail ( vérif email, mdr, hash, etc .. )
             $this->authService->registerUser($_POST);
 
             include __DIR__ . '/../../template/register.php';
             $this->modale("Inscription effectuée avec succès !Vous pouvez vous connecter.", true, "/Auth/login");
+            exit;
         } catch (Exception $err) {
             // Si il y'a une erreur jetée par le Service (email déjà pris etc)
             $errorMessage = $err->getMessage();
@@ -37,7 +50,8 @@ class AuthController {
             // On réaffiche le formulaire
             include __DIR__. '/../../template/register.php';
             // Et la modal en mode erreur
-            $this->modale($errorMessage, false, "/Auth");
+            $this->modale($errorMessage, false, "/Auth/register");
+            exit;
 
         }
     }
@@ -53,6 +67,12 @@ class AuthController {
     // Traite le formulaire de connexion
     // URL : /Auth/processLogin
     public function processLogin(?array $params) {
+
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header('Location: /Auth/login');
+            exit;
+        }
+
         try {
             // Le service vérifie les identifiants et nous renvoie l'utilisateur
             $user = $this->authService->loginUser($_POST);
@@ -70,6 +90,7 @@ class AuthController {
             include __DIR__ . '/../../template/login.php';
             // On affiche la modale d'erreur
             $this->modale($errorMessage, false, "/Auth/login");
+            exit;
         }
     }
 
@@ -83,9 +104,6 @@ class AuthController {
         exit;
 
     }
-
-
-    
     // MODALE
     public function modale($message, $success, $url) {
         include __DIR__ . '/../../template/message_modal.php';
