@@ -14,6 +14,13 @@
 
     <?php include __DIR__ . '/partials/header.php'; ?>
 
+    <?php if (isset($_SESSION['flash'])): ?>
+        <div class="flash-message flash-<?= $_SESSION['flash']['type'] ?>">
+            <?= htmlspecialchars($_SESSION['flash']['message']) ?>
+        </div>
+        <?php unset($_SESSION['flash']); ?>
+    <?php endif; ?>
+
     <main>
         <?= $content ?>
     </main>

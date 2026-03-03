@@ -10,11 +10,6 @@ ob_start();
         <h2>Rejoins nous !</h2>
         <p class="auth-subtitle">Crée ton compte pour acheter et vendre.</p>
 
-        <?php if (isset($errorMessage) && $errorMessage): ?>
-            <div class="error-message">
-                <?= htmlspecialchars($errorMessage) ?>
-            </div>
-        <?php endif; ?>
 
         <form action="/Auth/processRegister" method="POST" class="auth-form">
             

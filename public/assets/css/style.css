@@ -83,6 +83,151 @@ section h2 a:hover {
   color: var(--rose);
 }
 
+/* --- FLASH MESSAGES GLOBAUX --- */
+.flash-message {
+    position: fixed;
+    top: 6rem; /* Juste en dessous du header fixe */
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    padding: 1rem 2rem;
+    border-radius: 3rem;
+    font-weight: 600;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    animation: slideDownFade 0.4s ease-out forwards;
+    /* Pour s'assurer qu'il passe au dessus du reste */
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.flash-success {
+    background-color: rgba(40, 167, 69, 0.15);
+    color: #28a745;
+    border: 1px solid rgba(40, 167, 69, 0.5);
+}
+
+.flash-error {
+    background-color: rgba(255, 107, 107, 0.15);
+    color: #ff6b6b;
+    border: 1px solid rgba(255, 107, 107, 0.5);
+}
+
+@keyframes slideDownFade {
+    0% { top: 4rem; opacity: 0; }
+    100% { top: 6rem; opacity: 1; }
+}
+
+/* --- SECTION PROFIL --- */
+.profile-container {
+    padding: 100px 20px;
+    min-height: 60vh;
+}
+
+.profile-card {
+    background: var(--bg-dark);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 1rem;
+    padding: 2.5rem;
+    max-width: 600px;
+    margin: 0 auto;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3); /* Un peu de relief ! */
+}
+
+.profile-title {
+    color: var(--cyan);
+    margin-bottom: 2rem;
+    text-align: center;
+    font-size: 2rem;
+}
+
+.profile-header {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.profile-avatar-wrapper {
+    flex-shrink: 0;
+}
+
+.profile-avatar-img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--cyan);
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.2);
+}
+
+.profile-avatar-default {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 3px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.05);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.profile-avatar-default img {
+    width: 50px;
+    opacity: 0.5;
+}
+
+.profile-info {
+    color: white;
+    font-size: 1.1rem;
+    line-height: 1.8;
+}
+
+.profile-highlight {
+    color: var(--cyan);
+    font-weight: bold;
+}
+
+.profile-date {
+    font-size: 0.9rem;
+    color: gray;
+    margin-top: 0.5rem;
+}
+
+.profile-divider {
+    border: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    margin-bottom: 2rem;
+}
+
+.profile-actions {
+    text-align: center;
+}
+
+/* --- FORMULAIRE D'ÉDITION DU PROFIL --- */
+.profile-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.profile-actions-row {
+    text-align: center;
+    margin-top: 1rem;
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+/* On s'assure que les boutons sont bien alignés dans le formulaire */
+.profile-actions-row .btn-outline {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
 /*HEADER*/
 
 header {

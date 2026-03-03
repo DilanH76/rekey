@@ -22,8 +22,6 @@ class AuthController {
     // Affiche le formulaire d'inscription
     // URL: /Auth/register 
     public function register(?array $params) {
-        // On initialise $errorMessage à null pour que le fichier HTML ne plante pas en essayant de l'afficher
-        $errorMessage = null;
         include __DIR__.'/../../template/register.php';
     }
 
@@ -37,22 +35,25 @@ class AuthController {
         }
         
         try {
-            // Le service fait tout le travail ( vérif email, mdr, hash, etc .. )
+            // Le service fait tout le travail
             $this->authService->registerUser($_POST);
 
-            include __DIR__ . '/../../template/register.php';
-            $this->modale("Inscription effectuée avec succès !Vous pouvez vous connecter.", true, "/Auth/login");
+            // SUCCÈS : On met le Post-it vert et on redirige vers le Login
+            $_SESSION['flash'] = [
+                'type' => 'success',
+                'message' => 'Inscription effectuée avec succès ! Vous pouvez vous connecter.'
+            ];
+            header('Location: /Auth/login');
             exit;
+
         } catch (Exception $err) {
-            // Si il y'a une erreur jetée par le Service (email déjà pris etc)
-            $errorMessage = $err->getMessage();
-
-            // On réaffiche le formulaire
-            include __DIR__. '/../../template/register.php';
-            // Et la modal en mode erreur
-            $this->modale($errorMessage, false, "/Auth/register");
+            // ERREUR : On met le Post-it rouge et on redirige vers l'inscription
+            $_SESSION['flash'] = [
+                'type' => 'error',
+                'message' => $err->getMessage()
+            ];
+            header('Location: /Auth/register');
             exit;
-
         }
     }
 
@@ -74,22 +75,28 @@ class AuthController {
         }
 
         try {
-            // Le service vérifie les identifiants et nous renvoie l'utilisateur
             $user = $this->authService->loginUser($_POST);
-            // SUCCES : On connecte l'utilisateur en enregistrant son ID dans la session
+            
+            // SUCCÈS : On connecte l'utilisateur
             $_SESSION['user_id'] = $user->getIdUser();
             $_SESSION['user_pseudo'] = $user->getPseudo();
             $_SESSION['is_admin'] = $user->getIsAdmin();
-            // on redirige vers la page d'accueil ou le dashboard si admin
+            
+            // On met un petit Post-it vert de bienvenue 
+            $_SESSION['flash'] = [
+                'type' => 'success',
+                'message' => 'Ravi de vous revoir, ' . htmlspecialchars($user->getPseudo()) . ' !'
+            ];
             header('Location: /Home');
             exit;
+
         } catch (Exception $err) {
-            // Mauvais mot de passe ou email
-            $errorMessage = $err ->getMessage();
-            // on réaffiche le formulaire de connexion
-            include __DIR__ . '/../../template/login.php';
-            // On affiche la modale d'erreur
-            $this->modale($errorMessage, false, "/Auth/login");
+            // ERREUR : Post-it rouge
+            $_SESSION['flash'] = [
+                'type' => 'error',
+                'message' => $err->getMessage()
+            ];
+            header('Location: /Auth/login');
             exit;
         }
     }
@@ -97,16 +104,19 @@ class AuthController {
     // Déconnexion
     // URL: /Auth/logout
     public function logout(?array $params) {
-        // On détruit la session
+        // On détruit la session actuelle
         session_destroy();
+        
+        // ASTUCE : On redémarre une session vierge juste pour pouvoir coller le Post-it !
+        session_start();
+        $_SESSION['flash'] = [
+            'type' => 'success',
+            'message' => 'Vous êtes bien déconnecté. À bientôt !'
+        ];
+        
         // On redirige vers l'accueil
         header('Location: /Home');
         exit;
-
-    }
-    // MODALE
-    public function modale($message, $success, $url) {
-        include __DIR__ . '/../../template/message_modal.php';
     }
 }
 ?>

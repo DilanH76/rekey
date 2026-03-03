@@ -8,11 +8,13 @@ session_start();
     use App\Controller\{
         E404Controller,
         HomeController,
-        AuthController
+        AuthController,
+        ProfileController
     };
     use App\Service\{
         DatabaseFactory,
-        AuthService
+        AuthService,
+        ProfileService
     };
     use App\Repository\{
         UserRepository
@@ -59,6 +61,11 @@ session_start();
             $userRepository = new UserRepository($pdo);
             $authService = new AuthService($userRepository);
             return new AuthController($authService);
+        },
+        ProfileController::class => function($pdo) {
+            $userRepository = new UserRepository($pdo);
+            $profileService = new ProfileService($userRepository);
+            return new ProfileController($profileService);
         }
     ];
 

@@ -8,13 +8,7 @@ ob_start();
     <div class="auth-card">
         <h2>Bon retour parmi nous !</h2>
         <p class="auth-subtitle">Connecte-toi pour découvrir de nouvelles offres.</p>
-        <?php if (isset($errorMessage) && $errorMessage): ?>
-            <div class="error-message">
-                <?= htmlspecialchars($errorMessage) ?>
-            </div>
-        <?php endif; ?>
-
-
+ 
         <form action="/Auth/processLogin" method="POST" class="auth-form">
 
             <div class="form-group">

@@ -48,6 +48,7 @@ class AuthService {
         // On dit au Repository de sauvegarder
         $this->userRepository->register($user);
     }
+    // TODO REGEX ? Pour demander a l'tutilisateur un mot de passe robuste
 
     public function loginUser(array $postData): User
     {
@@ -65,10 +66,6 @@ class AuthService {
         return $user;
 
     }
-
 }
-
-
-
 
 ?>
