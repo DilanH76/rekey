@@ -93,3 +93,55 @@ CREATE TABLE favorites(
    FOREIGN KEY(id_user) REFERENCES users(id_user),
    FOREIGN KEY(id_ads) REFERENCES ads(id_ads)
 ) ENGINE=InnoDB;
+
+
+
+
+
+
+-- AUTRES SCRIPT : 
+-- On désactive temporairement les contraintes
+SET FOREIGN_KEY_CHECKS = 0;
+
+-- On supprime le contenu proprement
+DELETE FROM categories;
+DELETE FROM platforms;
+
+-- On remet les compteurs d'ID à 1
+ALTER TABLE categories AUTO_INCREMENT = 1;
+ALTER TABLE platforms AUTO_INCREMENT = 1;
+
+-- On réactive les contraintes (TRÈS IMPORTANT)
+SET FOREIGN_KEY_CHECKS = 1;
+
+-- ==========================================
+-- 1. INSERTION DES CATÉGORIES
+-- ==========================================
+INSERT INTO categories (label) VALUES 
+('Action'),
+('Aventure'),
+('RPG / Jeu de rôle'),
+('FPS / TPS (Tir)'),
+('Stratégie'),
+('Sport'),
+('Course'),
+('Simulation'),
+('MMO'),
+('Plateforme'),
+('Combat');
+
+-- ==========================================
+-- 2. INSERTION DES PLATEFORMES
+-- ==========================================
+INSERT INTO platforms (label, icon_svg) VALUES 
+('Steam', '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>'),
+
+('PlayStation', '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"></rect><circle cx="12" cy="12" r="2"></circle></svg>'),
+
+('Xbox', '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M8 8l8 8"></path><path d="M16 8l-8 8"></path></svg>'),
+
+('Nintendo Switch', '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="8" height="16" rx="2"></rect><rect x="14" y="4" width="8" height="16" rx="2"></rect><circle cx="6" cy="9" r="1"></circle><circle cx="18" cy="15" r="1"></circle></svg>'),
+
+('Epic Games', '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 2 17 12 22 22 17 22 7 12 2"></polygon></svg>'),
+
+('GOG', '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v8"></path><path d="M8 12h8"></path></svg>');
