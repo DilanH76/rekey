@@ -163,21 +163,6 @@ section h2 a:hover {
     box-shadow: 0 0 15px rgba(0, 255, 255, 0.2);
 }
 
-.profile-avatar-default {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    border: 3px solid rgba(255, 255, 255, 0.2);
-    background: rgba(255, 255, 255, 0.05);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.profile-avatar-default img {
-    width: 50px;
-    opacity: 0.5;
-}
 
 .profile-info {
     color: white;
@@ -219,6 +204,96 @@ section h2 a:hover {
     display: flex;
     gap: 1rem;
     justify-content: center;
+}
+
+/* --- ACCUEIL TEMPORAIRE --- */
+.home-temp-container {
+    text-align: center;
+    padding: 150px 20px;
+    min-height: 60vh;
+}
+
+.home-temp-title {
+    color: var(--cyan);
+    font-size: 3rem;
+    margin-bottom: 1.5rem;
+}
+
+/* --- UTILITAIRES FORMULAIRE (Upload & Textes) --- */
+.avatar-upload-wrapper {
+    height: auto;
+    margin-bottom: 1rem;
+}
+
+.avatar-file-input {
+    position: relative;
+    z-index: 1;
+    opacity: 1;
+    height: auto;
+    padding: 0.5rem;
+}
+
+.form-help-text {
+    color: gray;
+    font-size: 0.8rem;
+    display: block;
+    margin-top: 0.25rem;
+}
+
+/* --- ZONE DE SÉCURITÉ (DANGER) --- */
+.security-divider {
+    margin: 3rem 0;
+}
+
+.title-security {
+    font-size: 1.5rem;
+    color: #ff6b6b;
+}
+
+.label-danger {
+    color: #ff6b6b !important; /* Force la couleur pour écraser le cyan par défaut */
+}
+
+.btn-danger {
+    background-color: #ff6b6b;
+    box-shadow: none;
+}
+
+.btn-danger:hover {
+    background-color: #ff4c4c;
+    transform: translateY(-3px);
+    box-shadow: 0 0 1.5rem rgba(255, 107, 107, 0.4); /* Glow rouge ! */
+}
+
+
+/* --- ZONE DE SUPPRESSION (CRITIQUE) --- */
+.title-delete {
+    font-size: 1.5rem;
+    color: #dc3545; /* Rouge vif / Erreur critique */
+}
+
+.delete-warning-box {
+    background: rgba(220, 53, 69, 0.1);
+    border: 1px solid #dc3545;
+    padding: 1.5rem;
+    border-radius: 1rem;
+    text-align: center;
+}
+
+.delete-warning-text {
+    color: white;
+    margin-bottom: 1rem;
+}
+
+.btn-delete {
+    background-color: #dc3545;
+    box-shadow: none;
+}
+
+.btn-delete:hover {
+    background-color: #c82333; /* Rouge encore plus foncé au survol */
+    transform: translateY(-3px);
+    box-shadow: 0 0 1.5rem rgba(220, 53, 69, 0.4); /* Glow rouge vif */
 }
 
 /* On s'assure que les boutons sont bien alignés dans le formulaire */

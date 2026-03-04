@@ -35,7 +35,11 @@ ob_start();
 
             <div class="form-group">
                 <label for="password">Mot de passe</label>
-                <input type="password" id="password" name="password" placeholder="••••••••" required />
+                <input type="password" id="password" name="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@$!%*?&]).{8,}" 
+                        title="8 caractères minimum, avec au moins une majuscule, une minuscule, un chiffre et un caractère spécial." 
+                        placeholder="••••••••" 
+                        required 
+                />
             </div>
 
             <div class="form-group">

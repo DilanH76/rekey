@@ -3,7 +3,11 @@ namespace App\Entity;
 
 use \DateTime;
 
+/**
+ * Représente un utilisateur de l'application ReKey
+ */
 class User {
+    
     private ?int $id_user;
     private string $last_name;
     private string $first_name;
@@ -12,22 +16,31 @@ class User {
     private string $password;
     private bool $is_admin;
     private DateTime $created_at;
+    
+    /**
+     * @var mixed Contient les données binaires (BLOB) de l'image, ou null
+     */
     private $avatar;
 
+    /**
+     * Constructeur de l'entité User
+     */
     public function __construct(string $last_name, string $first_name, string $pseudo, string $email, string $password, DateTime $created_at, $avatar, bool $is_admin=false, ?int $id_user=null)
     {
-        $this->id_user=$id_user;
-        $this->last_name=$last_name;
-        $this->first_name=$first_name;
-        $this->pseudo=$pseudo;
-        $this->email=$email;
-        $this->password=$password;
-        $this->is_admin=$is_admin;
-        $this->created_at=$created_at;
-        $this->avatar=$avatar;
-
+        $this->id_user = $id_user;
+        $this->last_name = $last_name;
+        $this->first_name = $first_name;
+        $this->pseudo = $pseudo;
+        $this->email = $email;
+        $this->password = $password;
+        $this->is_admin = $is_admin;
+        $this->created_at = $created_at;
+        $this->avatar = $avatar;
     }
 
+    // =========================================================
+    // GETTERS & SETTERS
+    // =========================================================
 
     public function getIdUser(): ?int
     {
@@ -37,7 +50,6 @@ class User {
     public function setIdUser(?int $id_user): self
     {
         $this->id_user = $id_user;
-
         return $this;
     }
 
@@ -49,7 +61,6 @@ class User {
     public function setLastName(string $last_name): self
     {
         $this->last_name = $last_name;
-
         return $this;
     }
 
@@ -61,7 +72,6 @@ class User {
     public function setFirstName(string $first_name): self
     {
         $this->first_name = $first_name;
-
         return $this;
     }
 
@@ -73,7 +83,6 @@ class User {
     public function setPseudo(string $pseudo): self
     {
         $this->pseudo = $pseudo;
-
         return $this;
     }
 
@@ -85,7 +94,6 @@ class User {
     public function setEmail(string $email): self
     {
         $this->email = $email;
-
         return $this;
     }
 
@@ -97,7 +105,6 @@ class User {
     public function setPassword(string $password): self
     {
         $this->password = $password;
-
         return $this;
     }
 
@@ -109,7 +116,6 @@ class User {
     public function setIsAdmin(bool $is_admin): self
     {
         $this->is_admin = $is_admin;
-
         return $this;
     }
 
@@ -121,7 +127,6 @@ class User {
     public function setCreatedAt(DateTime $created_at): self
     {
         $this->created_at = $created_at;
-
         return $this;
     }
 
@@ -133,21 +138,27 @@ class User {
     public function setAvatar($avatar): self
     {
         $this->avatar = $avatar;
-
         return $this;
     }
 
-    public function getavatarBase64(): string
-    {
-        if (!$this->avatar) return "";
-        // TODO Mettre une image de profil par défaut si l'utilisateur n'en a pas
-        // return 'chemin/vers/assets/img/default-avatar.png';
-        return 'data:image/jpeg;base64,' . base64_encode($this->avatar);
+    // =========================================================
+    // MÉTHODES UTILITAIRES
+    // =========================================================
 
+    /**
+     * Retourne la source de l'image formatée pour une balise HTML <img>
+     * Gère automatiquement l'image par défaut si l'utilisateur n'a pas d'avatar.
+     * @return string L'URL ou le Base64 de l'image
+     */
+    public function getAvatarBase64(): string
+    {
+        // Si l'utilisateur n'a pas d'avatar en BDD, on retourne le chemin vers l'icône par défaut
+        if (!$this->avatar) {
+            return '/assets/ico/user.svg';
+        }
+        
+        // Sinon, on encode le BLOB en base64 pour l'afficher directement
+        return 'data:image/jpeg;base64,' . base64_encode($this->avatar);
     }
 }
-
-
-
-
 ?>

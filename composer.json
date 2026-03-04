@@ -1,6 +1,6 @@
 {
     "name": "dhoul/rekey",
-    "description": "Formation DWWM - Projet fil rouge",
+    "description": "Projet DWWM",
     "type": "project",
     "license": "GPL-3.0-or-later",
     "autoload": {
@@ -10,7 +10,7 @@
     },
     "authors": [
         {
-            "name": "Houlbreque Dilan"
+            "name": "Houlbrèque Dilan"
         }
     ],
     "minimum-stability": "stable",

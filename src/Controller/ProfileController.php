@@ -4,16 +4,32 @@ namespace App\Controller;
 use App\Service\ProfileService;
 use \Exception;
 
+/**
+ * Contrôleur gérant l'espace personnel de l'utilisateur
+ * (Affichage du profil, édition des infos/avatar, mot de passe et suppression de compte)
+ */
 class ProfileController {
+    
     private ProfileService $profileService;
     
+    /**
+     * Constructeur avec injection de dépendance
+     * @param ProfileService $profileService Le service métier gérant la logique du profil
+     */
     public function __construct(ProfileService $profileService)
     {
         $this->profileService = $profileService;
     }
 
-    // Affichage du profil
-    // URL : /Profil (ou /Profil/index)
+    // =========================================================
+    // SECTION : AFFICHAGE DES VUES
+    // =========================================================
+
+    /**
+     * Affiche la page principale du profil
+     * URL : /Profile (ou /Profile/index)
+     * @param array|null $params Paramètres d'URL éventuels
+     */
     public function index(?array $params) {
         // Verifier si l'utilisateur es connecté 
         if (!isset($_SESSION['user_id'])) {
@@ -30,12 +46,14 @@ class ProfileController {
         } catch (Exception $err) {
             // Si l'utilisateur n'est pas trouvé
             echo "Erreur : " . $err->getMessage();
-
         }
     }
 
-    // Affichage du formulaire de modification du profil
-    // URL : /Profile/edit
+    /**
+     * Affiche le formulaire de modification du profil
+     * URL : /Profile/edit
+     * @param array|null $params Paramètres d'URL éventuels
+     */
     public function edit(?array $params) {
         // Vérifier si l'utilisateur es connecté
         if (!isset($_SESSION['user_id'])) {
@@ -53,8 +71,15 @@ class ProfileController {
         }
     }
 
-    // Traitement du formulaire de modification du profil
-    // URL : /Profile/update
+    // =========================================================
+    // SECTION : TRAITEMENT DES MISES À JOUR (UPDATE)
+    // =========================================================
+
+    /**
+     * Traite le formulaire de modification du profil (Infos classiques + Avatar)
+     * URL : /Profile/update
+     * @param array|null $params Paramètres d'URL éventuels
+     */
     public function update(?array $params) {
         // Vérifier si l'utilisateur es connecté
         if (!isset($_SESSION['user_id'])) {
@@ -65,7 +90,7 @@ class ProfileController {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             try {
                 // On envoie tout le formulaire au sercie
-                $this->profileService->updateProfileData($_POST, $_SESSION['user_id']);
+                $this->profileService->updateProfileData($_POST, $_FILES, $_SESSION['user_id']);
                 // On met à jour le pseudo dans la session
                 $_SESSION['user_pseudo'] = trim($_POST['pseudo']);
                 // SUCCÈS
@@ -87,13 +112,96 @@ class ProfileController {
             }
         } else {
             // Si on accède à l'URL sans POST, on renvoie sur le profil
-            header('Location; /Profile');
+            header('Location: /Profile');
             exit;
         }
     }
-    
+
+    /**
+     * Traite le formulaire de changement de mot de passe
+     * URL : /Profile/updatePassword
+     * @param array|null $params Paramètres d'URL éventuels
+     */
+    public function updatePassword(?array $params) {
+        // Verifier si l'utilisateur es connecté
+        if (!isset($_SESSION['user_id'])) {
+            header('Location: /Auth/login');
+            exit;
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            try {
+                // On envoie les données du formulaire au Service
+                $this->profileService->changePassword($_SESSION['user_id'], $_POST);
+
+                // Succès
+                $_SESSION['flash'] = [
+                    'type' => 'success',
+                    'message' => 'Votre mot de passe a été modifié avec succès.'
+                ];
+                header('Location: /Profile');
+                exit;
+            } catch (Exception $err) {
+                // Erreur
+                $_SESSION['flash'] = [
+                    'type' => 'error',
+                    'message' => $err->getMessage()
+                ];
+                header('Location: /Profile/edit');
+                exit;
+            }
+        } else {
+            // Si on accède à l'URL sans POST
+            header('Location: /Profile');
+            exit;
+        }
+    }
+
+    // =========================================================
+    // SECTION : TRAITEMENT DE LA SUPPRESSION (DELETE)
+    // =========================================================
+
+    /**
+     * Traite la suppression définitive du compte utilisateur
+     * URL : /Profile/deleteAccount
+     * @param array|null $params Paramètres d'URL éventuels
+     */
+    public function deleteAccount(?array $params) {
+        // Verifier si l'utilisateur est connecté
+        if (!isset($_SESSION['user_id'])) {
+            header('Location: /Auth/login');
+            exit;
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            try {
+                // On demande au service de supprimer le compte
+                $this->profileService->deleteAccount($_SESSION['user_id']);
+
+                // On détruit la session actuelle ( déconnexion automatique )
+                session_destroy();
+
+                // On recrée une session vierge juste pour le message d'adieu
+                session_start();
+                $_SESSION['flash'] = [
+                    'type' => 'success',
+                    'message' => 'Votre compte a été definitivement supprimé. Au revoir !'
+                ];
+
+                header('Location: /Home');
+                exit;
+            } catch (Exception $err) {
+                $_SESSION['flash'] = [
+                    'type' => 'error',
+                    'message' => $err->getMessage()
+                ];
+                header('Location: /Profile/edit');
+                exit;
+            }
+        } else {
+            header('Location: /Profile');
+            exit;
+        }
+    }  
 }
-
-
-
 ?>

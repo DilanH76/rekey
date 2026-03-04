@@ -12,15 +12,10 @@ ob_start();
         <div class="profile-header">
             
             <div class="profile-avatar-wrapper">
-                <?php if ($user->getAvatar()): ?>
-                    <img src="data:image/jpeg;base64,<?= base64_encode($user->getAvatar()) ?>" 
-                         alt="Avatar de <?= htmlspecialchars($user->getPseudo()) ?>" 
-                         class="profile-avatar-img" />
-                <?php else: ?>
-                    <div class="profile-avatar-default">
-                        <img src="/assets/icons/user.svg" alt="Avatar par défaut" />
-                    </div>
-                <?php endif; ?>
+                <img src="<?= $user->getAvatarBase64() ?>" 
+                     alt="Avatar de <?= htmlspecialchars($user->getPseudo()) ?>" 
+                     class="profile-avatar-img" 
+                     style="background: rgba(255, 255, 255, 0.05);" />
             </div>
 
             <div class="profile-info">
