@@ -1256,7 +1256,117 @@ section h2 a:hover .link-arrow {
   margin-right: 0.5rem;
 }
 
+/* ========================================= */
+/* FORMULAIRES CUSTOM (ex: Vendre un jeu)    */
+/* ========================================= */
 
+.form-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 3rem 1rem;
+}
+
+.form-card {
+    background: rgba(20, 20, 25, 0.85); /* Fond sombre translucide */
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 2.5rem;
+    width: 100%;
+    max-width: 800px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(10px); /* Joli effet de flou en arrière-plan */
+}
+
+.form-title {
+    color: #fff;
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.form-subtitle {
+    color: #aaa;
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+
+.custom-form .form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1.5rem;
+}
+
+.custom-form .form-row {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.custom-form .half-width {
+    flex: 1;
+}
+
+.custom-form label {
+    color: #ddd;
+    font-size: 0.95rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+.custom-form input[type="text"],
+.custom-form input[type="number"],
+.custom-form input[type="file"],
+.custom-form select,
+.custom-form textarea {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #fff;
+    padding: 0.8rem 1rem;
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.custom-form input:focus,
+.custom-form select:focus,
+.custom-form textarea:focus {
+    outline: none;
+    border-color: #00ffff; /* La fameuse touche cyan de ton bouton neon */
+    box-shadow: 0 0 8px rgba(0, 255, 255, 0.2);
+}
+
+/* Astuce pour que les options du select restent lisibles sur fond sombre */
+.custom-form select option {
+    background-color: #1a1a1a;
+    color: #fff;
+}
+
+.form-help {
+    color: #888;
+    font-size: 0.8rem;
+    margin-top: 0.4rem;
+    font-style: italic;
+}
+
+.form-divider {
+    border: 0;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.1);
+    margin: 2rem 0;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: center;
+}
+
+/* Responsive : sur mobile, on empile les colonnes */
+@media (max-width: 768px) {
+    .custom-form .form-row {
+        flex-direction: column;
+        gap: 0;
+    }
+}
 
 /* PAGE VENTE (Sell)  */
 
