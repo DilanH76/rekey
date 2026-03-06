@@ -36,6 +36,19 @@ class AuthService {
      */
     public function registerUser(array $postData): void 
     {
+        // Sécurité Back-end
+        // Je vérifie que tous les champs obligatoires existent et ne sont pas juste des espaces (trim)
+        if (
+            empty(trim($postData['last_name'] ?? '')) ||
+            empty(trim($postData['first_name'] ?? '')) ||
+            empty(trim($postData['pseudo'] ?? '')) ||
+            empty(trim($postData['email'] ?? '')) ||
+            empty(trim($postData['password'] ?? '')) ||
+            empty(trim($postData['password_confirm'] ?? ''))
+        ) {
+            throw new Exception("Tous les champs sont obligatoires. Merci de remplir le formulaire correctement.");
+        }
+
         // On vérifie si l'email existe déjà via le Repository
         $existingEmail = $this->userRepository->findByEmailOrPseudo($postData['email']);
         if ($existingEmail) {

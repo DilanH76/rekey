@@ -60,7 +60,8 @@ session_start();
             return new E404Controller();
         },
         HomeController::class => function($pdo) {
-            return new HomeController();
+            $adRepository = new AdRepository($pdo);
+            return new HomeController($adRepository);
         },
         AuthController::class => function($pdo) {
             $userRepository = new UserRepository($pdo);

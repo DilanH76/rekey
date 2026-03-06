@@ -20,10 +20,49 @@ class AdController {
         $this->adService = $adService;
     }
 
+    /**
+     * Méthode par défaut si on tape juste /Ad dans l'URL
+     * On redirige vers l'accueil car il n'y a pas de page d'accueil spécifique aux annonces
+     */
+    public function index(?array $params) {
+        header('Location: /Home');
+        exit;
+    }
+
     // =========================================================
     // SECTION : AFFICHAGE DES VUES
     // =========================================================
 
+
+    /**
+     * Affiche la page détaillée d'une annonce spécifique
+     * URL : /Ad/show/123
+     */
+    public function show(?array $params) {
+        $adId = isset($params[0]) ? (int)$params[0] : 0;
+
+        if ($adId === 0) {
+            header('Location: /Home');
+            exit;
+        }
+
+        try {
+            // Je récupère la vraie annonce via le Service
+            $ad = $this->adService->getAdById($adId);
+            
+            //  J'affiche la vue (en lui passant $ad)
+            include __DIR__ . '/../../template/ad_show.php';
+
+        } catch (Exception $err) {
+            // Si erreur (ex: annonce 999 n'existe pas), post-it rouge et retour accueil
+            $_SESSION['flash'] = [
+                'type' => 'error',
+                'message' => $err->getMessage()
+            ];
+            header('Location: /Home');
+            exit;
+        }
+    }
     /**
      * Affiche le formulaire de création d'une nouvelle annonce
      * URL : /Ad/add

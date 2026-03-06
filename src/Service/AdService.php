@@ -110,5 +110,26 @@ class AdService {
             throw new Exception("Une erreur est survenue lors de la création de l'annonce."); 
         }
     }
+
+    // =========================================================
+    // SECTION : LECTURE (READ)
+    // =========================================================
+
+    /**
+     * Récupère une annonce par son ID
+     * @param int $id L'ID de l'annonce à chercher
+     * @return Ad L'objet complet
+     * @throws Exception Si l'annonce n'existe pas
+     */
+    public function getAdById(int $id): Ad
+    {
+        $ad = $this->adRepository->findByIdWithDetails($id);
+
+        if (!$ad) {
+            throw new Exception("Cette annonce n'existe pas ou a été supprimée.");
+        }
+
+        return $ad;
+    }
 }
 ?>

@@ -58,6 +58,161 @@ class AdRepository {
 
     }
 
+    // =========================================================
+    // SECTION : LECTURE (READ)
+    // =========================================================
+
+    /**
+     * Récupère toutes les annonces avec les détails de la catégorie, plateforme et vendeur
+     * @return array Un tableau contenant des objets Ad complètement hydratés
+     */
+    public function findAllWithDetails(): array
+    {
+        // Je sélectionne TOUT de la table ads (a.*)
+        // plus les champs spécifiques des autres tables en les renommant (AS)
+        $sql = "SELECT
+                    a.*,
+                    c.label AS category_label,
+                    p.label AS platform_label, p.icon_svg AS platform_icon,
+                    u.last_name, u.first_name, u.pseudo, u.email, u.password, u.is_admin, u.created_at AS user_created_at, u.avatar AS user_avatar
+                FROM ads a
+                INNER JOIN categories c ON a.id_category = c.id_category
+                INNER JOIN platforms p ON a.id_platform = p.id_platform
+                INNER JOIN users u ON a.id_user = u.id_user
+                ORDER BY a.created_at DESC";
+
+        $stmt = $this->pdo->query($sql);
+        $ads =[];
+        
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+
+            // J'instancie l'annonce de base
+            $ad = new Ad(
+                $row['title'],
+                $row['description'],
+                (float) $row['price'],
+                $row['cover_image'],
+                $row['game_key'],
+                $row['status'],
+                new \DateTime($row['created_at']),
+                (int) $row['id_platform'],
+                (int) $row['id_category'],
+                (int) $row['id_user'],
+                (int) $row['id_ads']
+            );
+
+            // J'instancie les objets relationnels
+
+            // La catégorie
+            $category = new \App\Entity\Category(
+                $row['category_label'], 
+                (int) $row['id_category']
+            );
+            $ad->setCategory($category);
+
+            // La plateforme
+            $platform = new \App\Entity\Platform(
+                $row['platform_icon'],
+                $row['platform_label'], 
+                (int) $row['id_platform']
+            );
+            $ad->setPlatform($platform);
+
+            // Le vendeur
+
+            $user = new \App\Entity\User(
+                $row['last_name'],
+                $row['first_name'],
+                $row['pseudo'],
+                $row['email'],
+                $row['password'],
+                new \DateTime($row['user_created_at']),
+                $row['user_avatar'],
+                (bool) $row['is_admin'],
+                (int) $row['id_user']
+            );
+            $ad->setUser($user);
+
+            // J'ajoute mon super objet Ad (qui contient maintenant 3 autres objets) dans le tableau final
+            $ads[] = $ad;
+        }
+
+        return $ads;
+    }
+
+    /**
+     * Récupère UNE annonce spécifique avec tous ses détails (Catégorie, Plateforme, Vendeur)
+     * @param int $id L'identifiant de l'annonce
+     * @return Ad|null L'objet Ad complet, ou null si introuvable
+     */
+    public function findByIdWithDetails(int $id): ?Ad
+    {
+        $sql = "SELECT
+                    a.*,
+                    c.label AS category_label,
+                    p.label AS platform_label, p.icon_svg AS platform_icon,
+                    u.last_name, u.first_name, u.pseudo, u.email, u.password, u.is_admin, u.created_at AS user_created_at, u.avatar AS user_avatar
+                FROM ads a
+                INNER JOIN categories c ON a.id_category = c.id_category
+                INNER JOIN platforms p ON a.id_platform = p.id_platform
+                INNER JOIN users u ON a.id_user = u.id_user
+                WHERE a.id_ads = :id";
+        
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute(['id' => $id]);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$row) {
+            return null; // Si l'annonce n'existe pas en BDD
+        }
+
+        // Instanciation de l'annonce
+        $ad = new Ad(
+            $row['title'],
+            $row['description'],
+            (float) $row['price'],
+            $row['cover_image'],
+            $row['game_key'],
+            $row['status'],
+            new \DateTime($row['created_at']),
+            (int) $row['id_platform'],
+            (int) $row['id_category'],
+            (int) $row['id_user'],
+            (int) $row['id_ads']
+        );
+
+
+        // instanciation et association des objets liés
+        $category = new \App\Entity\Category(
+            $row['category_label'],
+            (int) $row['id_category']
+        );
+        $ad->setCategory($category);
+
+        $platform = new \App\Entity\Platform(
+            $row['platform_icon'],
+            $row['platform_label'],
+            (int) $row['id_platform']
+        );
+        $ad->setPlatform($platform);
+
+        $user = new \App\Entity\User(
+            $row['last_name'],
+            $row['first_name'],
+            $row['pseudo'],
+            $row['email'],
+            $row['password'],
+            new \DateTime($row['created_at']),
+            $row['user_avatar'],
+            (bool) $row['is_admin'],
+            (int) $row['id_user']
+        );
+        $ad->setUser($user);
+
+        return $ad;
+    }
+
+
 
 }
 ?>

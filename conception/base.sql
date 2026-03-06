@@ -8,15 +8,17 @@ GRANT ALL PRIVILEGES ON rekey.* TO 'admin_rekey'@'localhost';
 
 CREATE TABLE users(
    id_user INT AUTO_INCREMENT,
-   last_name VARCHAR(50) ,
-   first_name VARCHAR(50) ,
-   pseudo VARCHAR(50) ,
-   email VARCHAR(100) ,
-   password VARCHAR(255) ,
-   is_admin BOOLEAN,
-   created_at DATETIME,
+   last_name VARCHAR(50) NOT NULL,
+   first_name VARCHAR(50) NOT NULL,
+   pseudo VARCHAR(50) NOT NULL,
+   email VARCHAR(100) NOT NULL,
+   password VARCHAR(255) NOT NULL,
+   is_admin BOOLEAN NOT NULL DEFAULT 0,
+   created_at DATETIME NOT NULL,
    avatar MEDIUMBLOB,
-   PRIMARY KEY(id_user)
+   PRIMARY KEY(id_user),
+   UNIQUE(email),
+   UNIQUE(pseudo)
 ) ENGINE=InnoDB;
 
 CREATE TABLE categories(
