@@ -2,6 +2,7 @@
 namespace App\Controller;
 
 use App\Service\ProfileService;
+use App\Service\AdService;
 use \Exception;
 
 /**
@@ -11,14 +12,16 @@ use \Exception;
 class ProfileController {
     
     private ProfileService $profileService;
+    private AdService $adService;
     
     /**
      * Constructeur avec injection de dépendance
      * @param ProfileService $profileService Le service métier gérant la logique du profil
      */
-    public function __construct(ProfileService $profileService)
+    public function __construct(ProfileService $profileService, AdService $adService)
     {
         $this->profileService = $profileService;
+        $this->adService = $adService;
     }
 
     // =========================================================
@@ -38,10 +41,12 @@ class ProfileController {
         }
 
         try {
-            // On demande au service les données de l'utilisateur
+            // Je demande au service les données de l'utilisateur
             // La variable $user contiendra un objet Entity\User complet
             $user = $this->profileService->getUserProfile($_SESSION['user_id']);
-            // On affiche la vue en lui passant l'objet $user
+            // Je demande au service toutes les annonces de cet utilisateur
+            $userAds = $this->adService->getUserAds($_SESSION['user_id']);
+            // Je affiche la vue en lui passant l'objet $user
             include __DIR__ . '/../../template/profile.php';
         } catch (Exception $err) {
             // Si l'utilisateur n'est pas trouvé
@@ -62,9 +67,9 @@ class ProfileController {
         }
 
         try {
-            // On demainde au service les données de l'utilisateur
+            // Je demainde au service les données de l'utilisateur
             $user = $this->profileService->getUserProfile($_SESSION['user_id']);
-            // On affiche la vue en lui passant l'objet $user
+            // J'affiche la vue en lui passant l'objet $user
             include __DIR__ . '/../../template/profile_edit.php';
         } catch (Exception $err) {
             echo "Erreur : " . $err->getMessage();
@@ -89,9 +94,9 @@ class ProfileController {
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             try {
-                // On envoie tout le formulaire au sercie
+                // J'envoie tout le formulaire au sercie
                 $this->profileService->updateProfileData($_POST, $_FILES, $_SESSION['user_id']);
-                // On met à jour le pseudo dans la session
+                // Je met à jour le pseudo dans la session
                 $_SESSION['user_pseudo'] = trim($_POST['pseudo']);
                 // SUCCÈS
                 $_SESSION['flash'] = [
@@ -111,7 +116,7 @@ class ProfileController {
                 exit;
             }
         } else {
-            // Si on accède à l'URL sans POST, on renvoie sur le profil
+            // Si j'accède à l'URL sans POST, je renvoie sur le profil
             header('Location: /Profile');
             exit;
         }
@@ -131,7 +136,7 @@ class ProfileController {
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             try {
-                // On envoie les données du formulaire au Service
+                // J'envoie les données du formulaire au Service
                 $this->profileService->changePassword($_SESSION['user_id'], $_POST);
 
                 // Succès
@@ -151,7 +156,7 @@ class ProfileController {
                 exit;
             }
         } else {
-            // Si on accède à l'URL sans POST
+            // Si j'accède à l'URL sans POST
             header('Location: /Profile');
             exit;
         }
@@ -175,13 +180,13 @@ class ProfileController {
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             try {
-                // On demande au service de supprimer le compte
+                // Je demande au service de supprimer le compte
                 $this->profileService->deleteAccount($_SESSION['user_id']);
 
-                // On détruit la session actuelle ( déconnexion automatique )
+                // Je détruit la session actuelle ( déconnexion automatique )
                 session_destroy();
 
-                // On recrée une session vierge juste pour le message d'adieu
+                // Je recrée une session vierge juste pour le message d'adieu
                 session_start();
                 $_SESSION['flash'] = [
                     'type' => 'success',

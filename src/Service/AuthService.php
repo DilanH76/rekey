@@ -49,19 +49,19 @@ class AuthService {
             throw new Exception("Tous les champs sont obligatoires. Merci de remplir le formulaire correctement.");
         }
 
-        // On vérifie si l'email existe déjà via le Repository
+        // Je vérifie si l'email existe déjà via le Repository
         $existingEmail = $this->userRepository->findByEmailOrPseudo($postData['email']);
         if ($existingEmail) {
             throw new Exception("Cet email est déjà utilisé.");
         }
         
-        // On vérifie si le pseudo est déjà pris
+        // Je vérifie si le pseudo est déjà pris
         $existingpseudo = $this->userRepository->findByEmailOrPseudo($postData['pseudo']);
         if ($existingpseudo) {
             throw new Exception("Ce pseudo est déjà utilisé.");
         }
 
-        // On vérifie les mots de passes
+        // Je vérifie les mots de passes
         if ($postData['password'] !== $postData['password_confirm']) {
             throw new Exception("Les mots de passe ne correspondent pas.");
         }
@@ -73,10 +73,10 @@ class AuthService {
             throw new Exception("Le mot de passe doit contenir au moins 8 caractères, dont une majuscule, une minuscule, un chiffre et un caractère spécial (@$!%*?&).");
         }
 
-        // On hache le mot de passe
+        // Je hache le mot de passe
         $hashedPassword = password_hash($postData['password'], PASSWORD_DEFAULT);
         
-        // on crée l'entité
+        // Je crée l'entité
         $user = new User(
             $postData['last_name'],
             $postData['first_name'],
@@ -87,7 +87,7 @@ class AuthService {
             null // Avatar par défaut géré dans l'Entity User.
         );
 
-        // On dit au Repository de sauvegarder
+        // Je dis au Repository de sauvegarder
         $this->userRepository->register($user);
     }
     
@@ -103,7 +103,7 @@ class AuthService {
      */
     public function loginUser(array $postData): User
     {
-        // On cherche l'utilisateur par son email ou pseudo ( champ 'login' du formulaire )
+        // Je cherche l'utilisateur par son email ou pseudo ( champ 'login' du formulaire )
         $user = $this->userRepository->findByEmailOrPseudo($postData['login']);
         
         // si l'utilisateur n'existe pas
@@ -111,12 +111,12 @@ class AuthService {
             throw new Exception("Identifiant ou mot de passe incorrect.");
         }
         
-        // On vérifie le mot de passe hashé
+        // Je vérifie le mot de passe hashé
         if (!password_verify($postData['password'], $user->getPassword())) {
             throw new Exception("Identifiant ou mot de passe incorrect.");
         }
         
-        // Si on arrive ici tout est valide. On retourne l'objet User.
+        // Si j'arrive ici tout est valide. Je retourne l'objet User.
         return $user;
     }
 }

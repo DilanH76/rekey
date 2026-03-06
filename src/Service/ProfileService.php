@@ -54,14 +54,14 @@ class ProfileService {
      * @throws Exception Si un pseudo/email est déjà pris, ou si l'avatar est invalide
      */
     public function updateProfileData(array $data, array $files, int $userId): void {
-        // On récupère l'utilisateur actuel grâce à la méthode qu'on a déjà
+        // Je récupère l'utilisateur actuel grâce à la méthode que j'ai déjà
         $user = $this->getUserProfile($userId);
 
         $newPseudo = trim($data['pseudo']);
         $newEmail  = trim($data['email']);
 
         // Verification du pseudo
-        // Si le pseudo a changé, on vérifie qu'il n'est pas déjà pris
+        // Si le pseudo a changé, je vérifie qu'il n'est pas déjà pris
         if ($newPseudo !== $user->getPseudo()) {
             $existingUser = $this->userRepository->findByEmailOrPseudo($newPseudo);
             if ($existingUser !== null && $existingUser->getIdUser() !== $userId) {
@@ -70,7 +70,7 @@ class ProfileService {
         }
 
         // Verification de l'email
-        // Si l'email a changé, on vérifie qu'il n'est pas déjà pris
+        // Si l'email a changé, je vérifie qu'il n'est pas déjà pris
         if ($newEmail !== $user->getEmail()) {
             $existingUser = $this->userRepository->findByEmailOrPseudo($newEmail);
             if ($existingUser !== null && $existingUser->getIdUser() !== $userId) {
@@ -101,13 +101,13 @@ class ProfileService {
             $user->setAvatar($blobData); // On met à jour l'entité
         }   
 
-        // On met à jour l'entité avec les nouvelles données du formulaire
+        // Je met à jour l'entité avec les nouvelles données du formulaire
         $user->setPseudo($newPseudo);
         $user->setEmail($newEmail);
         $user->setFirstName(trim($data['first_name']));
         $user->setLastName(trim($data['last_name']));
         
-        // On envoie l'objet mis à jour au Repository pour la sauvegarde en BDD
+        // Je envoie l'objet mis à jour au Repository pour la sauvegarde en BDD
         $success = $this->userRepository->updateProfile($user);
 
         if (!$success) {
@@ -127,29 +127,29 @@ class ProfileService {
      * @throws Exception Si les vérifications (ancien mdp, correspondance, regex) échouent
      */
     public function changePassword(int $userId, array $data): void {
-        // On récupère l'utilisateur actuel
+        // Je récupère l'utilisateur actuel
         $user = $this->getUserProfile($userId);
         
-        // On vérifie l'ancien mot de passe tapé correspond bien à celui en BDD
+        // Je vérifie l'ancien mot de passe tapé correspond bien à celui en BDD
         if (!password_verify($data['old_password'], $user->getPassword())) {
             throw new Exception("L'ancien mot de passe est incorrect.");
         }
 
-        // On vérifie que les deux nouveaux mots de passe correspondent
+        // Je vérifie que les deux nouveaux mots de passe correspondent
         if ($data['new_password'] !== $data['confirm_password']) {
             throw new Exception("Les nouveaux mots de passe ne correspondent pas.");
         }
 
-        // On vérifie la robustesse avec la Regex
+        // Je vérifie la robustesse avec la Regex
         $regexPassword = '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/';
         if (!preg_match($regexPassword, $data['new_password'])) {
             throw new Exception("Le nouveau mot de passe doit contenir au moins 8 caractères, dont une majuscule, une minuscule, un chiffre et un caractère spécial (@$!%*?&).");
         }
 
-        // On hache le nouveau mot de passe
+        // Je hache le nouveau mot de passe
         $hashedPassword = password_hash($data['new_password'], PASSWORD_DEFAULT);
 
-        // On l'envoie au Repository pour la sauvegarde
+        // Je l'envoie au Repository pour la sauvegarde
         $success = $this->userRepository->updatePassword($userId, $hashedPassword);
 
         if (!$success) {
@@ -164,7 +164,7 @@ class ProfileService {
      * @throws Exception Si la suppression échoue en base de données
      */
     public function deleteAccount(int $userId): void {
-        // On vérifie que l'utilisateur existe bien avant de le supprimer
+        // Je vérifie que l'utilisateur existe bien avant de le supprimer
         $user = $this->getUserProfile($userId);
 
         $success = $this->userRepository->delete($userId);

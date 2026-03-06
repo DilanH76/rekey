@@ -50,7 +50,7 @@ class AuthController {
      * * @param array|null $params Paramètres d'URL éventuels
      */
     public function processRegister(?array $params) {
-        // Sécurité : on s'assure que la requête vient bien d'un formulaire
+        // Sécurité : je m'assure que la requête vient bien d'un formulaire
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             header('Location: /Auth/register');
             exit;
@@ -60,7 +60,7 @@ class AuthController {
             // Le service fait tout le travail (vérification, hachage, sauvegarde en BDD)
             $this->authService->registerUser($_POST);
 
-            // SUCCÈS : On met le Post-it vert et on redirige vers le Login
+            // SUCCÈS : Je met le Post-it vert et je redirige vers le Login
             $_SESSION['flash'] = [
                 'type' => 'success',
                 'message' => 'Inscription effectuée avec succès ! Vous pouvez vous connecter.'
@@ -70,7 +70,7 @@ class AuthController {
 
         } catch (Exception $err) {
             // ERREUR (ex: email déjà pris, mot de passe trop faible)
-            // On met le Post-it rouge et on redirige vers l'inscription
+            // Je met le Post-it rouge et je redirige vers l'inscription
             $_SESSION['flash'] = [
                 'type' => 'error',
                 'message' => $err->getMessage()
@@ -99,22 +99,22 @@ class AuthController {
      * * @param array|null $params Paramètres d'URL éventuels
      */
     public function processLogin(?array $params) {
-        // Sécurité : on s'assure que la requête vient bien d'un formulaire
+        // Sécurité : je m'assure que la requête vient bien d'un formulaire
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             header('Location: /Auth/login');
             exit;
         }
 
         try {
-            // Le service vérifie les identifiants et nous renvoie l'entité User si c'est bon
+            // Le service vérifie les identifiants et me renvoie l'entité User si c'est bon
             $user = $this->authService->loginUser($_POST);
             
-            // SUCCÈS : On connecte l'utilisateur en stockant ses infos clés en session
+            // SUCCÈS : Je connecte l'utilisateur en stockant ses infos clés en session
             $_SESSION['user_id'] = $user->getIdUser();
             $_SESSION['user_pseudo'] = $user->getPseudo();
             $_SESSION['is_admin'] = $user->getIsAdmin();
             
-            // On met un petit Post-it vert de bienvenue 
+            // Je met un petit Post-it vert de bienvenue 
             $_SESSION['flash'] = [
                 'type' => 'success',
                 'message' => 'Ravi de vous revoir, ' . htmlspecialchars($user->getPseudo()) . ' !'
@@ -143,17 +143,17 @@ class AuthController {
      * * @param array|null $params Paramètres d'URL éventuels
      */
     public function logout(?array $params) {
-        // On détruit la session actuelle (efface user_id, user_pseudo, etc.)
+        // Je détruit la session actuelle (efface user_id, user_pseudo, etc.)
         session_destroy();
         
-        // ASTUCE : On redémarre une session vierge juste pour pouvoir coller le Post-it flash !
+        // ASTUCE : Je redémarre une session vierge juste pour pouvoir coller le Post-it flash !
         session_start();
         $_SESSION['flash'] = [
             'type' => 'success',
             'message' => 'Vous êtes bien déconnecté. À bientôt !'
         ];
         
-        // On redirige vers l'accueil
+        // Je redirige vers l'accueil
         header('Location: /Home');
         exit;
     }

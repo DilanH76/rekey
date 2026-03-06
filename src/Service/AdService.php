@@ -131,5 +131,15 @@ class AdService {
 
         return $ad;
     }
+
+    /**
+     * Récupère toutes les annonces publiées par un vendeur
+     * @param int $userId L'ID de l'utilisateur
+     * @return array Un tableau d'objets Ad
+     */
+    public function getUserAds(int $userId): array
+    {
+        return $this->adRepository->findByUserIdWithDetails($userId);
+    }
 }
 ?>

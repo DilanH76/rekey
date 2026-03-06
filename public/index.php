@@ -41,7 +41,7 @@ session_start();
     // Connexion à PDO
     try {
         $envPath = __DIR__ . '/../.env';
-        // si pas de fichier .env on lève une exception
+        // si pas de fichier .env je lève une exception
         if (!file_exists($envPath)) {
             throw new Exception("Configuration file (.env) is missing at project root.");
         }
@@ -56,28 +56,39 @@ session_start();
 
     // Définition des "recettes" de controlleurs (Conteneur d'Injection de Dépendances)
     $container = [
+
         E404Controller::class => function($pdo) {
             return new E404Controller();
         },
+
         HomeController::class => function($pdo) {
             $adRepository = new AdRepository($pdo);
             return new HomeController($adRepository);
         },
+
         AuthController::class => function($pdo) {
             $userRepository = new UserRepository($pdo);
             $authService = new AuthService($userRepository);
             return new AuthController($authService);
         },
+
         ProfileController::class => function($pdo) {
+            // ProfileService
             $userRepository = new UserRepository($pdo);
             $profileService = new ProfileService($userRepository);
-            return new ProfileController($profileService);
+            // AdService
+            $adRepository = new AdRepository($pdo);
+            $categoryRepository = new CategoryRepository($pdo);
+            $platformRepository = new PlatformRepository($pdo);
+            $adService = new AdService($adRepository, $categoryRepository, $platformRepository);
+
+            return new ProfileController($profileService, $adService);
         },
+
         AdController::class => function($pdo) {
             $adRepository = new AdRepository($pdo);
             $categoryRepository = new CategoryRepository($pdo);
             $platformRepository = new PlatformRepository($pdo);
-            
             $adService = new AdService($adRepository, $categoryRepository, $platformRepository);
             
             return new AdController($adService);

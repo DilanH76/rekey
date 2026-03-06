@@ -21,8 +21,8 @@ class AdController {
     }
 
     /**
-     * Méthode par défaut si on tape juste /Ad dans l'URL
-     * On redirige vers l'accueil car il n'y a pas de page d'accueil spécifique aux annonces
+     * Méthode par défaut si je tape juste /Ad dans l'URL
+     * Je redirige vers l'accueil car il n'y a pas de page d'accueil spécifique aux annonces
      */
     public function index(?array $params) {
         header('Location: /Home');
