@@ -103,8 +103,10 @@ class AuthService {
      */
     public function loginUser(array $postData): User
     {
+        $loginInput = $postData['login'] ?? '';
+        $passwordInput = $postData['password'] ?? '';
         // Je cherche l'utilisateur par son email ou pseudo ( champ 'login' du formulaire )
-        $user = $this->userRepository->findByEmailOrPseudo($postData['login']);
+        $user = $this->userRepository->findByEmailOrPseudo($loginInput);
         
         // si l'utilisateur n'existe pas
         if (!$user) {
@@ -112,7 +114,7 @@ class AuthService {
         }
         
         // Je vérifie le mot de passe hashé
-        if (!password_verify($postData['password'], $user->getPassword())) {
+        if (!password_verify($passwordInput, $user->getPassword())) {
             throw new Exception("Identifiant ou mot de passe incorrect.");
         }
         

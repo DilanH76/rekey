@@ -282,6 +282,54 @@ class AdRepository {
     }
 
 
+    // =========================================================
+    // SECTION : MISE À JOUR (UPDATE)
+    // =========================================================
+
+    /**
+     * Met à jour les informations textuelles d'une annonce
+     */
+
+    public function updateAdInfo(int $adId, string $title, string $description, float $price, int $idCategory, int $idPlatform): bool
+    {
+        $sql ="UPDATE ads SET
+                    title = :title,
+                    description = :description,
+                    price = :price,
+                    id_category = :id_category,
+                    id_platform = :id_platform
+               WHERE id_ads = :id_ads";
+
+        $stmt = $this->pdo->prepare($sql);
+
+        return $stmt->execute([
+            'title' => $title,
+            'description' => $description,
+            'price' => $price,
+            'id_category' => $idCategory,
+            'id_platform' => $idPlatform,
+            'id_ads' => $adId
+        ]);
+    }
+
+
+    // =========================================================
+    // SECTION : SUPPRESSION (DELETE)
+    // =========================================================
+
+    /**
+     * Supprime une annonce de la base de données
+     * @param int $id L'ID de l'annonce à supprimer
+     * @return bool True si la suppression a réussi, False sinon
+     */
+    public function delete(int $id): bool
+    {
+        $sql = "DELETE FROM ads WHERE id_ads = :id";
+        $stmt = $this->pdo->prepare($sql);
+        return $stmt->execute(['id' => $id]);
+    }
+
+
 
 }
 ?>

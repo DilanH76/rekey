@@ -137,5 +137,119 @@ class AdController {
             exit;
         }
     }
+
+    // =========================================================
+    // SECTION : TRAITEMENT DES MISES À JOUR (UPDATE)
+    // =========================================================
+
+    /**
+     * Affiche le formulaire de modification
+     * URL : /Ad/edit/123
+     */
+    public function edit(?array $params) {
+        if (!isset($_SESSION['user_id'])) {
+            header('Location: /Auth/login');
+            exit;
+        }
+
+        $adId = isset($params[0]) ? (int)$params[0] : 0;
+
+        try {
+            // Je récupère l'annonce
+            $ad = $this->adService->getAdById($adId);
+
+            if ($ad->getUser()->getIdUser() !== $_SESSION['user_id']) {
+                throw new \Exception("Accès refusé : vous n'êtes pas le vendeur de ce jeu.");
+            }
+
+            // Je prépare les menus déroulants
+            $formData = $this->adService->getFormData();
+            $categories = $formData['categories'];
+            $platforms = $formData['platforms'];
+
+            include __DIR__ . '/../../template/ad_edit.php';
+        } catch (\Exception $err) {
+            $_SESSION['flash'] = [
+                'type' => 'error',
+                'message' => $err->getMessage()
+            ];
+            header('Location: /Profile');
+            exit;
+        }
+    }
+
+    /**
+     * Traite le formulaire de modification
+     * URL : /Ad/update/123
+     */
+    public function update(?array $params) {
+        if (!isset($_SESSION['user_id']) || $_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header('Location: /Home');
+            exit;
+        }
+
+        $adId = isset($params[0]) ? (int)$params[0] : 0;
+
+        try {
+            $this->adService->updateAdData($adId, $_POST, $_SESSION['user_id']);
+
+            $_SESSION['flash'] = [
+                'type' => 'success',
+                'message' => 'Annonce modifiée avec succès !'
+            ];
+            header('Location: /Ad/show/' . $adId);
+            exit; 
+
+        } catch (Exception $err) {
+            $_SESSION['flash'] = [
+                'type' => 'error',
+                'message' => $err->getMessage()
+            ];
+            header('Location: /Ad/edit/'. $adId);
+            exit;
+        }
+    }
+
+    // =========================================================
+    // SECTION : TRAITEMENT DE LA SUPPRESSION (DELETE)
+    // =========================================================
+
+    /**
+     * Traite la demande de suppression d'une annonce
+     * URL : /Ad/delete/123
+     */
+    public function delete(?array $params) {
+        if (!isset($_SESSION['user_id'])) {
+            header('Location: /Auth/login');
+            exit;
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header('Location: /Home');
+            exit;
+        }
+
+        $adId = isset($params[0]) ? (int)$params[0] : 0;
+
+        try {
+            // J'envoie l'ID de l'annoonce et l'ID de l'utilisateur connecté au Service
+            $this->adService->deleteAd($adId, $_SESSION['user_id']);
+
+            $_SESSION['flash'] = [
+                'type' => 'success',
+                'message' => 'Votre annonce a été supprimée avec succès.'
+            ];
+            header('Location: /Profile');
+            exit;
+        } catch (Exception $err) {
+
+            $_SESSION['flash'] = [
+                'type' => 'error',
+                'message' => $err->getMessage()
+            ];
+            header('Location: /Ad/show/'. $adId);
+            exit;
+        }
+    }
 }
 ?>

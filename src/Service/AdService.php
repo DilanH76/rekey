@@ -141,5 +141,73 @@ class AdService {
     {
         return $this->adRepository->findByUserIdWithDetails($userId);
     }
+
+    // =========================================================
+    // SECTION : MISE À JOUR (UPDATE)
+    // =========================================================
+
+    /**
+     * Traite la modification d'une annonce
+     */
+
+    public function updateAdData(int $adId, array $postData, int $userId): void
+    {
+        // Je récupère l'annonce pour verifier le propriétaire
+        $ad = $this->getAdById($adId);
+
+        if ($ad->getUser()->getIdUser() !== $userId) {
+            throw new Exception("Action refusée : Vous ne pouvez modifier que vos propres annonces.");
+        }
+
+        if (empty(trim($postData['title']))) {
+            throw new Exception("Le titre est obligatoire.");
+        }
+
+        $price = (float) $postData['price'];
+        if ($price < 0) {
+            throw new Exception("Le prix ne peut pas être négatif.");
+        }
+
+        $success = $this->adRepository->updateAdInfo(
+            $adId,
+            trim($postData['title']),
+            trim($postData['description']),
+            $price,
+            (int) $postData['id_category'],
+            (int) $postData['id_platform']
+        );
+
+        if (!$success) {
+            throw new Exception("Une erreur est survenue lors de la mise à jour de l'annonce.");
+        }
+    }
+
+    // =========================================================
+    // SECTION : SUPPRESSION (DELETE)
+    // =========================================================
+
+    /**
+     * Supprime une annonce après avoir vérifié les droits de l'utilisateur
+     * @param int $adId L'ID de l'annonce
+     * @param int $userId L'ID de l'utilisateur qui demande la suppression
+     * @throws Exception Si l'annonce n'existe pas ou si l'utilisateur n'est pas le propriétaire
+     */
+    public function deleteAd(int $adId, int $userId): void
+    {
+        // Je récupère l'annonce
+        $ad = $this->getAdById($adId);
+
+        // Est-ce que celui qui clique est bien le vendeur ?
+        if ($ad->getUser()->getIdUser() !== $userId) {
+            throw new Exception("Action refusée : Vous n'êtes pas le propriétaire de cette annonce.");
+        }
+
+        // Si tout es bon, je demande au Repositry de détruire la ligne en BDD
+        $success = $this->adRepository->delete($adId);
+
+        if (!$success) {
+            throw new Exception("Une erreur est survenue lors de la suppression de l'annonce.");
+        }
+    }
 }
 ?>

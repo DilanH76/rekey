@@ -56,9 +56,9 @@ class ProfileService {
     public function updateProfileData(array $data, array $files, int $userId): void {
         // Je récupère l'utilisateur actuel grâce à la méthode que j'ai déjà
         $user = $this->getUserProfile($userId);
-
-        $newPseudo = trim($data['pseudo']);
-        $newEmail  = trim($data['email']);
+        // J'utilise ?? '' pour éviter une erreur si la clé n'exsite pas dans le $_POST
+        $newPseudo = trim($data['pseudo'] ?? '');
+        $newEmail  = trim($data['email'] ?? '');
 
         // Verification du pseudo
         // Si le pseudo a changé, je vérifie qu'il n'est pas déjà pris
@@ -104,8 +104,8 @@ class ProfileService {
         // Je met à jour l'entité avec les nouvelles données du formulaire
         $user->setPseudo($newPseudo);
         $user->setEmail($newEmail);
-        $user->setFirstName(trim($data['first_name']));
-        $user->setLastName(trim($data['last_name']));
+        $user->setFirstName(trim($data['first_name'] ?? ''));
+        $user->setLastName(trim($data['last_name'] ?? ''));
         
         // Je envoie l'objet mis à jour au Repository pour la sauvegarde en BDD
         $success = $this->userRepository->updateProfile($user);
@@ -129,25 +129,29 @@ class ProfileService {
     public function changePassword(int $userId, array $data): void {
         // Je récupère l'utilisateur actuel
         $user = $this->getUserProfile($userId);
+
+        $oldPassword = $data['old_password'] ?? '';
+        $newPassword = $data['new_password'] ?? '';
+        $confirmPassword = $data['confirm_password'] ?? '';
         
         // Je vérifie l'ancien mot de passe tapé correspond bien à celui en BDD
-        if (!password_verify($data['old_password'], $user->getPassword())) {
+        if (!password_verify($oldPassword, $user->getPassword())) {
             throw new Exception("L'ancien mot de passe est incorrect.");
         }
 
         // Je vérifie que les deux nouveaux mots de passe correspondent
-        if ($data['new_password'] !== $data['confirm_password']) {
+        if ($newPassword !== $confirmPassword) {
             throw new Exception("Les nouveaux mots de passe ne correspondent pas.");
         }
 
         // Je vérifie la robustesse avec la Regex
         $regexPassword = '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/';
-        if (!preg_match($regexPassword, $data['new_password'])) {
+        if (!preg_match($regexPassword, $newPassword)) {
             throw new Exception("Le nouveau mot de passe doit contenir au moins 8 caractères, dont une majuscule, une minuscule, un chiffre et un caractère spécial (@$!%*?&).");
         }
 
         // Je hache le nouveau mot de passe
-        $hashedPassword = password_hash($data['new_password'], PASSWORD_DEFAULT);
+        $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
 
         // Je l'envoie au Repository pour la sauvegarde
         $success = $this->userRepository->updatePassword($userId, $hashedPassword);

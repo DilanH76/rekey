@@ -89,7 +89,7 @@ ob_start();
     </div>
 
 </section>
-
+<!-- TODO Nettoyer CSS en ligne -->
 <?php 
 $content = ob_get_clean(); 
 require __DIR__ . '/layout.php'; 
