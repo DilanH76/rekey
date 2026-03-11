@@ -9,17 +9,22 @@ ob_start();
 </section>
 
 <?php if (isset($_SESSION['flash'])): ?>
-    <div class="alert alert-<?= $_SESSION['flash']['type']?>">
+    <div class="alert alert-<?= $_SESSION['flash']['type'] ?>">
         <?= $_SESSION['flash']['message'] ?>
     </div>
-    <?php unset($_SESSION['flash']);?>
+    <?php unset($_SESSION['flash']); ?>
 <?php endif; ?>
 
 <section class="ads-container">
     <?php if (empty($ads)): ?>
         <div class="empty-state">
-            <p>Aucune annonce n'est disponible pour le moment. Soyez le premier à vendre un jeu !</p>
-            <a href="/Ad/add" class="btn-neon">Vendre un jeu</a>
+            <?php if (!empty($_GET['q'])): ?>
+                <p>Aucun résultat trouvé pour la recherche "<strong><?= htmlspecialchars($_GET['q']) ?></strong>".</p>
+                <a href="/Home" class="btn-neon">Retour au catalogue</a>
+            <?php else: ?>
+                <p>Aucune annonce n'est disponible pour le moment. Soyez le premier à vendre un jeu !</p>
+                <a href="/Ad/add" class="btn-neon">Vendre un jeu</a>
+            <?php endif; ?>
         </div>
     <?php else: ?>
 
@@ -38,7 +43,7 @@ ob_start();
                             <div class="ad-card-header">
                                 <h2 class="ad-card-title"><?= htmlspecialchars($ad->getTitle()) ?></h2>
                                 <div class="ad-platform-icon" title="<?= htmlspecialchars($ad->getPlatform()->getLabel()) ?>">
-                                    <?= $ad->getPlatform()->getIconSvg() ?>
+                                    <img src="<?= htmlspecialchars($ad->getPlatform()->getIconSvg()) ?>" alt="<?= htmlspecialchars($ad->getPlatform()->getLabel()) ?>" width="24" height="24">
                                 </div>
                             </div>
 
@@ -61,7 +66,7 @@ ob_start();
     <?php endif; ?>
 </section>
 
-<?php 
-$content = ob_get_clean(); 
-require __DIR__ . '/layout.php'; 
+<?php
+$content = ob_get_clean();
+require __DIR__ . '/layout.php';
 ?>

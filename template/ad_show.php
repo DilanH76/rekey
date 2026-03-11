@@ -14,8 +14,8 @@ ob_start();
             <div class="ad-show-header">
                 <h1><?= htmlspecialchars($ad->getTitle()) ?></h1>
                 <div class="ad-platform-badge">
-                    <?= $ad->getPlatform()->getIconSvg() ?>
-                    <span><?= htmlspecialchars($ad->getplatform()->getLabel()) ?></span>
+                    <img src="<?= htmlspecialchars($ad->getPlatform()->getIconSvg()) ?>" alt="<?= htmlspecialchars($ad->getPlatform()->getLabel()) ?>" width="20" height="20">
+                    <span><?= htmlspecialchars($ad->getPlatform()->getLabel()) ?></span>
                 </div>
             </div>
 
