@@ -23,9 +23,10 @@
             </a>
         </nav>
 
-        <form class="search-form-expanded" action="#">
+        <form class="search-form-expanded" action="/Home" method="GET">
             <input
                 type="text"
+                name="q"
                 placeholder="Minecraft, RPG, Cyberpunk..."
                 id="search-input" />
 

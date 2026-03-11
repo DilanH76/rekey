@@ -146,7 +146,7 @@ class AuthController {
         // Je détruit la session actuelle (efface user_id, user_pseudo, etc.)
         session_destroy();
         
-        // ASTUCE : Je redémarre une session vierge juste pour pouvoir coller le Post-it flash !
+        // ASTUCE : Je redémarre une session vierge juste pour pouvoir coller le Post-it flash
         session_start();
         $_SESSION['flash'] = [
             'type' => 'success',

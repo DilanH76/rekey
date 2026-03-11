@@ -142,6 +142,26 @@ class AdService {
         return $this->adRepository->findByUserIdWithDetails($userId);
     }
 
+    /**
+     * Recherche des annonces par titre
+     * @param string $query Le texte tapé par l'utilisateur
+     * @return array Un tableau d'objets Ad
+     */
+    public function searchAds(string $query): array
+    {   
+        // Sécurité et nettoyage : j'enlève les espaces vides avant/après
+        $cleanedQuery = trim($query);
+
+        // Si la recherche est vide
+        // Je lui renvoie simplement tout le catalogue
+        if (empty($cleanedQuery)) {
+            return $this->adRepository->findAllWithDetails();
+        }
+
+        // Sinon, je demande au Repository de faire la requête SQL "LIKE"
+        return $this->adRepository->searchByTitle($cleanedQuery);
+    }
+
     // =========================================================
     // SECTION : MISE À JOUR (UPDATE)
     // =========================================================

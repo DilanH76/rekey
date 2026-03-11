@@ -1,7 +1,7 @@
 <?php
 namespace App\Controller;
 
-use App\Repository\AdRepository;
+use App\Service\AdService;
 use \Exception;
 
 /**
@@ -9,32 +9,41 @@ use \Exception;
  */
 class HomeController {
 
-    private AdRepository $adRepository;
+    private AdService $adService;
 
-    /**
+/**
      * Constructeur avec injection de dépendance
-     * @param AdRepository $adRepository Pour récupérer les annonces dans la BDD
+     * @param AdService $adService Le service métier gérant la logique des annonces
      */
-    public function __construct(AdRepository $adRepository) 
+    public function __construct(AdService $adService) 
     {
-        $this->adRepository = $adRepository;
+        $this->adService = $adService;
     }
 
+    // =========================================================
+    // SECTION : AFFICHAGE DES VUES
+    // =========================================================
+
     /**
-     * Affiche la page d'accueil avec toutes les annonces
-     * URL : /Home ou /
+     * Affiche la page d'accueil avec toutes les annonces OU les résultats de recherche
+     * URL : /Home ou /Home?q=mot_cle
      */
     public function index(?array $params) {
         try {
-            // Je récupère toutes les annonces avec leurs détails (Catégorie, Plateforme, User)
-            $ads = $this->adRepository->findAllWithDetails();
+            // Je regarde s'il y'a une recherche dans l'URL (ex: ?q=cyber)
+            // L'opérateur ?? '' met une chaîne vide si 'q' n'existe pas dans l'URL
+            $searchQuery = $_GET['q'] ?? '';
 
-            // J'affiche la vue en lui passant implicitement la variable $ads
+            // Je demande les annonces au Service.
+            // C'est lui qui fera le bon choix : tout le catalogue ou juste la recherche
+            $ads = $this->adService->searchAds($searchQuery);
+
             include __DIR__ . '/../../template/home_page.php';
         } catch (Exception $err) {
             echo "Erreur lors du chargement de l'accueil : " . $err->getMessage();
         }
     }
+
 }
 
 ?>

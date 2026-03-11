@@ -25,7 +25,8 @@ session_start();
         PlatformRepository
     };
 
-    $request = trim($_SERVER['REQUEST_URI'], '/');
+    // parse_url() avec PHP_URL_PATH coupe l'URL et ignore tout ce qui se trouve après le "?"
+    $request = trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
     $params = explode('/', $request);
     $controller=array_shift($params);
     $method=array_shift($params);
@@ -63,7 +64,10 @@ session_start();
 
         HomeController::class => function($pdo) {
             $adRepository = new AdRepository($pdo);
-            return new HomeController($adRepository);
+            $categoryRepository = new CategoryRepository($pdo);
+            $platformRepository = new PlatformRepository($pdo);
+            $adService = new AdService($adRepository, $categoryRepository, $platformRepository);
+            return new HomeController($adService);
         },
 
         AuthController::class => function($pdo) {
