@@ -2,6 +2,10 @@
 namespace App\Repository;
 
 use App\Entity\Ad;
+use App\Entity\User;
+use App\Entity\Category;
+use App\Entity\Platform;
+
 use \PDO;
 
 /**
@@ -104,14 +108,14 @@ class AdRepository {
             // J'instancie les objets relationnels
 
             // La catégorie
-            $category = new \App\Entity\Category(
+            $category = new Category(
                 $row['category_label'], 
                 (int) $row['id_category']
             );
             $ad->setCategory($category);
 
             // La plateforme
-            $platform = new \App\Entity\Platform(
+            $platform = new Platform(
                 $row['platform_icon'],
                 $row['platform_label'], 
                 (int) $row['id_platform']
@@ -119,7 +123,7 @@ class AdRepository {
             $ad->setPlatform($platform);
 
             // Le vendeur
-            $user = new \App\Entity\User(
+            $user = new User(
                 $row['last_name'],
                 $row['first_name'],
                 $row['pseudo'],
@@ -181,20 +185,20 @@ class AdRepository {
         );
 
         // instanciation et association des objets liés
-        $category = new \App\Entity\Category(
+        $category = new Category(
             $row['category_label'],
             (int) $row['id_category']
         );
         $ad->setCategory($category);
 
-        $platform = new \App\Entity\Platform(
+        $platform = new Platform(
             $row['platform_icon'],
             $row['platform_label'],
             (int) $row['id_platform']
         );
         $ad->setPlatform($platform);
 
-        $user = new \App\Entity\User(
+        $user = new User(
             $row['last_name'],
             $row['first_name'],
             $row['pseudo'],
@@ -251,18 +255,18 @@ class AdRepository {
             );
 
             // Instanciation et association des objets liés
-            $category = new \App\Entity\Category(
+            $category = new Category(
                 $row['category_label'], 
                 (int) $row['id_category']);
             $ad->setCategory($category);
 
-            $platform = new \App\Entity\Platform(
+            $platform = new Platform(
                 $row['platform_icon'], 
                 $row['platform_label'], 
                 (int) $row['id_platform']);
             $ad->setPlatform($platform);
 
-            $user = new \App\Entity\User(
+            $user = new User(
                 $row['last_name'],
                 $row['first_name'],
                 $row['pseudo'],
@@ -347,14 +351,14 @@ class AdRepository {
             // J'instancie les objets relationnels
 
             // La catégorie
-            $category = new \App\Entity\Category(
+            $category = new Category(
                 $row['category_label'], 
                 (int) $row['id_category']
             );
             $ad->setCategory($category);
 
             // La plateforme
-            $platform = new \App\Entity\Platform(
+            $platform = new Platform(
                 $row['platform_icon'],
                 $row['platform_label'], 
                 (int) $row['id_platform']
@@ -362,7 +366,7 @@ class AdRepository {
             $ad->setPlatform($platform);
 
             // Le vendeur
-            $user = new \App\Entity\User(
+            $user = new User(
                 $row['last_name'],
                 $row['first_name'],
                 $row['pseudo'],
@@ -410,6 +414,18 @@ class AdRepository {
             'id_platform' => $idPlatform,
             'id_ads' => $adId
         ]);
+    }
+
+    /**
+     * Met à jour le statut d'une annonce pour la marquer comme vendue
+     * @param int $adId L'identifiant de l'annonce
+     * @return bool
+     */
+    public function markAsSold(int $adId): bool
+    {
+        $sql = "UPDATE ads SET status = 'vendu' WHERE id_ads = :id_ads";
+        $stmt = $this->pdo->prepare($sql);
+        return $stmt->execute(['id_ads' => $adId]);
     }
 
     // =========================================================
