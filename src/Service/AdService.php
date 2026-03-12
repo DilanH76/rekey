@@ -143,23 +143,19 @@ class AdService {
     }
 
     /**
-     * Recherche des annonces par titre
+     * Recherche des annonces par titre et applique les filtres optionnels
      * @param string $query Le texte tapé par l'utilisateur
+     * @param int|null $idCategory L'ID de la catégorie
+     * @param int|null $idPlatform L'ID de la plateforme
      * @return array Un tableau d'objets Ad
      */
-    public function searchAds(string $query): array
+    public function searchAds(string $query, ?int $idCategory = null, ?int $idPlatform = null): array
     {   
-        // Sécurité et nettoyage : j'enlève les espaces vides avant/après
+        // Nettoyage de la recherche texte
         $cleanedQuery = trim($query);
 
-        // Si la recherche est vide
-        // Je lui renvoie simplement tout le catalogue
-        if (empty($cleanedQuery)) {
-            return $this->adRepository->findAllWithDetails();
-        }
-
-        // Sinon, je demande au Repository de faire la requête SQL "LIKE"
-        return $this->adRepository->searchByTitle($cleanedQuery);
+        // On délègue tout au Repository qui est capable de gérer les paramètres nuls
+        return $this->adRepository->searchAndFilter($cleanedQuery, $idCategory, $idPlatform);
     }
 
     // =========================================================

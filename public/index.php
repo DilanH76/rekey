@@ -80,13 +80,8 @@ session_start();
             // ProfileService
             $userRepository = new UserRepository($pdo);
             $profileService = new ProfileService($userRepository);
-            // AdService
-            $adRepository = new AdRepository($pdo);
-            $categoryRepository = new CategoryRepository($pdo);
-            $platformRepository = new PlatformRepository($pdo);
-            $adService = new AdService($adRepository, $categoryRepository, $platformRepository);
 
-            return new ProfileController($profileService, $adService);
+            return new ProfileController($profileService);
         },
 
         AdController::class => function($pdo) {

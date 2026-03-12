@@ -282,11 +282,13 @@ class AdRepository {
     }
 
     /**
-     * Recherche des annonces dont le titre contient le mot-clé
-     * @param string $search Le texte recherché
-     * @return array Un tableau d'objets Ad correspondants
+     * Recherche dynamique avec filtres (Texte, Catégorie, Plateforme)
+     * @param string $search Le texte recherché (vide si aucun)
+     * @param int|null $idCategory L'ID de la catégorie (null si aucune)
+     * @param int|null $idPlatform L'ID de la plateforme (null si aucune)
+     * @return array Un tableau d'objets Ad
      */
-    public function searchByTitle(string $search): array
+    public function searchAndFilter(string $search, ?int $idCategory, ?int $idPlatform): array
     {
         $sql = "SELECT
                     a.*,
@@ -297,19 +299,34 @@ class AdRepository {
                 INNER JOIN categories c ON a.id_category = c.id_category
                 INNER JOIN platforms p ON a.id_platform = p.id_platform
                 INNER JOIN users u ON a.id_user = u.id_user
-                WHERE a.title LIKE :search
-                ORDER BY a.created_at DESC";
-        
-        $stmt = $this->pdo->prepare($sql);
-
+                WHERE 1=1";
+        $params = [];
+        // Ajout dynamique des conditions si elles existent
         // J'entoure le mot recherché de "%" pour dire "Peu importe ce qu'il y'a avant ou après"
         // Exemple : Si $search ="cyber", ça trouvera "Cyberpunk2077"
-        $stmt->execute(['search' => '%' . $search . '%']);
+        if (!empty($search)) {
+            $sql .= " AND a.title LIKE :search";
+            $params['search'] = "%" . $search . '%';
+        }
+
+        if ($idCategory !== null) {
+            $sql .= " AND a.id_category = :id_category";
+            $params['id_category'] = $idCategory;
+        }
+
+        if ($idPlatform !== null) {
+            $sql .= " AND a.id_platform = :id_platform";
+            $params['id_platform'] = $idPlatform;
+        }
+
+        $sql .= " ORDER BY a.created_at DESC";
+
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute($params);
 
         $ads = [];
 
         // Même "hydratation" que pour findAllWithDetails
-
         while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
 
             

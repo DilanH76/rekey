@@ -2,7 +2,6 @@
 namespace App\Controller;
 
 use App\Service\ProfileService;
-use App\Service\AdService;
 use \Exception;
 
 /**
@@ -12,16 +11,14 @@ use \Exception;
 class ProfileController {
     
     private ProfileService $profileService;
-    private AdService $adService;
     
     /**
      * Constructeur avec injection de dépendance
      * @param ProfileService $profileService Le service métier gérant la logique du profil
      */
-    public function __construct(ProfileService $profileService, AdService $adService)
+    public function __construct(ProfileService $profileService)
     {
         $this->profileService = $profileService;
-        $this->adService = $adService;
     }
 
     // =========================================================
@@ -44,8 +41,6 @@ class ProfileController {
             // Je demande au service les données de l'utilisateur
             // La variable $user contiendra un objet Entity\User complet
             $user = $this->profileService->getUserProfile($_SESSION['user_id']);
-            // Je demande au service toutes les annonces de cet utilisateur
-            $userAds = $this->adService->getUserAds($_SESSION['user_id']);
             // Je affiche la vue en lui passant l'objet $user
             include __DIR__ . '/../../template/profile.php';
         } catch (Exception $err) {

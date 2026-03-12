@@ -86,7 +86,37 @@ class AdController {
             // J'affiche la vue en lui passant implicitement $categories et $platforms
             include __DIR__ . '/../../template/add_ad.php';
         } catch (Exception $err) {
-            echo "Erreur : " . $err->getMessage();
+            $_SESSION['flash'] = [
+                'type' => 'error',
+                'message' => $err->getMessage()
+            ];
+            header('Location: /Home');
+            exit;
+        }
+    }
+
+    /**
+     * Affiche la liste des annonces du vendeur connecté
+     * URL : /Ad/mine
+     */
+    public function mine(?array $params) {
+        if (!isset($_SESSION['user_id'])) {
+            header('Location: /Auth/login');
+            exit;
+        }
+
+        try {
+            // Le service récupère uniqument  les annonces de ce vendeur
+            $userAds = $this->adService->getUserAds($_SESSION['user_id']);
+
+            include __DIR__ . '/../../template/my_ads.php';
+        } catch (Exception $err) {
+            $_SESSION['flash'] = [
+                'type' => 'error',
+                'message' => "Erreur lors du chargement de vos annonces."
+            ];
+            header('Location: /Profile');
+            exit;
         }
     }
 
