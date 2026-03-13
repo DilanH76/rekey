@@ -45,19 +45,21 @@ ob_start();
                 </div>
             </div>
 
-            <div class="ad-actions">
-                <?php if (isset($_SESSION['user_id']) && $_SESSION['user_id'] === $ad->getUser()->getIdUser()): ?>
-                    <button class="btn-neon disabled" disabled>Votre annonce</button>
-                    <form action="/Ad/delete/<?= $ad->getIdAds() ?>" method="POST" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette annonce définitivement ? Cette action est irréversible.');">
-                        <button type="submit" class="btn-neon" style="background: rgba(255,0,0,0.1); color: #ff4444; border-color: #ff4444; box-shadow: 0 0 10px rgba(255,0,0,0.2);">
-                            Supprimer
-                        </button>
-                        <a href="/Ad/edit/<?= $ad->getIdAds() ?>" class="btn-neon" style="color: #fff; border-color: #fff;">
-                            Modifier
-                        </a>
-                    </form>
+            <div class="ad-actions" style="margin-top: 2rem;">
+                <?php if ($ad->getStatus() === 'vendu'): ?>
+                    <button class="btn-outline" disabled style="opacity: 0.5; cursor: not-allowed; width: 100%;">
+                        Ce jeu a déjà été vendu
+                    </button>
+
+                <?php elseif (isset($_SESSION['user_id']) && $_SESSION['user_id'] === $ad->getUser()->getIdUser()): ?>
+                    <button class="btn-outline" disabled style="opacity: 0.5; cursor: not-allowed; width: 100%;">
+                        Ceci est votre annonce
+                    </button>
+
                 <?php else: ?>
-                    <button class="btn-neon">Ajouter au panier</button>
+                    <a href="/Order/checkout/<?= $ad->getIdAds() ?>" class="btn-neon" style="display: block; text-align: center; width: 100%;">
+                        Acheter immédiatement
+                    </a>
                 <?php endif; ?>
             </div>
 

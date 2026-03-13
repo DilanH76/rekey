@@ -32,7 +32,7 @@ class PlatformRepository {
      */
     public function findAll(): array
     {
-        // On trie par ordre alphabétique
+        // Je trie par ordre alphabétique
         $sql = "SELECT * FROM platforms ORDER BY label ASC";
 
         $stmt = $this->pdo->query($sql);

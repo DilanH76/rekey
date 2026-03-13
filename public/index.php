@@ -10,19 +10,22 @@ session_start();
         HomeController,
         AuthController,
         ProfileController,
-        AdController
+        AdController,
+        OrderController
     };
     use App\Service\{
         DatabaseFactory,
         AuthService,
         ProfileService,
-        AdService
+        AdService,
+        OrderService
     };
     use App\Repository\{
         UserRepository,
         AdRepository,
         CategoryRepository,
-        PlatformRepository
+        PlatformRepository,
+        OrderRepository
     };
 
     // parse_url() avec PHP_URL_PATH coupe l'URL et ignore tout ce qui se trouve après le "?"
@@ -91,6 +94,19 @@ session_start();
             $adService = new AdService($adRepository, $categoryRepository, $platformRepository);
             
             return new AdController($adService);
+        },
+
+        OrderController::class => function($pdo) {
+            $adRepository = new AdRepository($pdo);
+            $categoryRepository = new CategoryRepository($pdo);
+            $platformRepository = new PlatformRepository($pdo);
+            $adService = new AdService($adRepository, $categoryRepository, $platformRepository);
+
+            $orderRepository = new OrderRepository($pdo);
+            $orderService = new OrderService($orderRepository, $adRepository);
+
+            return new OrderController($orderService, $adService);
+
         }
     ];
 

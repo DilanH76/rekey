@@ -149,13 +149,17 @@ class AdService {
      * @param int|null $idPlatform L'ID de la plateforme
      * @return array Un tableau d'objets Ad
      */
-    public function searchAds(string $query, ?int $idCategory = null, ?int $idPlatform = null): array
+    public function searchAds(string $query, ?int $idCategory = null, ?int $idPlatform = null, string $sort = 'date_desc', int $page = 1): array
     {   
         // Nettoyage de la recherche texte
         $cleanedQuery = trim($query);
+        // Calcul de la pagination ( ex : 12 annonces par page)
+        $limit = 12;
+        // Si je suis page 1, offset = 0. Si page 2, offset = 12, etc.
+        $offset = ($page- 1) * $limit;
 
         // On délègue tout au Repository qui est capable de gérer les paramètres nuls
-        return $this->adRepository->searchAndFilter($cleanedQuery, $idCategory, $idPlatform);
+        return $this->adRepository->searchAndFilter($cleanedQuery, $idCategory, $idPlatform, $sort, $limit, $offset);
     }
 
     // =========================================================

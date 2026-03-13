@@ -285,14 +285,17 @@ class AdRepository {
         return $ads;
     }
 
-    /**
-     * Recherche dynamique avec filtres (Texte, Catégorie, Plateforme)
+/**
+     * Recherche dynamique avec filtres, tri et pagination
      * @param string $search Le texte recherché (vide si aucun)
      * @param int|null $idCategory L'ID de la catégorie (null si aucune)
      * @param int|null $idPlatform L'ID de la plateforme (null si aucune)
+     * @param string $sort Le type de tri (date_desc, price_asc, price_desc)
+     * @param int $limit Le nombre maximum d'annonces à renvoyer
+     * @param int $offset Le point de départ pour la pagination
      * @return array Un tableau d'objets Ad
      */
-    public function searchAndFilter(string $search, ?int $idCategory, ?int $idPlatform): array
+    public function searchAndFilter(string $search, ?int $idCategory, ?int $idPlatform, string $sort = 'date_desc', int $limit = 12, int $offset = 0): array
     {
         $sql = "SELECT
                     a.*,
@@ -323,10 +326,27 @@ class AdRepository {
             $params['id_platform'] = $idPlatform;
         }
 
-        $sql .= " ORDER BY a.created_at DESC";
+        // Gestion du tri (ORDER BY dynamique)
+        if ($sort === 'price_asc') {
+            $sql .= " ORDER BY a.price ASC";
+        } elseif ($sort === 'price_desc') {
+            $sql .= " ORDER BY a.price DESC";
+        } else {
+            $sql .= " ORDER BY a.created_at DESC";
+        }
+
+        $sql .= " LIMIT :limit OFFSET :offset";
 
         $stmt = $this->pdo->prepare($sql);
-        $stmt->execute($params);
+        // je bind les paramètres de recherche (texte, catégorie, plateforme)
+        foreach ($params as $key => $value) {
+            $stmt->bindValue(":$key", $value);
+        }
+        // Je bind la pagination en forçant le type INT (sinon PDO plante)
+        $stmt->bindValue(':limit', $limit, \PDO::PARAM_INT);
+        $stmt->bindValue(':offset', $offset, \PDO::PARAM_INT);
+        // j'exécute à vide (car j'ai tout bindé manuellement juste au-dessus)
+        $stmt->execute();
 
         $ads = [];
 

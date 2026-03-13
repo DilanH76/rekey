@@ -80,9 +80,9 @@ class UserRepository {
 
         $row = $stmt->fetch(\PDO::FETCH_ASSOC);
 
-        if (!$row) return null; // Si aucun utilisateur n'a cet email/pseudo, on renvoie null
+        if (!$row) return null; // Si aucun utilisateur n'a cet email/pseudo, je renvoie null
 
-        // On recrée l'objet Entity User en utilisant le constructeur complet
+        // Je recrée l'objet Entity User en utilisant le constructeur complet
         $user = new User (
             $row['last_name'],
             $row['first_name'],

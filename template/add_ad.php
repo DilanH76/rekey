@@ -9,13 +9,6 @@ ob_start();
         <h1 class="form-title">Vendre un jeu</h1>
         <p class="form-subtitle">Remplissez les informations ci-dessous pour publier votre annonce.</p>
 
-        <?php if (isset($_SESSION['flash'])): ?>
-            <div class="alert alert-<?= $_SESSION['flash']['type'] ?>">
-                <?= $_SESSION['flash']['message'] ?>
-            </div>
-            <?php unset($_SESSION['flash']); ?>
-        <?php endif; ?>
-
         <form action="/Ad/store" method="POST" enctype="multipart/form-data" class="custom-form">
             
             <div class="form-group">

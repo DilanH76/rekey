@@ -45,13 +45,7 @@ ob_start();
 
     </form>
 </section>
-
-<?php if (isset($_SESSION['flash'])): ?>
-    <div class="alert alert-<?= $_SESSION['flash']['type'] ?>">
-        <?= $_SESSION['flash']['message'] ?>
-    </div>
-    <?php unset($_SESSION['flash']); ?>
-<?php endif; ?>
+f; ?>
 
 <section class="ads-container">
     <?php if (empty($ads)): ?>
@@ -107,7 +101,7 @@ ob_start();
         </div>
     <?php endif; ?>
 </section>
-
+<!-- TODO M -->
 <?php 
 $content = ob_get_clean(); 
 require __DIR__ . '/layout.php'; 

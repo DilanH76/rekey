@@ -60,7 +60,7 @@
 
                     <li><a href="/Profile">Mon Profil</a></li>
                     <li><a href="/Ad/mine">Mes Annonces</a></li>
-                    <li><a href="/Orders">Mes Achats</a></li>
+                    <li><a href="/Order/myPurchases">Mes Achats</a></li>
                     <li><a href="/Favorites">Mes Favoris</a></li>
                     <li class="logout-link"><a href="/Auth/logout">Déconnexion</a></li>
                 </ul>
