@@ -26,6 +26,15 @@ class ProfileService {
     // =========================================================
 
     /**
+     * Récupère la liste complète de tous les utilisateurs inscrits.
+     * @return array Un tableau d'objets User
+     */
+    public function getAllUsers(): array 
+    {
+        return $this->userRepository->findAll();
+    }
+
+    /**
      * Récupère les données d'un utilisateur par son ID
      * @param int $userId L'identifiant de l'utilisateur
      * @return User L'objet Entity\User correspondant

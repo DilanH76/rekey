@@ -11,7 +11,8 @@ session_start();
         AuthController,
         ProfileController,
         AdController,
-        OrderController
+        OrderController,
+        AdminController
     };
     use App\Service\{
         DatabaseFactory,
@@ -107,6 +108,18 @@ session_start();
 
             return new OrderController($orderService, $adService);
 
+        },
+
+        AdminController::class => function($pdo) {
+            $adRepository = new AdRepository($pdo);
+            $categoryRepository = new CategoryRepository($pdo);
+            $platformRepository = new PlatformRepository($pdo);
+            $adService = new AdService($adRepository, $categoryRepository, $platformRepository);
+
+            $userRepository = new UserRepository($pdo);
+            $profileService = new ProfileService($userRepository);
+
+            return new AdminController($adService, $profileService);
         }
     ];
 
