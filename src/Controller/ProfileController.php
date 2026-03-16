@@ -8,7 +8,7 @@ use \Exception;
  * Contrôleur gérant l'espace personnel de l'utilisateur
  * (Affichage du profil, édition des infos/avatar, mot de passe et suppression de compte)
  */
-class ProfileController {
+class ProfileController extends BaseController {
     
     private ProfileService $profileService;
     
@@ -32,10 +32,7 @@ class ProfileController {
      */
     public function index(?array $params) {
         // Verifier si l'utilisateur es connecté 
-        if (!isset($_SESSION['user_id'])) {
-            header('Location: /Auth/login');
-            exit;
-        }
+        $this->requireAuth();
 
         try {
             // Je demande au service les données de l'utilisateur
@@ -56,10 +53,7 @@ class ProfileController {
      */
     public function edit(?array $params) {
         // Vérifier si l'utilisateur es connecté
-        if (!isset($_SESSION['user_id'])) {
-            header('Location: /Auth/login');
-            exit;
-        }
+        $this->requireAuth();
 
         try {
             // Je demainde au service les données de l'utilisateur
@@ -82,37 +76,29 @@ class ProfileController {
      */
     public function update(?array $params) {
         // Vérifier si l'utilisateur es connecté
-        if (!isset($_SESSION['user_id'])) {
-            header('Location: /Auth/login');
-            exit;
-        }
+        $this->requireAuth();
+        $this->requirePost('/Profile');
 
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            try {
-                // J'envoie tout le formulaire au sercie
-                $this->profileService->updateProfileData($_POST, $_FILES, $_SESSION['user_id']);
-                // Je met à jour le pseudo dans la session
-                $_SESSION['user_pseudo'] = trim($_POST['pseudo']);
-                // SUCCÈS
-                $_SESSION['flash'] = [
-                    'type' => 'success',
-                    'message' => 'Vos informations ont été mises à jour.'
-                ];
-                header('Location: /Profile');
-                exit;
-
-            } catch (Exception $err) {
-                // ERREUR 
-                $_SESSION['flash'] = [
-                    'type' => 'error',
-                    'message' => $err->getMessage()
-                ];
-                header('Location: /Profile/edit');
-                exit;
-            }
-        } else {
-            // Si j'accède à l'URL sans POST, je renvoie sur le profil
+        try {
+            // J'envoie tout le formulaire au sercie
+            $this->profileService->updateProfileData($_POST, $_FILES, $_SESSION['user_id']);
+            // Je met à jour le pseudo dans la session
+            $_SESSION['user_pseudo'] = trim($_POST['pseudo']);
+            // SUCCÈS
+            $_SESSION['flash'] = [
+                'type' => 'success',
+                'message' => 'Vos informations ont été mises à jour.'
+            ];
             header('Location: /Profile');
+            exit;
+
+        } catch (Exception $err) {
+            // ERREUR 
+            $_SESSION['flash'] = [
+                'type' => 'error',
+                'message' => $err->getMessage()
+            ];
+            header('Location: /Profile/edit');
             exit;
         }
     }
@@ -124,35 +110,27 @@ class ProfileController {
      */
     public function updatePassword(?array $params) {
         // Verifier si l'utilisateur es connecté
-        if (!isset($_SESSION['user_id'])) {
-            header('Location: /Auth/login');
-            exit;
-        }
+        $this->requireAuth();
+        $this->requirePost('/Profile');
 
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            try {
-                // J'envoie les données du formulaire au Service
-                $this->profileService->changePassword($_SESSION['user_id'], $_POST);
+        try {
+            // J'envoie les données du formulaire au Service
+            $this->profileService->changePassword($_SESSION['user_id'], $_POST);
 
-                // Succès
-                $_SESSION['flash'] = [
-                    'type' => 'success',
-                    'message' => 'Votre mot de passe a été modifié avec succès.'
-                ];
-                header('Location: /Profile');
-                exit;
-            } catch (Exception $err) {
-                // Erreur
-                $_SESSION['flash'] = [
-                    'type' => 'error',
-                    'message' => $err->getMessage()
-                ];
-                header('Location: /Profile/edit');
-                exit;
-            }
-        } else {
-            // Si j'accède à l'URL sans POST
+            // Succès
+            $_SESSION['flash'] = [
+                'type' => 'success',
+                'message' => 'Votre mot de passe a été modifié avec succès.'
+            ];
             header('Location: /Profile');
+            exit;
+        } catch (Exception $err) {
+            // Erreur
+            $_SESSION['flash'] = [
+                'type' => 'error',
+                'message' => $err->getMessage()
+            ];
+            header('Location: /Profile/edit');
             exit;
         }
     }
@@ -168,38 +146,31 @@ class ProfileController {
      */
     public function deleteAccount(?array $params) {
         // Verifier si l'utilisateur est connecté
-        if (!isset($_SESSION['user_id'])) {
-            header('Location: /Auth/login');
+        $this->requireAuth();
+        $this->requirePost('/Profile');
+
+        try {
+            // Je demande au service de supprimer le compte
+            $this->profileService->deleteAccount($_SESSION['user_id']);
+
+            // Je détruit la session actuelle ( déconnexion automatique )
+            session_destroy();
+
+            // Je recrée une session vierge juste pour le message d'adieu
+            session_start();
+            $_SESSION['flash'] = [
+                'type' => 'success',
+                'message' => 'Votre compte a été definitivement supprimé. Au revoir !'
+            ];
+
+            header('Location: /Home');
             exit;
-        }
-
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            try {
-                // Je demande au service de supprimer le compte
-                $this->profileService->deleteAccount($_SESSION['user_id']);
-
-                // Je détruit la session actuelle ( déconnexion automatique )
-                session_destroy();
-
-                // Je recrée une session vierge juste pour le message d'adieu
-                session_start();
-                $_SESSION['flash'] = [
-                    'type' => 'success',
-                    'message' => 'Votre compte a été definitivement supprimé. Au revoir !'
-                ];
-
-                header('Location: /Home');
-                exit;
-            } catch (Exception $err) {
-                $_SESSION['flash'] = [
-                    'type' => 'error',
-                    'message' => $err->getMessage()
-                ];
-                header('Location: /Profile/edit');
-                exit;
-            }
-        } else {
-            header('Location: /Profile');
+        } catch (Exception $err) {
+            $_SESSION['flash'] = [
+                'type' => 'error',
+                'message' => $err->getMessage()
+            ];
+            header('Location: /Profile/edit');
             exit;
         }
     }  

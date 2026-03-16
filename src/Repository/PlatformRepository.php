@@ -22,6 +22,25 @@ class PlatformRepository {
     }
 
     // =========================================================
+    // SECTION : CRÉATION (CREATE)
+    // =========================================================
+
+    /**
+     * Ajoute une nouvelle plateforme en base de données
+     * @param Platform $platform L'objet Platform contenant le nom et l'icône
+     * @return bool True si succès, False sinon
+     */
+    public function create(Platform $platform): bool
+    {
+        $sql = "INSERT INTO platforms (label, icon_svg) VALUES (:label, :icon_svg)";
+        $stmt = $this->pdo->prepare($sql);
+        return $stmt->execute([
+            'label' => $platform->getLabel(),
+            'icon_svg' => $platform->getIconSvg()
+        ]);
+    }
+
+    // =========================================================
     // SECTION : LECTURE (READ)
     // =========================================================
 
@@ -48,6 +67,43 @@ class PlatformRepository {
         }
 
         return $platforms;
+    }
+
+    // =========================================================
+    // SECTION : MISE À JOUR (UPDATE)
+    // =========================================================
+
+    /**
+     * Met à jour les informations d'une plateforme existante
+     * @param Platform $platform L'objet Platform contenant les nouvelles infos et l'ID
+     * @return bool True si succès, False sinon
+     */
+    public function update(Platform $platform): bool
+    {
+        $sql = "UPDATE platforms SET label = :label, icon_svg = :icon_svg WHERE id_platform = :id_platform";
+        $stmt = $this->pdo->prepare($sql);
+        
+        return $stmt->execute([
+            'label' => $platform->getLabel(),
+            'icon_svg' => $platform->getIconSvg(),
+            'id_platform' => $platform->getIdPlatform()
+        ]);
+    }
+
+    // =========================================================
+    // SECTION : SUPPRESSION (DELETE)
+    // =========================================================
+
+    /**
+     * Supprime une plateforme de la base de données
+     * @param int $id L'identifiant de la plateforme
+     * @return bool True si succès, False sinon
+     */
+    public function delete(int $id): bool
+    {
+        $sql = "DELETE FROM platforms WHERE id_platform = :id";
+        $stmt = $this->pdo->prepare($sql);
+        return $stmt->execute(['id' => $id]);
     }
 
 }

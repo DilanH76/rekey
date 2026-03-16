@@ -8,7 +8,7 @@ use \Exception;
  * Contrôleur gérant l'authentification des utilisateurs
  * (Inscription, Connexion, Déconnexion)
  */
-class AuthController {
+class AuthController extends BaseController {
     
     private AuthService $authService;
 
@@ -51,10 +51,7 @@ class AuthController {
      */
     public function processRegister(?array $params) {
         // Sécurité : je m'assure que la requête vient bien d'un formulaire
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            header('Location: /Auth/register');
-            exit;
-        }
+        $this->requirePost('/Auth/register');
         
         try {
             // Le service fait tout le travail (vérification, hachage, sauvegarde en BDD)
@@ -100,10 +97,7 @@ class AuthController {
      */
     public function processLogin(?array $params) {
         // Sécurité : je m'assure que la requête vient bien d'un formulaire
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            header('Location: /Auth/login');
-            exit;
-        }
+        $this->requirePost('/Auth/login');
 
         try {
             // Le service vérifie les identifiants et me renvoie l'entité User si c'est bon

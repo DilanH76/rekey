@@ -7,7 +7,7 @@ use \Exception;
 /**
  * Contrôleur gérant les pages liées aux annonces (Création, affichage, etc.)
  */
-class AdController {
+class AdController extends BaseController {
 
     private AdService $adService;
 
@@ -70,10 +70,7 @@ class AdController {
      */
     public function add(?array $params) {
         // L'utilisateur doit absolument être connecté pour vendre un jeu
-        if (!isset($_SESSION['user_id'])) {
-            header('Location: /Auth/login');
-            exit;
-        }
+        $this->requireAuth();
 
         try {
             // Je demande au service de me fournir les catégories et platformes
@@ -100,10 +97,7 @@ class AdController {
      * URL : /Ad/mine
      */
     public function mine(?array $params) {
-        if (!isset($_SESSION['user_id'])) {
-            header('Location: /Auth/login');
-            exit;
-        }
+        $this->requireAuth();
 
         try {
             // Le service récupère uniqument  les annonces de ce vendeur
@@ -131,38 +125,32 @@ class AdController {
      */
     public function store(?array $params) {
         // Sécurité : l'utilisateur doit être connecté
-        if (!isset($_SESSION['user_id'])) {
-            header('Location: /Auth/login');
+        $this->requireAuth();
+        
+        // Si on accède à l'URL sans POST (en tapant l'URL manuellement)
+        $this->requirePost('/Ad/add');
+
+        try {
+            // J'envoie tout le formulaire, les fichiers et l'ID du vendeur au service
+            $this->adService->createAd($_POST, $_FILES, $_SESSION['user_id']);
+
+            // SUCCES
+            $_SESSION['flash'] = [
+                'type' => 'success',
+                'message' => 'Félicitations ! Votre jeu a bien été mis en vente.'
+            ];
+
+            // Je redirige vers l'accueil
+            header('Location: /Home');
             exit;
-        }
-
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            try {
-                // J'envoie tout le formulaire, les fichiers et l'ID du vendeur au service
-                $this->adService->createAd($_POST, $_FILES, $_SESSION['user_id']);
-
-                // SUCCES
-                $_SESSION['flash'] = [
-                    'type' => 'success',
-                    'message' => 'Félicitations ! Votre jeu a bien été mis en vente.'
-                ];
-
-                // Je redirige vers l'accueil
-                header('Location: /Home');
-                exit;
-            } catch (Exception $err) {
-                // ERREUR : Le service a levé une exception (prix négatif, image trop lourde...)
-                $_SESSION['flash'] = [
-                    'type' => 'error',
-                    'message' => $err->getMessage()
-                ];
-                
-                // Je le renvoie sur le formulaire pour qu'il corrige
-                header('Location: /Ad/add');
-                exit;
-            }
-        } else {
-            // Si on accède à l'URL sans POST (en tapant l'URL manuellement)
+        } catch (Exception $err) {
+            // ERREUR : Le service a levé une exception (prix négatif, image trop lourde...)
+            $_SESSION['flash'] = [
+                'type' => 'error',
+                'message' => $err->getMessage()
+            ];
+            
+            // Je le renvoie sur le formulaire pour qu'il corrige
             header('Location: /Ad/add');
             exit;
         }
@@ -177,10 +165,7 @@ class AdController {
      * URL : /Ad/edit/123
      */
     public function edit(?array $params) {
-        if (!isset($_SESSION['user_id'])) {
-            header('Location: /Auth/login');
-            exit;
-        }
+        $this->requireAuth();
 
         $adId = isset($params[0]) ? (int)$params[0] : 0;
 
@@ -213,10 +198,8 @@ class AdController {
      * URL : /Ad/update/123
      */
     public function update(?array $params) {
-        if (!isset($_SESSION['user_id']) || $_SERVER['REQUEST_METHOD'] !== 'POST') {
-            header('Location: /Home');
-            exit;
-        }
+        $this->requireAuth('/Home');
+        $this->requirePost('/Home');
 
         $adId = isset($params[0]) ? (int)$params[0] : 0;
 
@@ -249,15 +232,8 @@ class AdController {
      * URL : /Ad/delete/123
      */
     public function delete(?array $params) {
-        if (!isset($_SESSION['user_id'])) {
-            header('Location: /Auth/login');
-            exit;
-        }
-
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            header('Location: /Home');
-            exit;
-        }
+        $this->requireAuth();
+        $this->requirePost();
 
         $adId = isset($params[0]) ? (int)$params[0] : 0;
 

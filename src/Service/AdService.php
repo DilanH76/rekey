@@ -241,5 +241,36 @@ class AdService {
             throw new Exception("Une erreur est survenue lors de la suppression de l'annonce.");
         }
     }
+
+    // =========================================================
+    // SECTION : ADMINISTRATION (MODÉRATION)
+    // =========================================================
+
+    /**
+     * Récupère la liste complète de toutes les annonces pour le Back-Office
+     * @return array Un tableau d'objets Ad
+     */
+    public function getAllAdsForAdmin(): array
+    {
+        return $this->adRepository->findAllWithDetails();
+    }
+
+    /**
+     * Supprime une annonce (Modération Admin) sans vérifier le propriétaire
+     * @param int $adId L'ID de l'annonce
+     * @throws Exception Si l'annonce n'existe pas ou si la suppression échoue
+     */
+    public function deleteAdAsAdmin(int $adId): void
+    {
+        // Je vérifie simplement que l'annonce existe
+        $this->getAdById($adId);
+
+        // Je lance la suppression directe
+        $success = $this->adRepository->delete($adId);
+
+        if (!$success) {
+            throw new Exception("Une erreur est survenue lors de la suppression de l'annonce par la modération.");
+        }
+    }
 }
 ?>

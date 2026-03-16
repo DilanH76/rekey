@@ -20,6 +20,22 @@ class CategoryRepository {
     }
 
     // =========================================================
+    // SECTION : CRÉATION (CREATE)
+    // =========================================================
+
+    /**
+     * Ajoute une nouvelle catégorie en base de données
+     * @param Category $category L'objet Category contenant le nom
+     * @return bool True si succès, False sinon
+     */
+    public function create(Category $category): bool
+    {
+        $sql = "INSERT INTO categories (label) VALUES (:label)";
+        $stmt = $this->pdo->prepare($sql);
+        return $stmt->execute(['label' => $category->getLabel()]);
+    }
+
+    // =========================================================
     // SECTION : LECTURE (READ)
     // =========================================================
 
@@ -49,6 +65,42 @@ class CategoryRepository {
         }
 
         return $categories; // je renvoie le tableau
+    }
+
+    // =========================================================
+    // SECTION : MISE À JOUR (UPDATE)
+    // =========================================================
+
+    /**
+     * Met à jour le nom d'une catégorie existante
+     * @param Category $category L'objet Category contenant le nouveau nom et l'ID à modifier
+     * @return bool True si succès, False sinon
+     */
+    public function update(Category $category): bool
+    {
+        $sql = "UPDATE categories SET label = :label WHERE id_category = :id_category";
+        $stmt = $this->pdo->prepare($sql);
+        
+        return $stmt->execute([
+            'label' => $category->getLabel(),
+            'id_category' => $category->getIdCategory()
+        ]);
+    }
+
+    // =========================================================
+    // SECTION : SUPPRESSION (DELETE)
+    // =========================================================
+
+    /**
+     * Supprime une catégorie de la base de données
+     * @param int $id L'identifiant de la catégorie
+     * @return bool True si succès, False sinon
+     */
+    public function delete(int $id): bool
+    {
+        $sql = "DELETE FROM categories WHERE id_category = :id";
+        $stmt = $this->pdo->prepare($sql);
+        return $stmt->execute(['id' => $id]);
     }
 }
 ?>

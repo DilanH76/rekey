@@ -8,7 +8,7 @@ use \Exception;
 /**
  * Contrôleur gérant le tunnel d'achat et l'historique des commandes
  */
-class OrderController {
+class OrderController extends BaseController {
 
     private OrderService $orderService;
     private AdService $adService;
@@ -32,14 +32,7 @@ class OrderController {
      */
     public function checkout(?array $params) {
         // Utilisateur connecté uniquement
-        if (!isset($_SESSION['user_id'])) {
-            $_SESSION['flash'] = [
-                'type' => 'error',
-                'message' => 'Vous devez être connecté pour acheter un jeu.'
-            ];
-            header('Location: /Auth/login');
-            exit;
-        }
+        $this->requireAuth();
 
         $adId = isset($params[0]) ? (int)$params[0] : 0;
 
@@ -73,10 +66,8 @@ class OrderController {
      * URL : /Order/process/5
      */
     public function process(?array $params) {
-        if (!isset($_SESSION['user_id']) || $_SERVER['REQUEST_METHOD'] !== 'POST') {
-            header('Location: /Home');
-            exit;
-        }
+        $this->requireAuth('/Home');
+        $this->requirePost('/Home');
 
         $adId = isset($params[0]) ? (int)$params[0] : 0;
 
@@ -108,10 +99,7 @@ class OrderController {
      * URL : /Order/myPurchases
      */
     public function myPurchases(?array $params) {
-        if (!isset($_SESSION['user_id'])) {
-            header('Location: /Auth/login');
-            exit;
-        }
+        $this->requireAuth();
 
         try {
             // Je demande l'historique au service

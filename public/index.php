@@ -19,7 +19,9 @@ session_start();
         AuthService,
         ProfileService,
         AdService,
-        OrderService
+        OrderService,
+        CategoryService,
+        PlatformService
     };
     use App\Repository\{
         UserRepository,
@@ -114,12 +116,16 @@ session_start();
             $adRepository = new AdRepository($pdo);
             $categoryRepository = new CategoryRepository($pdo);
             $platformRepository = new PlatformRepository($pdo);
+
             $adService = new AdService($adRepository, $categoryRepository, $platformRepository);
 
             $userRepository = new UserRepository($pdo);
             $profileService = new ProfileService($userRepository);
 
-            return new AdminController($adService, $profileService);
+            $categoryService = new CategoryService($categoryRepository);
+            $platformService = new PlatformService($platformRepository);
+
+            return new AdminController($adService, $profileService, $categoryService, $platformService);
         }
     ];
 
