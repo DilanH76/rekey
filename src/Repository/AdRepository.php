@@ -406,6 +406,43 @@ class AdRepository {
         return $ads;
     }
 
+    /**
+     * Compte le nombre total d'annonces correspondant aux filtres
+     * Indispensable pour calculer le nombre de pages pour la pagination
+     * @param string $search Le texte recherché (vide si aucun)
+     * @param int|null $idCategory L'ID de la catégorie (null si aucune)
+     * @param int|null $idPlatform L'ID de la plateforme (null si aucune)
+     * @return int Le nombre total d'annonces trouvées
+     */
+    public function countAdsWithFilters(string $search, ?int $idCategory, ?int $idPlatform): int
+    {
+        $sql = "SELECT COUNT(*) FROM ads a WHERE 1=1";
+        $params = [];
+
+        // Exactement les mêmes conditions que la méthode searchAndFilter
+        if (!empty($search)) {
+            $sql .=" AND a.title LIKE :search";
+            $params['search'] = "%" . $search . "%";
+        }
+
+        if ($idCategory !== null) {
+            $sql .= " AND a.id_category = :id_category";
+            $params['id_category'] = $idCategory;
+        }
+
+        if ($idPlatform !== null) {
+            $sql .= " AND a.id_platform = :id_platform";
+            $params['id_platform'] = $idPlatform;
+        }
+
+        // Ici, pas besoin de ORDER BY ni de LIMIT/OFFSET, je veux juste le compte global
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute($params);
+
+        // fetchColumn() récupère directement la première colonne de la première ligne (mon COUNT)
+        return (int) $stmt->fetchColumn();
+    }
+
     // =========================================================
     // SECTION : MISE À JOUR (UPDATE)
     // =========================================================

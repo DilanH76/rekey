@@ -40,15 +40,25 @@ class HomeController {
             // Même logique pour la platforme
             $idPlatform = isset($_GET['platform']) && $_GET['platform'] !== '' ? (int) $_GET['platform'] : null;
 
-            // j'envoie mes 3 critères au Service
-            $ads = $this->adService->searchAds($searchQuery, $idCategory, $idPlatform);
+            // Tri par défaut
+            $sort = $_GET['sort'] ?? 'date_desc';
+            // Page 1 minimum
+            $page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
+
+            // J'envoie tous mes critères au Service
+            $result = $this->adService->searchAds($searchQuery, $idCategory, $idPlatform, $sort, $page);
+
+            // J'extrais les données du résultat
+            $ads = $result['ads'];
+            $totalPages = $result['totalPages'];
+            $currentPage = $page; // Je stock la page courante pour que la vue sache sur quel bouton on est
 
             // Je demande au Service les listes complètes pour fabriquer les menus déroulants
             $formData = $this->adService->getFormData();
             $categories = $formData['categories'];
             $platforms = $formData['platforms'];
 
-            // J'affiche la vue ( qui aura désormais accès à $ads, $categories, et $platforms)
+            // J'affiche la vue ( qui aura désormais accès à $ads, $categories, $platforms, $sort, $totalPages et $currentPage)
             include __DIR__ .'/../../template/home_page.php';
 
         } catch (Exception $err) {
@@ -61,6 +71,11 @@ class HomeController {
             $ads = [];
             $categories = [];
             $platforms = [];
+            $totalPages = 1;
+            $currentPage = 1;
+            $sort = 'date_desc';
+            
+            include __DIR__ .'/../../template/home_page.php';
         }
     }
 }

@@ -143,7 +143,7 @@ class AdService {
     }
 
     /**
-     * Recherche des annonces par titre et applique les filtres optionnels
+     * Recherche des annonces avec filtres, tri et pagination
      * @param string $query Le texte tapé par l'utilisateur
      * @param int|null $idCategory L'ID de la catégorie
      * @param int|null $idPlatform L'ID de la plateforme
@@ -158,8 +158,20 @@ class AdService {
         // Si je suis page 1, offset = 0. Si page 2, offset = 12, etc.
         $offset = ($page- 1) * $limit;
 
-        // On délègue tout au Repository qui est capable de gérer les paramètres nuls
-        return $this->adRepository->searchAndFilter($cleanedQuery, $idCategory, $idPlatform, $sort, $limit, $offset);
+        // Je récupère les annonces pour cette page précise
+        $ads = $this->adRepository->searchAndFilter($cleanedQuery, $idCategory, $idPlatform, $sort, $limit, $offset);
+
+        // Je compte le total d'annonces existantes
+        $totalAds = $this->adRepository->countAdsWithFilters($cleanedQuery, $idCategory, $idPlatform);
+
+        // Je calcule le nombre total de pages (ceil arrondi à l'entier supérieur)
+        $totalPages = ceil($totalAds / $limit);
+
+        // Je renvoie un "package" complet au Contrôleur
+        return [
+            'ads' => $ads,
+            'totalPages' => max(1, (int)$totalPages) // Au minimum 1 page, même si 0 annonce
+        ];
     }
 
     // =========================================================
