@@ -43,9 +43,6 @@ class OrderController extends BaseController {
             if ($ad->getStatus() !== 'disponible') {
                 throw new Exception("Ce jeu n'est plus disponible");
             }
-            if ($ad->getUser()->getIdUser() === $_SESSION['user_id']) {
-                throw new Exception("Vous ne pouvez pas acheter votre propre jeu !");
-            }
 
             include __DIR__ . '/../../template/checkout.php';
 

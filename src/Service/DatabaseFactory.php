@@ -41,7 +41,7 @@ class DatabaseFactory
             // Log the real error for the developer
             error_log("PDO Connection Error: " . $e->getMessage());
             // Throw a clean message for the application
-            throw new Exception("Unable to connect to the database. ".$e->getMessage(),$e->getCode());
+            throw new Exception("Impossible de se connecter à la base de données. Veuillez réessayer plus tard.");
         }
     }
 }

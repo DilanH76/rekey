@@ -11,7 +11,6 @@ use \PDO;
 /**
  * Repository gérant toutes les requêtes SQL liées à la table 'ads' (Annonces)
  */
-
 class AdRepository {
 
     private PDO $pdo;
@@ -280,8 +279,7 @@ class AdRepository {
             $ad->setUser($user);
 
             $ads[] = $ad;
-        }
-        
+        }   
         return $ads;
     }
 
@@ -352,8 +350,7 @@ class AdRepository {
 
         // Même "hydratation" que pour findAllWithDetails
         while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
-
-            
+ 
             $ad = new Ad(
                 $row['title'],
                 $row['description'],
@@ -450,7 +447,6 @@ class AdRepository {
     /**
      * Met à jour les informations textuelles d'une annonce
      */
-
     public function updateAdInfo(int $adId, string $title, string $description, float $price, int $idCategory, int $idPlatform): bool
     {
         $sql ="UPDATE ads SET

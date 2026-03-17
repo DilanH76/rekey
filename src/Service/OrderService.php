@@ -43,6 +43,11 @@ class OrderService {
             throw new Exception("Désolé, ce jeu vient juste d'être vendu à un autre utilisateur.");
         }
 
+        // L'utilisateur essaie-t-il d'acheter sa propre annonce ?
+        if ($ad->getUser()->getIdUser() === $userId) {
+            throw new Exception("Action refusée : Vous ne pouvez pas acheter votre propre jeu.");
+        }
+
         // Génération d'une référence de commande unique ( ex : CMD-20260312-A8F4)
         // La fonction uniqid() génère une chaîne aléatoire unique.
         $reference = 'CMD-'. date('Ymd') . '-' . strtoupper(substr(uniqid(), -4));

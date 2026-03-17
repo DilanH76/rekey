@@ -41,8 +41,14 @@ class ProfileController extends BaseController {
             // Je affiche la vue en lui passant l'objet $user
             include __DIR__ . '/../../template/profile.php';
         } catch (Exception $err) {
-            // Si l'utilisateur n'est pas trouvé
-            echo "Erreur : " . $err->getMessage();
+            // Si l'utilisateur n'est pas trouvé (ex: compte supprimé par l'admin entre temps)
+            $_SESSION['flash'] = [
+                'type' => 'error',
+                'message' => "Erreur d'accès au profil : " . $err->getMessage()
+            ];
+            // Je le redirige vers la déconnexion pour nettoyer sa session fantôme
+            header('Location: /Auth/logout');
+            exit;
         }
     }
 
@@ -61,7 +67,12 @@ class ProfileController extends BaseController {
             // J'affiche la vue en lui passant l'objet $user
             include __DIR__ . '/../../template/profile_edit.php';
         } catch (Exception $err) {
-            echo "Erreur : " . $err->getMessage();
+            $_SESSION['flash'] = [
+                'type' => 'error',
+                'message' => "Erreur d'accès au profil : " . $err->getMessage()
+            ];
+            header('Location: /Auth/logout');
+            exit;
         }
     }
 
