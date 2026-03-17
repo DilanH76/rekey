@@ -42,10 +42,6 @@
     </div>
 
     <nav class="user-nav">
-        <a href="#" aria-label="Mon Panier">
-            <img src="/assets/ico/cart.svg" alt="Panier" />
-        </a>
-
         <?php if (isset($_SESSION['user_id'])): ?>
             <div class="user-dropdown">
                 <a href="#" aria-label="Mon Compte" class="dropdown-toggle" style="display: flex; align-items: center; gap: 0.5rem;">

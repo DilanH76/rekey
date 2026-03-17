@@ -61,3 +61,65 @@ document.addEventListener("click", (e) => {
     capsule.classList.remove("search-active");
   }
 });
+
+// --- DRAG TO SCROLL POUR LES CATÉGORIES (Desktop) ---
+const slider = document.querySelector('.category-badges');
+let isDown = false;
+let startX;
+let scrollLeft;
+
+if (slider) {
+    slider.addEventListener('mousedown', (e) => {
+        isDown = true;
+        slider.style.cursor = 'grabbing';
+        // Enregistre la position initiale de la souris
+        startX = e.pageX - slider.offsetLeft;
+        // Enregistre le niveau de scroll actuel
+        scrollLeft = slider.scrollLeft;
+    });
+
+    slider.addEventListener('mouseleave', () => {
+        isDown = false;
+        slider.style.cursor = 'grab';
+    });
+
+    slider.addEventListener('mouseup', () => {
+        isDown = false;
+        slider.style.cursor = 'grab';
+    });
+
+    slider.addEventListener('mousemove', (e) => {
+        if (!isDown) return; // Stop si la souris n'est pas cliquée
+        e.preventDefault();
+        // Calcule le déplacement
+        const x = e.pageX - slider.offsetLeft;
+        const walk = (x - startX) * 2; // Multiplicateur pour la vitesse (x2)
+        // Applique le nouveau scroll
+        slider.scrollLeft = scrollLeft - walk;
+    });
+    
+    // Curseur de base
+    slider.style.cursor = 'grab';
+}
+
+// --- SMOOTH SCROLL POUR LES ANCRES ---
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        
+        const targetId = this.getAttribute('href');
+        const targetElement = document.querySelector(targetId);
+        
+        if (targetElement) {
+            // Offset pour la Navbar : 4.5rem (soit environ 72px) + une petite marge (10px) = 82px
+            const headerOffset = 0; 
+            const elementPosition = targetElement.getBoundingClientRect().top;
+            const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+  
+            window.scrollTo({
+                 top: offsetPosition,
+                 behavior: "smooth"
+            });
+        }
+    });
+});
