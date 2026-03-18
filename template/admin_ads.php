@@ -1,65 +1,57 @@
 <?php
 $pageTitle = 'ReKey - Modération des Annonces';
-$currentAdminTab = 'ads'; // Allume l'onglet "Modération des Annonces"
+$currentAdminTab = 'ads';
 ob_start();
 ?>
 
-<h1 style="margin-top: 0;">Modération des Annonces</h1>
-<p style="color: #aaa; margin-bottom: 2rem;">Consultez et modérez les jeux mis en vente sur la plateforme.</p>
+<div class="admin-header" style="margin-bottom: 2rem;">
+    <h1 style="font-size: 2.2rem; text-transform: uppercase; margin-bottom: 0.5rem;">Modération</h1>
+    <p class="auth-subtitle" style="text-align: left; margin-bottom: 0;">Consultez et modérez les jeux mis en vente sur la plateforme.</p>
+</div>
 
-<div style="background: rgba(255,255,255,0.05); border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); overflow-x: auto;">
-    <table style="width: 100%; border-collapse: collapse; text-align: left;">
+<div class="admin-table-wrapper">
+    <table class="admin-table">
         <thead>
-            <tr style="border-bottom: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.02);">
-                <th style="padding: 1rem;">Cover</th>
-                <th style="padding: 1rem;">Titre</th>
-                <th style="padding: 1rem;">Prix</th>
-                <th style="padding: 1rem;">Vendeur</th>
-                <th style="padding: 1rem;">Statut</th>
-                <th style="padding: 1rem;">Date</th>
-                <th style="padding: 1rem; text-align: right;">Action</th>
+            <tr>
+                <th>Cover</th>
+                <th>Titre</th>
+                <th>Prix</th>
+                <th>Vendeur</th>
+                <th>Statut</th>
+                <th>Date</th>
+                <th style="text-align: right;">Action</th>
             </tr>
         </thead>
         <tbody>
             <?php foreach ($ads as $ad): ?>
-                <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
-                    
-                    <td style="padding: 1rem;">
-                        <img src="<?= $ad->getCoverImageBase64() ?>" alt="Cover" style="width: 60px; height: 35px; border-radius: 4px; object-fit: cover;">
+                <tr>
+                    <td>
+                        <img src="<?= $ad->getCoverImageBase64() ?>" alt="Cover" style="width: 50px; height: 70px; border-radius: 4px; object-fit: cover; border: 1px solid rgba(255,255,255,0.1);">
                     </td>
-                    
-                    <td style="padding: 1rem; font-weight: bold;">
-                        <a href="/Ad/show/<?= $ad->getIdAds() ?>" target="_blank" style="color: #00ffcc; text-decoration: none;">
+                    <td style="font-weight: bold;">
+                        <a href="/Ad/show/<?= $ad->getIdAds() ?>" target="_blank" style="color: var(--cyan); text-decoration: none;">
                             <?= htmlspecialchars($ad->getTitle()) ?>
                         </a>
                     </td>
-                    
-                    <td style="padding: 1rem;"><?= number_format($ad->getPrice(), 2, ',', ' ') ?> €</td>
-                    
-                    <td style="padding: 1rem; color: #aaa;">
+                    <td><?= number_format($ad->getPrice(), 2, ',', '&nbsp;') ?>&nbsp;€</td>
+                    <td style="color: var(--text-muted);">
                         <?= htmlspecialchars($ad->getUser()->getPseudo()) ?>
                     </td>
-                    
-                    <td style="padding: 1rem;">
+                    <td>
                         <?php if ($ad->getStatus() === 'disponible'): ?>
-                            <span style="background: rgba(0, 255, 204, 0.2); color: #00ffcc; padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.8rem;">En vente</span>
+                            <span class="badge-admin">En vente</span>
                         <?php else: ?>
-                            <span style="background: rgba(255, 0, 85, 0.2); color: #ff0055; padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.8rem;">Vendu</span>
+                            <span class="badge-sold">Vendu</span>
                         <?php endif; ?>
                     </td>
-                    
-                    <td style="padding: 1rem; color: #aaa; font-size: 0.9rem;">
+                    <td style="color: var(--text-muted); font-size: 0.9rem;">
                         <?= $ad->getCreatedAt()->format('d/m/Y') ?>
                     </td>
-                    
-                    <td style="padding: 1rem; text-align: right;">
-                        <form action="/Admin/deleteAd/<?= $ad->getIdAds() ?>" method="POST" onsubmit="return confirm('Attention : Cette action est irréversible. Confirmer la suppression ?');">
-                            <button type="submit" style="background: rgba(255, 0, 85, 0.2); color: #ff0055; border: 1px solid #ff0055; padding: 0.4rem 0.8rem; border-radius: 4px; cursor: pointer; transition: 0.3s;">
-                                Supprimer
-                            </button>
+                    <td style="text-align: right;">
+                        <form action="/Admin/deleteAd/<?= $ad->getIdAds() ?>" method="POST" onsubmit="return confirm('Attention : Cette action est irréversible. Confirmer la suppression ?');" style="display:inline;">
+                            <button type="submit" class="btn btn-danger" style="padding: 0.4rem 0.8rem; font-size: 0.8rem;">Supprimer</button>
                         </form>
                     </td>
-
                 </tr>
             <?php endforeach; ?>
         </tbody>

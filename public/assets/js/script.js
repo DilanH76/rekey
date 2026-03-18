@@ -123,3 +123,31 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         }
     });
 });
+
+// --- GESTION DU MENU BURGER MOBILE ---
+const hamburgerBtn = document.querySelector('.hamburger-btn');
+const mobileOverlay = document.querySelector('.mobile-overlay');
+const closeMobileBtn = document.querySelector('.close-mobile-menu');
+
+if (hamburgerBtn && mobileOverlay) {
+    // Ouvrir le menu
+    hamburgerBtn.addEventListener('click', () => {
+        mobileOverlay.classList.add('active');
+        document.body.style.overflow = 'hidden'; // Empêche de scroller la page derrière le menu
+    });
+
+    // Fermer le menu via la croix
+    closeMobileBtn.addEventListener('click', () => {
+        mobileOverlay.classList.remove('active');
+        document.body.style.overflow = ''; // Réactive le scroll
+    });
+
+    // Fermer le menu si on clique sur un lien (pour aller vers PC, PS, etc.)
+    const mobileLinks = mobileOverlay.querySelectorAll('.mobile-nav-link');
+    mobileLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            mobileOverlay.classList.remove('active');
+            document.body.style.overflow = '';
+        });
+    });
+}

@@ -569,7 +569,7 @@ header.scrolled {
   cursor: pointer;
   text-transform: uppercase;
   letter-spacing: 1px;
-  border: none; /* Efface la bordure 3D moche du navigateur */
+  border: none;
   text-decoration: none;
   transition: all var(--transition-fast);
 }
@@ -660,6 +660,12 @@ header.scrolled {
 textarea.form-control {
   resize: vertical;
   min-height: 120px;
+}
+
+/* Force le fond sombre pour les options des menus déroulants */
+select.form-control option {
+  background-color: var(--bg-dark);
+  color: var(--text-main);
 }
 
 /* ========================================= */
@@ -911,4 +917,1528 @@ textarea.form-control {
   border-radius: 50%;
   object-fit: cover;
   border: 1px solid var(--border-light);
+}
+
+/* ========================================= */
+/* 11. PAGE DÉTAIL D'UNE ANNONCE (AD SHOW)   */
+/* ========================================= */
+
+.ad-show-page {
+  display: grid;
+  grid-template-columns: 1.8fr 1fr; /* 65% pour l'image/desc, 35% pour l'achat */
+  gap: 4rem;
+  padding-top: 10rem; /* Espace sous la navbar */
+  padding-bottom: 5rem;
+  position: relative;
+  z-index: 10;
+}
+
+/* --- Colonne Gauche --- */
+.ad-show-cover {
+  width: 100%;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid var(--border-light);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
+  margin-bottom: 2rem;
+}
+
+.ad-show-cover img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  display: block;
+}
+
+.ad-show-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.ad-show-header h1 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--text-main);
+  line-height: 1.2;
+}
+
+.ad-platform-badge img {
+  width: 40px;
+  height: 40px;
+  filter: brightness(0) invert(1) drop-shadow(0 0 10px rgba(255, 255, 255, 0.3));
+}
+
+.ad-tags {
+  margin-bottom: 3rem;
+}
+
+.ad-tags .badge-tech {
+  display: inline-block;
+  cursor: default; /* Pas de hover vu que c'est juste informatif ici */
+}
+
+.ad-description-box h3 {
+  font-size: 1.2rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 1rem;
+  color: var(--text-main);
+}
+
+.text-cyan {
+  color: var(--cyan);
+}
+
+.ad-description-content {
+  background: rgba(0, 0, 0, 0.3);
+  border-left: 3px solid var(--cyan);
+  padding: 1.5rem;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  color: var(--text-muted);
+  font-size: 1.05rem;
+  line-height: 1.8;
+}
+
+.empty-desc {
+  font-style: italic;
+  opacity: 0.6;
+}
+
+/* --- Colonne Droite (Carte Transaction) --- */
+.ad-show-sidebar {
+  /* Rend la barre collante au scroll */
+  position: sticky;
+  top: 7rem;
+  align-self: start; 
+}
+
+.transaction-card {
+  background: var(--bg-card);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 2.5rem;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5), inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+}
+
+.ad-price-block {
+  text-align: center;
+  margin-bottom: 2rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.price-label {
+  display: block;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 0.5rem;
+}
+
+.price-value {
+  display: block;
+  font-size: 3.5rem;
+  font-weight: 800;
+  color: var(--cyan);
+  text-shadow: 0 0 20px var(--cyan-glow);
+  line-height: 1;
+}
+
+.buy-btn {
+  width: 100%;
+  padding: 1.2rem;
+  font-size: 1.1rem;
+}
+
+.disabled-btn {
+  width: 100%;
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.disabled-btn:hover {
+  transform: none;
+  box-shadow: none;
+  border-color: rgba(255, 255, 255, 0.2);
+  color: var(--text-main);
+  background-color: transparent;
+}
+
+.seller-card {
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border-light);
+}
+
+.seller-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.seller-avatar {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.seller-identity {
+  display: flex;
+  flex-direction: column;
+}
+
+.seller-label {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.seller-name {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.seller-footer {
+  text-align: right;
+}
+
+.seller-footer .ad-date {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+/* Bouton de retour (Fil d'Ariane) */
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 1.5rem;
+  transition: all var(--transition-fast);
+}
+
+.back-link:hover {
+  color: var(--text-main);
+  transform: translateX(-5px); /* Petit effet de glissement vers la gauche */
+}
+
+/* --- Responsive Mobile --- */
+@media (max-width: 992px) {
+  .ad-show-page {
+    grid-template-columns: 1fr; /* On passe sur 1 seule colonne */
+    gap: 2rem;
+    padding-top: 7rem;
+  }
+  
+  .ad-show-sidebar {
+    position: static; /* Désactive l'effet collant sur mobile */
+  }
+}
+
+/* ========================================= */
+/* 12. AUTHENTIFICATION (LOGIN & REGISTER)   */
+/* ========================================= */
+
+.auth-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 8rem 1.5rem 4rem; /* Laisse l'espace pour le header */
+  position: relative;
+  z-index: 10;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 450px;
+  background: var(--bg-card);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 3rem 2.5rem;
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.6), inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+}
+
+/* Version plus large pour l'inscription */
+.auth-card.register-card {
+  max-width: 550px;
+}
+
+.auth-card h2 {
+  font-size: 2rem;
+  font-weight: 800;
+  text-align: center;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(to right, #ffffff, var(--cyan));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.auth-subtitle {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  margin-bottom: 2.5rem;
+}
+
+/* Champs sur la même ligne (ex: Nom / Prénom) */
+.form-row {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.form-row .form-group {
+  flex: 1;
+}
+
+.form-options {
+  display: flex;
+  justify-content: flex-end;
+  font-size: 0.85rem;
+  margin-bottom: 1.5rem;
+  margin-top: -0.5rem;
+}
+
+.form-options a, 
+.auth-footer a,
+.checkbox-group a {
+  color: var(--cyan);
+  font-weight: 600;
+  transition: all var(--transition-fast);
+}
+
+.form-options a:hover, 
+.auth-footer a:hover,
+.checkbox-group a:hover {
+  color: #fff;
+  text-shadow: 0 0 10px var(--cyan-glow);
+}
+
+.auth-form .btn {
+  width: 100%;
+  padding: 1rem;
+  font-size: 1.1rem;
+}
+
+.checkbox-group {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-bottom: 2rem;
+  flex-direction: row; /* Force la ligne */
+}
+
+.checkbox-group input[type="checkbox"] {
+  width: 1.2rem;
+  height: 1.2rem;
+  accent-color: var(--rose);
+  cursor: pointer;
+}
+
+.checkbox-group label {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  text-transform: none; /* Enlève les majuscules ici */
+  letter-spacing: normal;
+  margin-bottom: 0;
+}
+
+.auth-footer {
+  text-align: center;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-light);
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+@media (max-width: 576px) {
+  .form-row {
+    flex-direction: column;
+    gap: 0;
+  }
+  .auth-card {
+    padding: 2rem 1.5rem;
+  }
+}
+
+/* ========================================= */
+/* 13. CRÉATION / ÉDITION D'ANNONCE          */
+/* ========================================= */
+
+.ad-form-page {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; /* Différent du login, on aligne en haut car le formulaire est long */
+  min-height: 100vh;
+  padding: 10rem 1.5rem 5rem; /* Laisse l'espace pour le header */
+  position: relative;
+  z-index: 10;
+}
+
+.ad-form-card {
+  width: 100%;
+  max-width: 850px; /* Plus large pour que la grille respire */
+  background: var(--bg-card);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 3rem 4rem;
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.6), inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+}
+
+.ad-form-header {
+  margin-bottom: 3rem;
+  border-bottom: 1px solid var(--border-light);
+  padding-bottom: 1.5rem;
+}
+
+.ad-form-header h1 {
+  font-size: 2.2rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+  color: var(--text-main);
+}
+
+.form-help {
+  display: block;
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+/* Customisation du bouton "Choisir un fichier" */
+.file-input {
+  padding: 0.8rem 1.2rem;
+}
+
+.file-input::file-selector-button {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: var(--text-main);
+  padding: 0.6rem 1.2rem;
+  border-radius: var(--radius-sm);
+  margin-right: 1.5rem;
+  cursor: pointer;
+  font-family: inherit;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  transition: all var(--transition-fast);
+}
+
+.file-input::file-selector-button:hover {
+  background: rgba(0, 229, 255, 0.1);
+  border-color: var(--cyan);
+  color: var(--cyan);
+  box-shadow: 0 0 10px var(--cyan-glow);
+}
+
+.form-divider {
+  border: 0;
+  height: 1px;
+  background: var(--border-light);
+  margin: 2.5rem 0;
+}
+
+/* Utilitaire de largeur */
+.w-100 {
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .ad-form-card {
+    padding: 2rem 1.5rem;
+  }
+}
+
+/* ========================================= */
+/* 14. CHECKOUT (PAIEMENT)                   */
+/* ========================================= */
+.checkout-page {
+  padding-top: 10rem;
+  padding-bottom: 5rem;
+  position: relative;
+  z-index: 10;
+}
+
+.checkout-header {
+  margin-bottom: 3rem;
+  text-align: center;
+}
+
+.checkout-header h1 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+  color: var(--text-main);
+  background: linear-gradient(to right, #ffffff, var(--cyan));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.checkout-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr; /* 40% Résumé, 60% Formulaire */
+  gap: 3rem;
+  align-items: start;
+}
+
+.checkout-card {
+  background: var(--bg-card);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 2.5rem;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5), inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+}
+
+/* --- Bloc Résumé de Commande --- */
+.checkout-summary-item {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.checkout-cover {
+  width: 90px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+}
+
+.checkout-details h3 {
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+  color: var(--text-main);
+  line-height: 1.3;
+}
+
+.checkout-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1.5rem;
+}
+
+.checkout-total .price {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: var(--cyan);
+  text-shadow: 0 0 15px var(--cyan-glow);
+  line-height: 1;
+}
+
+/* --- Alerte de Simulation (Mode Test) --- */
+.alert-warning {
+  background: rgba(255, 170, 0, 0.1);
+  border-left: 4px solid #ffaa00;
+  color: #ffb833;
+  padding: 1rem 1.5rem;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  font-size: 0.9rem;
+  margin-bottom: 2.5rem;
+  line-height: 1.6;
+}
+
+@media (max-width: 992px) {
+  .checkout-grid {
+    grid-template-columns: 1fr; /* Passe sur 1 seule colonne sur mobile/tablette */
+  }
+}
+
+/* ========================================= */
+/* 15. ESPACE PERSONNEL (DASHBOARD)          */
+/* ========================================= */
+.dashboard-page {
+  padding-top: 10rem;
+  padding-bottom: 5rem;
+  position: relative;
+  z-index: 10;
+}
+
+.dashboard-header {
+  margin-bottom: 3rem;
+}
+
+.dashboard-header h1 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  background: linear-gradient(to right, #ffffff, var(--cyan));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* --- Carte d'Identité (Haut) --- */
+.identity-card {
+  background: var(--bg-card);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 3rem;
+  display: flex;
+  align-items: center;
+  gap: 3rem;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5), inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+  margin-bottom: 3rem;
+}
+
+.identity-avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+.identity-info {
+  flex-grow: 1;
+}
+
+.identity-info h2 {
+  font-size: 2rem;
+  color: var(--text-main);
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.identity-info p {
+  color: var(--text-muted);
+  font-size: 1rem;
+  margin-bottom: 0.3rem;
+}
+
+.identity-info .highlight {
+  color: var(--cyan);
+  font-weight: 600;
+}
+
+/* --- Grille des Actions (Bas) --- */
+.dashboard-actions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+.action-card {
+  background: var(--bg-card);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 2.5rem 2rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  transition: all var(--transition-smooth);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
+
+.action-card:hover {
+  transform: translateY(-5px);
+  border-color: var(--cyan);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6), 0 0 15px var(--cyan-glow);
+}
+
+.action-card h3 {
+  font-size: 1.2rem;
+  color: var(--text-main);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.action-card p {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.action-icon {
+  font-size: 2.5rem;
+  color: var(--cyan);
+  background: rgba(0, 229, 255, 0.1);
+  width: 80px;
+  height: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 229, 255, 0.2);
+  transition: all var(--transition-fast);
+}
+
+.action-icon svg {
+  width: 35px;
+  height: 35px;
+  stroke-width: 2;
+  transition: all var(--transition-fast);
+}
+
+.action-card:hover .action-icon {
+  background: var(--cyan);
+  color: var(--bg-dark);
+  box-shadow: 0 0 20px var(--cyan-glow);
+}
+
+/* Variante de couleur pour la carte "Ventes" */
+.action-card.rose:hover {
+  border-color: var(--rose);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6), 0 0 15px var(--rose-glow);
+}
+.action-card.rose .action-icon {
+  color: var(--rose);
+  background: rgba(255, 77, 184, 0.1);
+  border-color: rgba(255, 77, 184, 0.2);
+}
+.action-card.rose:hover .action-icon {
+  background: var(--rose);
+  color: #fff;
+  box-shadow: 0 0 20px var(--rose-glow);
+}
+
+/* --- Responsive --- */
+@media (max-width: 768px) {
+  .identity-card {
+    flex-direction: column;
+    text-align: center;
+    gap: 1.5rem;
+    padding: 2rem;
+  }
+}
+
+/* ========================================= */
+/* 16. ÉDITION DU PROFIL (PARAMÈTRES)        */
+/* ========================================= */
+.settings-page {
+  padding-top: 10rem;
+  padding-bottom: 5rem;
+  position: relative;
+  z-index: 10;
+  max-width: 800px; /* On centre et on limite la largeur pour la lisibilité */
+  margin: 0 auto;
+}
+
+.settings-header {
+  margin-bottom: 3rem;
+}
+
+.settings-header h1 {
+  font-size: 2.2rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--text-main);
+}
+
+/* Cartes de paramètres */
+.settings-card {
+  background: var(--bg-card);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 2.5rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  margin-bottom: 2rem;
+}
+
+.settings-card h2 {
+  font-size: 1.3rem;
+  color: var(--cyan);
+  margin-bottom: 1.5rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  border-bottom: 1px solid var(--border-light);
+  padding-bottom: 1rem;
+}
+
+/* Zone de Danger (Suppression) */
+.settings-card.danger-zone {
+  border-color: rgba(255, 51, 102, 0.3);
+  background: rgba(255, 51, 102, 0.02);
+}
+
+.settings-card.danger-zone h2 {
+  color: var(--danger);
+  border-bottom-color: rgba(255, 51, 102, 0.2);
+}
+
+.danger-text {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+}
+
+/* Boutons d'action dans les formulaires */
+.form-actions-right {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+/* ========================================= */
+/* 17. MES ACHATS (MY PURCHASES)             */
+/* ========================================= */
+
+.purchases-page {
+  padding-top: 10rem;
+  padding-bottom: 5rem;
+  position: relative;
+  z-index: 10;
+}
+
+.purchases-header {
+  margin-bottom: 3rem;
+}
+
+.purchases-header h1 {
+  font-size: 2.2rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--text-main);
+}
+
+.purchases-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Carte de jeu acheté */
+.purchase-card {
+  background: var(--bg-card);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  transition: all var(--transition-fast);
+}
+
+.purchase-card:hover {
+  border-color: rgba(0, 229, 255, 0.3);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6), 0 0 15px rgba(0, 229, 255, 0.1);
+}
+
+.purchase-cover {
+  width: 90px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  flex-shrink: 0;
+}
+
+.purchase-info {
+  flex-grow: 1;
+}
+
+.purchase-info h2 {
+  font-size: 1.4rem;
+  color: var(--text-main);
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.purchase-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.purchase-meta .bullet {
+  color: rgba(255, 255, 255, 0.2);
+}
+
+.purchase-platform {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--text-main);
+}
+
+.purchase-platform img {
+  width: 16px;
+  height: 16px;
+  filter: brightness(0) invert(0.8);
+}
+
+/* Zone du Coffre-fort (Clé) */
+.purchase-key-box {
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px dashed var(--cyan);
+  border-radius: var(--radius-sm);
+  padding: 1.5rem;
+  min-width: 300px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  box-shadow: inset 0 0 20px rgba(0, 229, 255, 0.05);
+}
+
+.key-label {
+  color: var(--cyan);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+/* Le bouton révéler (SVG inclus) */
+.btn-reveal {
+  padding: 0.6rem 1.2rem;
+  font-size: 0.9rem;
+}
+
+.btn-reveal svg {
+  width: 18px;
+  height: 18px;
+  margin-right: 8px;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+/* La clé une fois révélée */
+.key-value-code {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #fff;
+  background: var(--bg-dark);
+  padding: 0.8rem 1.5rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-light);
+  user-select: all; /* Permet de copier tout le texte en 1 clic */
+  letter-spacing: 2px;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+  animation: decryptReveal 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes decryptReveal {
+  0% { opacity: 0; transform: scale(0.95); filter: blur(4px); }
+  100% { opacity: 1; transform: scale(1); filter: blur(0); }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .purchase-card {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+  }
+  
+  .purchase-cover {
+    margin: 0 auto;
+  }
+  
+  .purchase-meta {
+    justify-content: center;
+  }
+  
+  .purchase-key-box {
+    min-width: 100%;
+  }
+}
+
+/* ========================================= */
+/* 18. MES ANNONCES (MY ADS)                 */
+/* ========================================= */
+.my-ads-page {
+  padding-top: 10rem;
+  padding-bottom: 5rem;
+  position: relative;
+  z-index: 10;
+}
+
+.my-ads-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 3rem;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+.my-ads-header h1 {
+  font-size: 2.2rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--text-main);
+  margin-bottom: 0.5rem;
+}
+
+/* ========================================= */
+/* 19. PAGE D'ERREUR (404)                   */
+/* ========================================= */
+.error-page {
+  min-height: 80vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  z-index: 10;
+  padding: 10rem 1.5rem 5rem;
+}
+
+.error-content {
+  background: var(--bg-card);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 4rem 2rem;
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.5), inset 0 0 0 1px rgba(255, 51, 102, 0.2);
+  max-width: 650px;
+  width: 100%;
+}
+
+/* L'effet Glitch Visuel sur le 404 */
+.error-code {
+  font-size: clamp(6rem, 15vw, 10rem);
+  font-weight: 900;
+  line-height: 1;
+  margin-bottom: 0.5rem;
+  color: var(--text-main);
+  /* On dédouble le texte en Cyan et Rose pour faire un effet bug graphique */
+  text-shadow: 
+    4px 0px 0px var(--cyan), 
+    -4px 0px 0px var(--rose),
+    0 0 30px rgba(255, 255, 255, 0.2);
+  letter-spacing: -5px;
+  font-family: monospace; /* Fait plus "code informatique" */
+}
+
+.error-title {
+  font-size: 2rem;
+  text-transform: uppercase;
+  color: var(--danger);
+  margin-bottom: 1.5rem;
+  letter-spacing: 2px;
+}
+
+.error-description {
+  color: var(--text-muted);
+  font-size: 1.1rem;
+  margin-bottom: 3rem;
+  line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+  .error-content {
+    padding: 3rem 1.5rem;
+  }
+}
+
+/* ========================================= */
+/* 20. BACK-OFFICE ADMINISTRATEUR            */
+/* ========================================= */
+.admin-page {
+  padding-top: 8rem;
+  padding-bottom: 5rem;
+  z-index: 10;
+  position: relative;
+}
+
+.admin-wrapper {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 2.5rem;
+  align-items: start;
+}
+
+/* --- Barre latérale (Sidebar) --- */
+.admin-sidebar {
+  background: var(--bg-card);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 2rem 1.5rem;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  position: sticky;
+  top: 6rem; /* Reste visible au scroll */
+}
+
+.admin-sidebar h3 {
+  color: var(--cyan);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-size: 1.1rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.admin-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.admin-nav-link {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  color: var(--text-muted);
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.admin-nav-link svg {
+  width: 20px;
+  height: 20px;
+}
+
+.admin-nav-link:hover {
+  background: rgba(255,255,255,0.05);
+  color: var(--text-main);
+  transform: translateX(5px);
+}
+
+.admin-nav-link.active {
+  background: rgba(0, 229, 255, 0.1);
+  color: var(--cyan);
+  border-left: 3px solid var(--cyan);
+  box-shadow: inset 10px 0 20px -10px var(--cyan-glow);
+  transform: none;
+}
+
+/* --- Contenu Principal --- */
+.admin-content-area {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+  min-width: 0; /* LIGNE CHIRURGICALE 1 : Empêche la grille de déborder */
+}
+
+/* Cartes de Statistiques */
+.admin-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+}
+
+.admin-stat-card {
+  background: var(--bg-card);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 2rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+}
+
+/* Ligne colorée en haut de chaque carte de stat */
+.admin-stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 4px;
+  background: var(--cyan);
+  box-shadow: 0 0 15px var(--cyan-glow);
+}
+.admin-stat-card.rose::before { background: var(--rose); box-shadow: 0 0 15px var(--rose-glow); }
+.admin-stat-card.warning::before { background: #ffaa00; box-shadow: 0 0 15px rgba(255,170,0,0.4); }
+
+.admin-stat-value {
+  font-size: 3.5rem;
+  font-weight: 800;
+  color: var(--text-main);
+  line-height: 1;
+  margin-bottom: 0.5rem;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.admin-stat-label {
+  color: var(--text-muted);
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+}
+
+/* Tableaux de données */
+.admin-table-wrapper {
+  background: var(--bg-card);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  overflow-x: auto;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.admin-table th {
+  padding: 1.2rem 1.5rem;
+  background: rgba(0,0,0,0.4);
+  color: var(--text-muted);
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.admin-table td {
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+  color: var(--text-main);
+  vertical-align: middle;
+}
+
+.admin-table tbody tr:hover {
+  background: rgba(255,255,255,0.02);
+}
+
+/* Badges de statuts (Admin, Membre, En vente...) */
+.badge-admin {
+  background: rgba(0, 229, 255, 0.1); color: var(--cyan); border: 1px solid rgba(0, 229, 255, 0.2); padding: 0.3rem 0.6rem; border-radius: 4px; font-size: 0.75rem; text-transform: uppercase; font-weight: bold;
+  display: inline-block; white-space: nowrap;
+}
+.badge-member {
+  background: rgba(255, 255, 255, 0.05); color: var(--text-muted); border: 1px solid var(--border-light); padding: 0.3rem 0.6rem; border-radius: 4px; font-size: 0.75rem; text-transform: uppercase; font-weight: bold;
+  display: inline-block; white-space: nowrap;
+}
+.badge-sold {
+  background: rgba(255, 51, 102, 0.1); color: var(--danger); border: 1px solid rgba(255, 51, 102, 0.2); padding: 0.3rem 0.6rem; border-radius: 4px; font-size: 0.75rem; text-transform: uppercase; font-weight: bold;
+  display: inline-block; white-space: nowrap;
+}
+
+@media (max-width: 992px) {
+  .admin-wrapper { grid-template-columns: 1fr; }
+  .admin-sidebar { position: static; margin-bottom: 2rem; }
+}
+
+/* ========================================= */
+/* 21. RESPONSIVE MENU (MOBILE OVERLAY)      */
+/* ========================================= */
+
+/* Le bouton burger caché sur PC */
+.hamburger-btn {
+  display: none;
+  background: transparent;
+  border: none;
+  color: var(--text-main);
+  cursor: pointer;
+  margin-left: 0.5rem;
+}
+
+.hamburger-btn svg {
+  width: 28px;
+  height: 28px;
+  transition: color var(--transition-fast);
+}
+
+.hamburger-btn:hover svg {
+  color: var(--cyan);
+}
+
+/* L'overlay plein écran (menu mobile) */
+.mobile-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(10, 15, 24, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.4s ease;
+}
+
+.mobile-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.close-mobile-menu {
+  position: absolute;
+  top: 2.5rem;
+  right: 2.5rem;
+  background: transparent;
+  border: none;
+  color: var(--text-main);
+  font-size: 2rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: color var(--transition-fast);
+}
+
+.close-mobile-menu:hover {
+  color: var(--rose);
+}
+
+.mobile-menu-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+  text-align: center;
+}
+
+.mobile-nav-link {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--text-main);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  transition: all var(--transition-fast);
+}
+
+.mobile-nav-link img {
+  width: 35px;
+  height: 35px;
+  filter: brightness(0) invert(1);
+  transition: all var(--transition-fast);
+}
+
+.mobile-nav-link:hover {
+  color: var(--cyan);
+  transform: translateX(10px);
+}
+
+.mobile-nav-link:hover img {
+  filter: brightness(0) invert(1) drop-shadow(0 0 10px var(--cyan-glow));
+}
+
+/* --- LE COMPORTEMENT RESPONSIVE DE LA NAVBAR --- */
+/* --- DESIGN DU MENU MOBILE PLUS PROPRE --- */
+.mobile-menu-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem; /* Plus resserré pour l'iPhone SE */
+  text-align: center;
+  width: 100%;
+  max-width: 300px;
+}
+
+.mobile-user-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.mobile-avatar-placeholder {
+  width: 60px;
+  height: 60px;
+  background: rgba(0, 229, 255, 0.1);
+  border: 1px solid rgba(0, 229, 255, 0.3);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.mobile-avatar-placeholder img {
+  width: 30px;
+  height: 30px;
+  filter: brightness(0) invert(1);
+}
+
+.mobile-pseudo {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--cyan);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.mobile-divider {
+  border: 0;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.1);
+  margin: 0.5rem 0;
+}
+
+.mobile-nav-link {
+  font-size: 1.6rem; /* Plus petit pour petits écrans */
+  font-weight: 800;
+  color: var(--text-main);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  transition: all var(--transition-fast);
+}
+
+.mobile-nav-link.secondary {
+  font-size: 1.1rem;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+}
+
+.mobile-nav-link img {
+  width: 28px;
+  height: 28px;
+  filter: brightness(0) invert(1);
+}
+
+.text-danger { color: var(--danger) !important; }
+.text-cyan { color: var(--cyan) !important; }
+
+
+/* --- LE COMPORTEMENT RESPONSIVE DE LA NAVBAR --- */
+@media (max-width: 992px) {
+  /* La barre prend tout l'écran en haut */
+/* La barre prend TOUT l'écran physique (100vw) et est ancrée des deux côtés */
+  header, header.scrolled {
+    width: 100vw !important; 
+    max-width: 100vw !important;
+    left: 0 !important;
+    right: 0 !important; /* Force l'ancrage à droite */
+    top: 0 !important;
+    transform: none !important;
+    border-radius: 0 !important;
+    border: none !important;
+    border-bottom: 1px solid rgba(255,255,255,0.05) !important;
+    padding: 0 1rem !important;
+    height: 4rem !important;
+    box-sizing: border-box !important; /* Empêche le padding d'ajouter de la largeur */
+    
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+  }
+  
+  /* PARTIE 1 : LOGO (Prend un tiers, s'aligne à gauche) */
+  .logo {
+    flex: 1;
+    display: flex;
+    justify-content: flex-start;
+  }
+  .logo img {
+    transform: scale(1) !important;
+    height: 1.8rem !important;
+  }
+  
+  /* PARTIE 2 : LOUPE (Prend un tiers, s'aligne parfaitement au centre) */
+  .nav-center-capsule {
+    flex: 1 !important;
+    display: flex !important;
+    justify-content: center !important;
+    padding: 0 !important;
+  }
+  .search-btn-round {
+    margin: 0 !important; 
+  }
+  
+  /* PARTIE 3 : BURGER (Prend un tiers, s'aligne à droite) */
+  .user-nav {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+  }
+  .hamburger-btn {
+    display: flex !important;
+    margin: 0 !important;
+  }
+  
+  /* ON CACHE TOUT LE RESTE SUR MOBILE */
+  .platform-nav,
+  .desktop-user-menu {
+    display: none !important;
+  }
+  
+  /* La barre de recherche quand on clique sur la loupe */
+  .nav-center-capsule.search-active {
+    position: absolute !important;
+    top: 0 !important; bottom: 0 !important; left: 0 !important; right: 0 !important;
+    background: var(--bg-dark) !important;
+    border-radius: 0 !important;
+    padding: 0 1rem !important;
+    display: flex !important;
+    align-items: center !important;
+    z-index: 10 !important;
+  }
+  .nav-center-capsule.search-active .search-form-expanded {
+    width: 100% !important;
+    margin: 0 !important;
+  }
+}
+
+/* --- CORRECTION DU DÉBORDEMENT FANTÔME (HERO SECTION) --- */
+@media (max-width: 576px) {
+  /* Si tes boutons sont dans une div flex (ce qui est le cas), on les force à passer à la ligne */
+  .hero-tech div {
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    width: 100%;
+  }
+  
+  /* On limite la taille des boutons pour qu'ils ne dépassent jamais de l'écran */
+  .hero-tech .btn, 
+  .hero-tech .btn-neon, 
+  .hero-tech .btn-outline {
+    width: 100% !important;
+    max-width: 280px !important;
+    margin-bottom: 0.5rem;
+  }
 }

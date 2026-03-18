@@ -1,96 +1,109 @@
 <?php
-$pageTitle = 'ReKey - Modifier mon Profil';
+$pageTitle = 'ReKey - Paramètres du compte';
 ob_start();
 ?>
 
-<section class="profile-container">
+<div class="ambient-glow glow-cyan" style="top: 10%; left: 0;"></div>
+<div class="ambient-glow glow-rose" style="bottom: 10%; right: 0;"></div>
 
-    <div class="profile-card">
+<section class="settings-page container">
 
-        <h1 class="profile-title">Modifier mes informations</h1>
+    <a href="/Profile" class="back-link">
+        <span class="text-cyan">←</span> Retour au terminal
+    </a>
 
-        <form action="/Profile/update" method="POST" enctype="multipart/form-data" class="profile-form">
+    <div class="settings-header">
+        <h1>Paramètres du compte</h1>
+        <p class="auth-subtitle" style="text-align: left; margin-bottom: 0;">Gérez vos informations personnelles et la sécurité de votre compte.</p>
+    </div>
+
+    <div class="settings-card">
+        <h2>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+            Informations Générales
+        </h2>
+
+        <form action="/Profile/update" method="POST" enctype="multipart/form-data">
 
             <div class="form-group">
-                <label for="avatar">Photo de profil (Optionnel)</label>
-                <div class="file-upload-wrapper avatar-upload-wrapper">
-                    <input type="file" id="avatar" name="avatar" accept="image/png, image/jpeg, image/webp" class="file-input avatar-file-input" />
-                </div>
-                <small class="form-help-text">Formats acceptés : JPG, PNG, WEBP. Taille max : 2Mo.</small>
-            </div>
-
-            <div class="form-group">
-                <label for="pseudo">Pseudo</label>
-                <input type="text" id="pseudo" name="pseudo" value="<?= htmlspecialchars($user->getPseudo()) ?>" required />
-            </div>
-
-            <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" id="email" name="email" value="<?= htmlspecialchars($user->getEmail()) ?>" required />
+                <label for="avatar" class="form-label">Photo de profil (Optionnel)</label>
+                <input type="file" id="avatar" name="avatar" accept="image/png, image/jpeg, image/webp" class="form-control file-input" />
+                <small class="form-help">Formats acceptés : JPG, PNG, WEBP. Taille max : 2Mo.</small>
             </div>
 
             <div class="form-row">
                 <div class="form-group">
-                    <label for="last_name">Nom</label>
-                    <input type="text" id="last_name" name="last_name" value="<?= htmlspecialchars($user->getLastName()) ?>" required />
+                    <label for="pseudo" class="form-label">Pseudo</label>
+                    <input type="text" id="pseudo" name="pseudo" class="form-control" value="<?= htmlspecialchars($user->getPseudo()) ?>" required />
                 </div>
-
                 <div class="form-group">
-                    <label for="first_name">Prénom</label>
-                    <input type="text" id="first_name" name="first_name" value="<?= htmlspecialchars($user->getFirstName()) ?>" required />
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" id="email" name="email" class="form-control" value="<?= htmlspecialchars($user->getEmail()) ?>" required />
                 </div>
-            </div>
-
-            <div class="profile-actions-row">
-                <a href="/Profile" class="btn-outline">Annuler</a>
-                <button type="submit" class="btn-neon">Sauvegarder</button>
-            </div>
-        </form>
-
-        <hr class="profile-divider security-divider">
-
-        <h2 class="profile-title title-security">Sécurité</h2>
-
-        <form action="/Profile/updatePassword" method="POST" class="profile-form">
-
-            <div class="form-group">
-                <label for="old_password" class="label-danger">Mot de passe actuel</label>
-                <input type="password" id="old_password" name="old_password" required />
             </div>
 
             <div class="form-row">
                 <div class="form-group">
-                    <label for="new_password" class="label-danger">Nouveau mot de passe</label>
-                    <input type="password" id="new_password" name="new_password" required />
+                    <label for="first_name" class="form-label">Prénom</label>
+                    <input type="text" id="first_name" name="first_name" class="form-control" value="<?= htmlspecialchars($user->getFirstName()) ?>" required />
                 </div>
-
                 <div class="form-group">
-                    <label for="confirm_password" class="label-danger">Confirmer le nouveau</label>
-                    <input type="password" id="confirm_password" name="confirm_password" required />
+                    <label for="last_name" class="form-label">Nom</label>
+                    <input type="text" id="last_name" name="last_name" class="form-control" value="<?= htmlspecialchars($user->getLastName()) ?>" required />
                 </div>
             </div>
 
-            <div class="profile-actions-row">
-                <button type="submit" class="btn-neon btn-danger">
-                    Changer le mot de passe
-                </button>
+            <div class="form-actions-right">
+                <button type="submit" class="btn btn-neon">Sauvegarder les modifications</button>
             </div>
         </form>
+    </div>
 
-        <hr class="profile-divider security-divider">
+    <div class="settings-card">
+        <h2>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+            Sécurité
+        </h2>
 
-        <h2 class="profile-title title-delete">SUPPRESSION</h2>
+        <form action="/Profile/updatePassword" method="POST">
 
-        <div class="delete-warning-box">
-            <p class="delete-warning-text">
-                Attention, la suppression de votre compte est définitive et irréversible. Toutes vos données seront effacées.
-            </p>
-            <form action="/Profile/deleteAccount" method="POST" onsubmit="return confirm('Êtes-vous absolument sûr de vouloir supprimer votre compte ReKey ? Cette action est définitive.');">
-                <button type="submit" class="btn-neon btn-delete">
-                    Supprimer définitivement mon compte
-                </button>
-            </form>
-        </div>
+            <div class="form-group">
+                <label for="old_password" class="form-label">Mot de passe actuel</label>
+                <input type="password" id="old_password" name="old_password" class="form-control" required />
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="new_password" class="form-label">Nouveau mot de passe</label>
+                    <input type="password" id="new_password" name="new_password" class="form-control" required />
+                </div>
+                <div class="form-group">
+                    <label for="confirm_password" class="form-label">Confirmer le nouveau</label>
+                    <input type="password" id="confirm_password" name="confirm_password" class="form-control" required />
+                </div>
+            </div>
+
+            <div class="form-actions-right">
+                <button type="submit" class="btn btn-outline">Mettre à jour le mot de passe</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="settings-card danger-zone">
+        <h2>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+            Supprimer mon compte
+        </h2>
+        
+        <p class="danger-text">
+            Attention, la suppression de votre compte est <strong>définitive et irréversible</strong>. Toutes vos données, y compris vos annonces en cours et votre historique d'achats, seront effacées de nos serveurs de manière permanente.
+        </p>
+
+        <form action="/Profile/deleteAccount" method="POST" onsubmit="return confirm('Êtes-vous absolument sûr de vouloir supprimer votre compte ReKey ? Cette action est définitive.');">
+            <button type="submit" class="btn btn-danger">
+                Supprimer définitivement mon compte
+            </button>
+        </form>
     </div>
 
 </section>

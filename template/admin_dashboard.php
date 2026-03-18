@@ -1,33 +1,34 @@
 <?php
 $pageTitle = 'ReKey - Administration';
-$currentAdminTab = 'dashboard'; // On indique au layout quel menu allumer
+$currentAdminTab = 'dashboard';
 ob_start();
 ?>
 
-<h1 style="margin-top: 0;">Tableau de Bord</h1>
-<p style="color: #aaa; margin-bottom: 2rem;">Bienvenue dans l'espace d'administration, <?= htmlspecialchars($_SESSION['user_pseudo'] ?? 'Admin') ?>.</p>
+<div class="admin-header">
+    <h1 style="font-size: 2.2rem; text-transform: uppercase; margin-bottom: 0.5rem;">Tableau de Bord</h1>
+    <p class="auth-subtitle" style="text-align: left;">Bienvenue dans l'espace d'administration, <?= htmlspecialchars($_SESSION['user_pseudo'] ?? 'Admin') ?>.</p>
+</div>
 
-<div class="stats-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem;">
+<div class="admin-stats-grid">
     
-    <div class="stat-card" style="background: rgba(255,255,255,0.05); padding: 1.5rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); text-align: center;">
-        <div style="font-size: 2.5rem; font-weight: bold; color: #00ffcc;">--</div>
-        <div style="color: #aaa; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 1px; margin-top: 0.5rem;">Utilisateurs Inscrits</div>
+    <div class="admin-stat-card">
+        <div class="admin-stat-value">--</div>
+        <div class="admin-stat-label">Utilisateurs Inscrits</div>
     </div>
 
-    <div class="stat-card" style="background: rgba(255,255,255,0.05); padding: 1.5rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); text-align: center;">
-        <div style="font-size: 2.5rem; font-weight: bold; color: #00ffcc;">--</div>
-        <div style="color: #aaa; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 1px; margin-top: 0.5rem;">Annonces en Ligne</div>
+    <div class="admin-stat-card rose">
+        <div class="admin-stat-value">--</div>
+        <div class="admin-stat-label">Annonces en Ligne</div>
     </div>
 
-    <div class="stat-card" style="background: rgba(255,255,255,0.05); padding: 1.5rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); text-align: center;">
-        <div style="font-size: 2.5rem; font-weight: bold; color: #00ffcc;">--</div>
-        <div style="color: #aaa; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 1px; margin-top: 0.5rem;">Ventes Réalisées</div>
+    <div class="admin-stat-card warning">
+        <div class="admin-stat-value">--</div>
+        <div class="admin-stat-label">Ventes Réalisées</div>
     </div>
 
 </div>
 
 <?php 
-// On passe le relais au layout admin !
 $adminContent = ob_get_clean(); 
 require __DIR__ . '/admin_layout.php'; 
 ?>

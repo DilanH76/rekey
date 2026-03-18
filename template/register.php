@@ -1,50 +1,54 @@
 <?php
-// On définit le titre de l'onglet du navigateur
 $pageTitle = 'ReKey - Inscription' ;
-// On ouvre le "robinet" pour capturer tout le HTML qui suit :  
 ob_start();
 ?>
 
-<section class="auth-container">
-    <div class="auth-card">
-        <h2>Rejoins nous !</h2>
-        <p class="auth-subtitle">Crée ton compte pour acheter et vendre.</p>
+<div class="ambient-glow glow-rose" style="top: 0; left: 0;"></div>
+<div class="ambient-glow glow-cyan" style="bottom: 0; right: 0;"></div>
 
+<section class="auth-page">
+    <div class="auth-card register-card">
+        <h2>Rejoins le réseau</h2>
+        <p class="auth-subtitle">Crée ton compte pour acheter et vendre tes clés instantanément.</p>
 
         <form action="/Auth/processRegister" method="POST" class="auth-form">
             
             <div class="form-group">
-                <label for="pseudo">Pseudo</label>
-                <input type="text" id="pseudo" name="pseudo" value="<?= isset($_POST['pseudo']) ? htmlspecialchars($_POST['pseudo']) : '' ?>"  placeholder="Gamer123" required />
+                <label for="pseudo" class="form-label">Pseudo</label>
+                <input type="text" id="pseudo" name="pseudo" class="form-control" value="<?= isset($_POST['pseudo']) ? htmlspecialchars($_POST['pseudo']) : '' ?>" placeholder="Gamer123" required />
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="last_name" class="form-label">Nom</label>
+                    <input type="text" id="last_name" name="last_name" class="form-control" value="<?= isset($_POST['last_name']) ? htmlspecialchars($_POST['last_name']) : '' ?>" placeholder="Dupont" required />
+                </div>
+
+                <div class="form-group">
+                    <label for="first_name" class="form-label">Prénom</label>
+                    <input type="text" id="first_name" name="first_name" class="form-control" value="<?= isset($_POST['first_name']) ? htmlspecialchars($_POST['first_name']) : '' ?>" placeholder="Jean" required />
+                </div>
             </div>
 
             <div class="form-group">
-                <label for="last_name">Nom</label>
-                <input type="text" id="last_name" name="last_name"  value="<?= isset($_POST['last_name']) ? htmlspecialchars($_POST['last_name']) : '' ?>"  placeholder="Dupont" required />
+                <label for="email" class="form-label">Email</label>
+                <input type="email" id="email" name="email" class="form-control" value="<?= isset($_POST['email']) ? htmlspecialchars($_POST['email']) : '' ?>" placeholder="exemple@gmail.com" required />
             </div>
 
-            <div class="form-group">
-                <label for="first_name">Prénom</label>
-                <input type="text" id="first_name" name="first_name"  value="<?= isset($_POST['first_name']) ? htmlspecialchars($_POST['first_name']) : '' ?>" placeholder="Jean" required />
-            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="password" class="form-label">Mot de passe</label>
+                    <input type="password" id="password" name="password" class="form-control" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@$!%*?&]).{8,}" 
+                            title="8 caractères minimum, avec au moins une majuscule, une minuscule, un chiffre et un caractère spécial." 
+                            placeholder="••••••••" 
+                            required 
+                    />
+                </div>
 
-            <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" id="email" name="email"  value="<?= isset($_POST['email']) ? htmlspecialchars($_POST['email']) : '' ?>" placeholder="exemple@gmail.com" required />
-            </div>
-
-            <div class="form-group">
-                <label for="password">Mot de passe</label>
-                <input type="password" id="password" name="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@$!%*?&]).{8,}" 
-                        title="8 caractères minimum, avec au moins une majuscule, une minuscule, un chiffre et un caractère spécial." 
-                        placeholder="••••••••" 
-                        required 
-                />
-            </div>
-
-            <div class="form-group">
-                <label for="confirm-password">Confirmer le mot de passe</label>
-                <input type="password" id="confirm-password" name="password_confirm" placeholder="••••••••" required />
+                <div class="form-group">
+                    <label for="confirm-password" class="form-label">Confirmer</label>
+                    <input type="password" id="confirm-password" name="password_confirm" class="form-control" placeholder="••••••••" required />
+                </div>
             </div>
 
             <div class="form-group checkbox-group">
@@ -54,7 +58,7 @@ ob_start();
                 </label>
             </div>
 
-            <button type="submit" class="btn-neon btn-full btn-submit">
+            <button type="submit" class="btn btn-neon">
                 S'inscrire
             </button>
         </form>
@@ -66,9 +70,6 @@ ob_start();
 </section>
 
 <?php 
-// On ferme le robinet et on stocke tout le HTML ci-dessus dans la variable $content
 $content = ob_get_clean(); 
-
-// On appelle le grand gabarit qui va afficher le header, ce $content, et le footer
 require __DIR__ . '/layout.php'; 
 ?>

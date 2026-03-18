@@ -27,9 +27,9 @@ ob_start();
 <section id="annonces" class="ads-container container" style="position: relative; z-index: 10;">
 
     <div class="category-badges">
-        <a href="/Home" class="badge-tech <?= empty($_GET['category']) ? 'active' : '' ?>">Toutes les clés</a>
+        <a href="/Home#annonces" class="badge-tech <?= empty($_GET['category']) ? 'active' : '' ?>">Toutes les clés</a>
         <?php foreach ($categories as $cat): ?>
-            <a href="/Home?category=<?= $cat->getIdCategory() ?>" 
+            <a href="/Home?category=<?= $cat->getIdCategory() ?>#annonces" 
                class="badge-tech <?= (isset($_GET['category']) && $_GET['category'] == $cat->getIdCategory()) ? 'active' : '' ?>">
                 <?= htmlspecialchars($cat->getLabel()) ?>
             </a>
@@ -39,7 +39,7 @@ ob_start();
     <?php if (empty($ads)): ?>
         <div class="empty-state" style="text-align: center; padding: 4rem 0;">
             <p style="font-size: 1.2rem; color: var(--text-muted); margin-bottom: 2rem;">Aucune clé ne correspond à vos critères dans la base de données.</p>
-            <a href="/Home" class="btn btn-outline">Réinitialiser les filtres</a>
+            <a href="/Home#annonces" class="btn btn-outline">Réinitialiser les filtres</a>
         </div>
     <?php else: ?>
 
@@ -79,7 +79,7 @@ ob_start();
                 <?php for ($i = 1; $i <= $totalPages; $i++): ?>
                     <?php 
                         $queryParams = array_merge($_GET, ['page' => $i]);
-                        $pageUrl = '?' . http_build_query($queryParams);
+                        $pageUrl = '?' . http_build_query($queryParams) . '#annonces';
                     ?>
                     <a href="<?= htmlspecialchars($pageUrl) ?>" class="<?= ($i === $currentPage) ? 'btn btn-neon' : 'btn btn-outline' ?>" style="padding: 0.5rem 1rem;">
                        <?= $i ?>

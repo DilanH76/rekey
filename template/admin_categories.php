@@ -4,51 +4,53 @@ $currentAdminTab = 'categories';
 ob_start();
 ?>
 
-<h1 style="margin-top: 0;">Catégories & Plateformes</h1>
-<p style="color: #aaa; margin-bottom: 2rem;">Gérez les genres de jeux et les consoles disponibles sur la plateforme.</p>
+<div class="admin-header" style="margin-bottom: 2rem;">
+    <h1 style="font-size: 2.2rem; text-transform: uppercase; margin-bottom: 0.5rem;">Catégories & Consoles</h1>
+    <p class="auth-subtitle" style="text-align: left; margin-bottom: 0;">Gérez les genres de jeux et les consoles disponibles sur la plateforme.</p>
+</div>
 
-<div style="display: flex; gap: 2rem; flex-wrap: wrap;">
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
 
-    <div style="flex: 1; min-width: 300px; background: rgba(255,255,255,0.05); padding: 1.5rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">
-        <h2 style="color: #00ffcc; margin-top: 0;">Genres de jeux</h2>
+    <div class="admin-table-wrapper" style="padding: 2rem;">
+        <h2 style="color: var(--cyan); margin-bottom: 1.5rem; text-transform: uppercase; font-size: 1.2rem;">Genres de jeux</h2>
         
-        <form action="/Admin/addCategory" method="POST" style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem;">
-            <input type="text" name="label" placeholder="Nouvelle catégorie (ex: RPG)" required style="flex: 1; padding: 0.5rem; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.2); color: white; border-radius: 4px;">
-            <button type="submit" style="background: rgba(0, 255, 204, 0.2); color: #00ffcc; border: 1px solid #00ffcc; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer;">Ajouter</button>
+        <form action="/Admin/addCategory" method="POST" style="display: flex; gap: 0.5rem; margin-bottom: 2rem;">
+            <input type="text" name="label" placeholder="Ex: RPG" class="form-control" required style="padding: 0.6rem 1rem;">
+            <button type="submit" class="btn btn-neon" style="padding: 0.6rem 1.2rem;">Ajouter</button>
         </form>
 
         <ul style="list-style: none; padding: 0; margin: 0;">
             <?php foreach ($categories as $cat): ?>
-                <li style="display: flex; justify-content: space-between; align-items: center; padding: 0.8rem 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
-                    <span><?= htmlspecialchars($cat->getLabel()) ?></span>
+                <li style="display: flex; justify-content: space-between; align-items: center; padding: 1rem 0; border-bottom: 1px solid var(--border-light);">
+                    <span style="font-weight: 600;"><?= htmlspecialchars($cat->getLabel()) ?></span>
                     
                     <form action="/Admin/deleteCategory/<?= $cat->getIdCategory() ?>" method="POST" onsubmit="return confirm('Supprimer cette catégorie ?');">
-                        <button type="submit" style="background: none; border: none; color: #ff0055; cursor: pointer; text-decoration: underline;">Supprimer</button>
+                        <button type="submit" style="background: none; border: none; color: var(--danger); cursor: pointer; text-decoration: underline; font-weight: 600;">Supprimer</button>
                     </form>
                 </li>
             <?php endforeach; ?>
         </ul>
     </div>
 
-    <div style="flex: 1; min-width: 300px; background: rgba(255,255,255,0.05); padding: 1.5rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">
-        <h2 style="color: #00ffcc; margin-top: 0;">Consoles & PC</h2>
+    <div class="admin-table-wrapper" style="padding: 2rem;">
+        <h2 style="color: var(--cyan); margin-bottom: 1.5rem; text-transform: uppercase; font-size: 1.2rem;">Consoles & PC</h2>
         
-        <form action="/Admin/addPlatform" method="POST" style="display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1.5rem;">
-            <input type="text" name="label" placeholder="Nom (ex: PS6)" required style="padding: 0.5rem; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.2); color: white; border-radius: 4px;">
-            <input type="text" name="icon_svg" placeholder="Chemin icône (ex: /assets/ico/ps6.svg)" required style="padding: 0.5rem; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.2); color: white; border-radius: 4px;">
-            <button type="submit" style="background: rgba(0, 255, 204, 0.2); color: #00ffcc; border: 1px solid #00ffcc; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer;">Ajouter la plateforme</button>
+        <form action="/Admin/addPlatform" method="POST" style="display: flex; flex-direction: column; gap: 0.8rem; margin-bottom: 2rem;">
+            <input type="text" name="label" placeholder="Nom (ex: PS6)" class="form-control" required style="padding: 0.6rem 1rem;">
+            <input type="text" name="icon_svg" placeholder="Chemin icône (ex: /assets/ico/ps6.svg)" class="form-control" required style="padding: 0.6rem 1rem;">
+            <button type="submit" class="btn btn-neon" style="padding: 0.6rem 1.2rem; justify-content: center;">Ajouter la plateforme</button>
         </form>
 
         <ul style="list-style: none; padding: 0; margin: 0;">
             <?php foreach ($platforms as $plat): ?>
-                <li style="display: flex; justify-content: space-between; align-items: center; padding: 0.8rem 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
-                    <div style="display: flex; align-items: center; gap: 0.5rem;">
-                        <img src="<?= htmlspecialchars($plat->getIconSvg()) ?>" alt="Icon" width="20" height="20" style="filter: invert(1);">
-                        <span><?= htmlspecialchars($plat->getLabel()) ?></span>
+                <li style="display: flex; justify-content: space-between; align-items: center; padding: 1rem 0; border-bottom: 1px solid var(--border-light);">
+                    <div style="display: flex; align-items: center; gap: 0.8rem;">
+                        <img src="<?= htmlspecialchars($plat->getIconSvg()) ?>" alt="Icon" width="24" height="24" style="filter: invert(1);">
+                        <span style="font-weight: 600;"><?= htmlspecialchars($plat->getLabel()) ?></span>
                     </div>
                     
                     <form action="/Admin/deletePlatform/<?= $plat->getIdPlatform() ?>" method="POST" onsubmit="return confirm('Supprimer cette plateforme ?');">
-                        <button type="submit" style="background: none; border: none; color: #ff0055; cursor: pointer; text-decoration: underline;">Supprimer</button>
+                        <button type="submit" style="background: none; border: none; color: var(--danger); cursor: pointer; text-decoration: underline; font-weight: 600;">Supprimer</button>
                     </form>
                 </li>
             <?php endforeach; ?>

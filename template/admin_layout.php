@@ -1,36 +1,48 @@
 <?php
-// On sécurise l'onglet actif au cas où on oublierait de le définir
 $currentAdminTab = $currentAdminTab ?? 'dashboard';
-
-// On commence à capturer le bloc complet de l'administration
 ob_start();
 ?>
 
-<div class="admin-layout" style="display: flex; gap: 2rem; max-width: 1200px; margin: 2rem auto; padding: 0 1rem;">
-    
-    <aside class="admin-sidebar" style="width: 250px; background: rgba(255,255,255,0.05); padding: 1.5rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); height: fit-content;">
-        <h3 style="margin-top: 0; margin-bottom: 1.5rem; color: #00ffcc;">Menu Admin</h3>
-        <nav style="display: flex; flex-direction: column; gap: 1rem;">
-            
-            <a href="/Admin/dashboard" style="text-decoration: none; padding: 0.5rem; <?= $currentAdminTab === 'dashboard' ? 'color: white; background: rgba(0, 255, 204, 0.1); border-left: 3px solid #00ffcc;' : 'color: #aaa; transition: 0.3s;' ?>">Tableau de bord</a>
-            
-            <a href="/Admin/users" style="text-decoration: none; padding: 0.5rem; <?= $currentAdminTab === 'users' ? 'color: white; background: rgba(0, 255, 204, 0.1); border-left: 3px solid #00ffcc;' : 'color: #aaa; transition: 0.3s;' ?>">Gestion des Utilisateurs</a>
-            
-            <a href="/Admin/ads" style="text-decoration: none; padding: 0.5rem; <?= $currentAdminTab === 'ads' ? 'color: white; background: rgba(0, 255, 204, 0.1); border-left: 3px solid #00ffcc;' : 'color: #aaa; transition: 0.3s;' ?>">Modération des Annonces</a>
-            
-            <a href="/Admin/categories" style="text-decoration: none; padding: 0.5rem; <?= $currentAdminTab === 'categories' ? 'color: white; background: rgba(0, 255, 204, 0.1); border-left: 3px solid #00ffcc;' : 'color: #aaa; transition: 0.3s;' ?>">Catégories & Plateformes</a>
-            
-        </nav>
-    </aside>
+<div class="ambient-glow glow-cyan" style="top: -5%; left: 0; opacity: 0.2;"></div>
 
-    <main class="admin-content" style="flex: 1;">
-        <?= $adminContent ?>
-    </main>
+<section class="admin-page container">
+    <div class="admin-wrapper">
+        
+        <aside class="admin-sidebar">
+            <h3>Menu Admin</h3>
+            <nav class="admin-nav">
+                
+                <a href="/Admin/dashboard" class="admin-nav-link <?= $currentAdminTab === 'dashboard' ? 'active' : '' ?>">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+                    Tableau de bord
+                </a>
+                
+                <a href="/Admin/users" class="admin-nav-link <?= $currentAdminTab === 'users' ? 'active' : '' ?>">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                    Utilisateurs
+                </a>
+                
+                <a href="/Admin/ads" class="admin-nav-link <?= $currentAdminTab === 'ads' ? 'active' : '' ?>">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+                    Modération
+                </a>
+                
+                <a href="/Admin/categories" class="admin-nav-link <?= $currentAdminTab === 'categories' ? 'active' : '' ?>">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+                    Catégories & Consoles
+                </a>
+                
+            </nav>
+        </aside>
 
-</div>
+        <main class="admin-content-area">
+            <?= $adminContent ?>
+        </main>
+
+    </div>
+</section>
 
 <?php 
-// On emballe tout ce qu'on vient de faire (Sidebar + Contenu) pour le donner au layout principal
 $content = ob_get_clean(); 
 require __DIR__ . '/layout.php'; 
 ?>
