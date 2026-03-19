@@ -8,8 +8,12 @@ ob_start();
 
 <section class="dashboard-page container">
 
+    <a href="javascript:history.back()" class="back-link">
+        <span class="text-cyan">←</span> Retour
+    </a>
+
     <div class="dashboard-header">
-        <h1>Terminal de bord</h1>
+        <h1>Mon Profil</h1>
         <p class="auth-subtitle" style="text-align: left; margin-bottom: 0;">Bienvenue dans votre espace personnel, <?= htmlspecialchars($user->getPseudo()) ?>.</p>
     </div>
 
@@ -30,7 +34,7 @@ ob_start();
 
     <div class="dashboard-actions-grid">
         
-        <a href="/Order/purchases" class="action-card">
+        <a href="/Order/myPurchases" class="action-card">
             <div class="action-icon">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"></path>

@@ -10,8 +10,8 @@
         <div class="footer-links">
             <h4>Navigation</h4>
             <ul>
-                <li><a href="/Home">Catalogue</a></li>
-                <li><a href="/Ad/create">Vendre une clé</a></li>
+                <li><a href="/Home#annonces">Catalogue</a></li>
+                <li><a href="/Ad/add">Vendre une clé</a></li>
                 <?php if (!isset($_SESSION['user_id'])): ?>
                     <li><a href="/Auth/register">Créer un compte</a></li>
                 <?php else: ?>

@@ -44,6 +44,11 @@ class OrderController extends BaseController {
                 throw new Exception("Ce jeu n'est plus disponible");
             }
 
+            // Bloque l'auto-achat
+            if ($ad->getUser()->getIdUser() === $_SESSION['user_id']) {
+                throw new Exception("Vous ne pouvez pas acheter votre propre jeu.");
+            }
+
             include __DIR__ . '/../../template/checkout.php';
 
         } catch (Exception $err) {

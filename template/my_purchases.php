@@ -8,13 +8,13 @@ ob_start();
 
 <section class="purchases-page container">
 
-    <a href="/Profile" class="back-link">
-        <span class="text-cyan">←</span> Retour au terminal
+    <a href="javascript:history.back()" class="back-link">
+        <span class="text-cyan">←</span> Retour
     </a>
 
     <div class="purchases-header">
         <h1>Mes Achats</h1>
-        <p class="auth-subtitle" style="text-align: left; margin-bottom: 0;">Retrouvez ici toutes vos clés d'activation achetées sur le réseau ReKey.</p>
+        <p class="auth-subtitle" style="text-align: left; margin-bottom: 0;">Retrouvez ici toutes vos clés d'activation achetées sur ReKey.</p>
     </div>
 
     <?php if (empty($orders)): ?>

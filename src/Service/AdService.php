@@ -174,6 +174,20 @@ class AdService {
         ];
     }
 
+    /**
+     * Retourne le nombre d'annonces actuellement en ligne (disponibles)
+     */
+    public function countActiveAds(): int {
+        return $this->adRepository->countAdsByStatus('disponible');
+    }
+
+    /**
+     * Retourne le nombre d'annonces vendues (ventes réalisées)
+     */
+    public function countSoldAds(): int {
+        return $this->adRepository->countAdsByStatus('vendu');
+    }
+
     // =========================================================
     // SECTION : MISE À JOUR (UPDATE)
     // =========================================================

@@ -49,6 +49,13 @@ class ProfileService {
         
         return $user;
     }
+
+    /**
+     * Retourne le nombre total de membres
+     */
+    public function countTotalUsers(): int {
+        return $this->userRepository->countTotalUsers();
+    }
         
     // =========================================================
     // SECTION : MISE À JOUR DES DONNÉES

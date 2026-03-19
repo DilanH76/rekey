@@ -8,14 +8,14 @@ ob_start();
 
 <section class="my-ads-page container">
 
-    <a href="/Profile" class="back-link">
-        <span class="text-cyan">←</span> Retour au terminal
+    <a href="javascript:history.back()" class="back-link">
+        <span class="text-cyan">←</span> Retour
     </a>
 
     <div class="my-ads-header">
         <div>
             <h1>Mes Annonces <span style="color: var(--cyan);">[<?= count($userAds) ?>]</span></h1>
-            <p class="auth-subtitle" style="text-align: left; margin-bottom: 0;">Gérez les jeux que vous avez mis en vente sur le réseau.</p>
+            <p class="auth-subtitle" style="text-align: left; margin-bottom: 0;">Gérez les jeux que vous avez mis en vente.</p>
         </div>
         
         <a href="/Ad/add" class="btn btn-neon">

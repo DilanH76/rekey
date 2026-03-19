@@ -12,17 +12,17 @@ ob_start();
 <div class="admin-stats-grid">
     
     <div class="admin-stat-card">
-        <div class="admin-stat-value">--</div>
+        <div class="admin-stat-value"><?= $totalUsers ?></div>
         <div class="admin-stat-label">Utilisateurs Inscrits</div>
     </div>
 
     <div class="admin-stat-card rose">
-        <div class="admin-stat-value">--</div>
+        <div class="admin-stat-value"><?= $activeAds ?></div>
         <div class="admin-stat-label">Annonces en Ligne</div>
     </div>
 
     <div class="admin-stat-card warning">
-        <div class="admin-stat-value">--</div>
+        <div class="admin-stat-value"><?= $totalSales ?></div>
         <div class="admin-stat-label">Ventes Réalisées</div>
     </div>
 

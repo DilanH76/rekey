@@ -234,7 +234,7 @@ header.scrolled {
 .search-btn-round img {
   width: 1rem;
   height: 1rem;
-  filter: brightness(0) invert(1);
+  filter: brightness(0) invert(0.6);
 }
 
 /* État : Recherche Active */
@@ -668,6 +668,38 @@ select.form-control option {
   color: var(--text-main);
 }
 
+/* --- Wrapper pour l'œil du mot de passe --- */
+.password-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+/* On fait de la place à droite pour que le texte ne passe pas sous l'œil */
+.password-wrapper .form-control {
+  padding-right: 3rem; 
+}
+
+.toggle-password {
+  position: absolute;
+  right: 10px;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all var(--transition-fast);
+}
+
+.toggle-password:hover, 
+.toggle-password.active {
+  color: var(--cyan);
+  transform: scale(1.1);
+}
+
 /* ========================================= */
 /* 9. PAGE D'ACCUEIL : CONCEPT TECH/NEON     */
 /* ========================================= */
@@ -744,9 +776,11 @@ select.form-control option {
   overflow-x: auto; /* Permet le scroll horizontal */
   gap: 1rem;
   margin-top: 5rem;
+  margin-bottom: 2.5rem;
   padding: 0 1rem 1rem 1rem;
   max-width: 100%;
   width: 100%;
+  user-select: none;
   
   /* Masque la barre de défilement pour un look épuré */
   -ms-overflow-style: none;  /* IE and Edge */
@@ -2117,7 +2151,24 @@ select.form-control option {
   border: 1px solid var(--border-light);
   border-radius: var(--radius-md);
   overflow-x: auto;
+  overflow-y: hidden; /* CHIRURGICAL : Empêche le bug de déclenchement fantôme */
   box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+/* --- Scrollbar Cyberpunk pour les tableaux --- */
+.admin-table-wrapper::-webkit-scrollbar {
+  height: 6px; /* Très fine et discrète */
+}
+.admin-table-wrapper::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+.admin-table-wrapper::-webkit-scrollbar-thumb {
+  background: rgba(0, 229, 255, 0.3); /* Couleur cyan atténuée */
+  border-radius: 4px;
+}
+.admin-table-wrapper::-webkit-scrollbar-thumb:hover {
+  background: var(--cyan);
 }
 
 .admin-table {

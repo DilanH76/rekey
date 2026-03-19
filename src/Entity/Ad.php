@@ -207,7 +207,7 @@ class Ad {
     public function getCoverImageBase64(): string
     {
         if (!$this->cover_image) {
-            return '/assets/img/default-cover.jpg'; // TODO créer cette image plus tard
+            return '/assets/img/default_cover.svg';
         }
         return 'data:image/jpeg;base64,' . base64_encode($this->cover_image);
     }

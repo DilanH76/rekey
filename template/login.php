@@ -20,6 +20,7 @@ ob_start();
                     id="login" 
                     name="login" 
                     class="form-control"
+                    value="<?= isset($_POST['login']) ? htmlspecialchars($_POST['login']) : '' ?>"
                     placeholder="exemple@gmail.com ou Gamer123" 
                     required 
                 />
@@ -27,14 +28,22 @@ ob_start();
 
             <div class="form-group">
                 <label for="password" class="form-label">Mot de passe</label>
-                <input 
-                    type="password" 
-                    id="password" 
-                    name="password" 
-                    class="form-control"
-                    placeholder="••••••••" 
-                    required 
-                />
+                <div class="password-wrapper">
+                    <input 
+                        type="password" 
+                        id="password" 
+                        name="password" 
+                        class="form-control"
+                        placeholder="••••••••" 
+                        required 
+                    />
+                    <button type="button" class="toggle-password" aria-label="Afficher/Masquer le mot de passe">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                            <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                    </button>
+                </div>
             </div>
 
             <div class="form-options">

@@ -30,11 +30,11 @@ class AuthService {
     /**
      * Traite l'inscription d'un nouvel utilisateur
      * Vérifie les doublons, la robustesse du mot de passe et crée l'entité.
-     * * @param array $postData Les données brutes issues du formulaire ($_POST)
-     * @return void
+     *  @param array $postData Les données brutes issues du formulaire ($_POST)
+     * @return User L'utilisateur nouvellement créé
      * @throws Exception Si une vérification échoue (email pris, mot de passe faible, etc.)
      */
-    public function registerUser(array $postData): void 
+    public function registerUser(array $postData): User 
     {
         // Sécurité Back-end
         // Je vérifie que tous les champs obligatoires existent et ne sont pas juste des espaces (trim)
@@ -89,6 +89,8 @@ class AuthService {
 
         // Je dis au Repository de sauvegarder
         $this->userRepository->register($user);
+
+        return $this->userRepository->findByEmailOrPseudo($postData['email']);
     }
     
     // =========================================================

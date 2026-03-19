@@ -48,7 +48,7 @@ ob_start();
             </h2>
             
             <div class="alert-warning">
-                <strong>MODE SIMULATION :</strong> Ceci est un environnement de test. Ne saisissez <u>aucune</u> véritable coordonnée bancaire. Des données factices suffisent pour valider la transaction.
+                <strong>SIMULATION :</strong> Ceci est un environnement de test. Ne saisissez <u>aucune</u> véritable coordonnée bancaire. Des données factices suffisent pour valider la transaction.
             </div>
 
             <form action="/Order/process/<?= $ad->getIdAds() ?>" method="POST" class="ad-form">

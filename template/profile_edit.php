@@ -9,7 +9,7 @@ ob_start();
 <section class="settings-page container">
 
     <a href="/Profile" class="back-link">
-        <span class="text-cyan">←</span> Retour au terminal
+        <span class="text-cyan">←</span> Retour
     </a>
 
     <div class="settings-header">

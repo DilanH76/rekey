@@ -15,7 +15,7 @@ ob_start();
             <a href="#annonces" class="btn btn-neon">Découvrir les annonces</a>
             
             <?php if (isset($_SESSION['user_id'])): ?>
-                <a href="/Ad/create" class="btn btn-outline">Vendre une clé</a>
+                <a href="/Ad/add" class="btn btn-outline">Vendre une clé</a>
             <?php else: ?>
                 <a href="/Auth/register" class="btn btn-outline">Rejoindre le réseau</a>
             <?php endif; ?>

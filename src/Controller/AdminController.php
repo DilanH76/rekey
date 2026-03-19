@@ -61,7 +61,10 @@ class AdminController extends BaseController {
         $this->requireAdmin();
 
         try {
-            // TODO : Intégration future des statistiques globales (utilisateurs, annonces)
+            // statistiques globales (utilisateurs, annonces)
+            $totalUsers = $this->profileService->countTotalUsers();
+            $activeAds = $this->adService->countActiveAds();
+            $totalSales = $this->adService->countSoldAds();
             
             include __DIR__ . '/../../template/admin_dashboard.php';
         } catch (Exception $err) {

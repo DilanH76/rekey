@@ -440,6 +440,18 @@ class AdRepository {
         return (int) $stmt->fetchColumn();
     }
 
+    /**
+     * Compte le nombre total d'annonces selon leur statut ('disponible' ou 'vendu')
+     * @param string $status Le statut à cibler
+     * @return int
+     */
+    public function countAdsByStatus(string $status): int {
+        $sql = "SELECT COUNT(*) FROM ads WHERE status = :status";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute(['status' => $status]);
+        return (int) $stmt->fetchColumn();
+    }
+
     // =========================================================
     // SECTION : MISE À JOUR (UPDATE)
     // =========================================================

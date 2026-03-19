@@ -23,7 +23,7 @@
             </a>
         </nav>
 
-        <form class="search-form-expanded" action="/Home" method="GET">
+        <form class="search-form-expanded" action="/Home#annonces" method="GET">
             <input
                 type="text"
                 name="q"
@@ -45,7 +45,7 @@
             <?php if (isset($_SESSION['user_id'])): ?>
                 <div class="user-dropdown">
                     <a href="#" aria-label="Mon Compte" class="dropdown-toggle" style="display: flex; align-items: center; gap: 0.5rem;">
-                        <img src="/assets/ico/user.svg" alt="Profil" />
+                        <img src="<?= $_SESSION['user_avatar'] ?? '/assets/ico/user.svg' ?>" alt="Profil" style="width: 28px; height: 28px; border-radius: 50%; object-fit: cover; filter: none !important;" />
                         <span class="desktop-pseudo" style="font-size: 0.9rem; font-weight: 600; color: var(--cyan);"><?= htmlspecialchars($_SESSION['user_pseudo']) ?></span>
                     </a>
 
@@ -56,7 +56,7 @@
 
                         <li><a href="/Profile">Mon Profil</a></li>
                         <li><a href="/Ad/mine">Mes Annonces</a></li>
-                        <li><a href="/Order/purchases">Mes Achats</a></li>
+                        <li><a href="/Order/myPurchases">Mes Achats</a></li>
                         <li><a href="/Favorites">Mes Favoris</a></li>
                         <li class="logout-link"><a href="/Auth/logout">Déconnexion</a></li>
                     </ul>
@@ -85,8 +85,8 @@
         
         <?php if (isset($_SESSION['user_id'])): ?>
             <div class="mobile-user-section">
-                <div class="mobile-avatar-placeholder">
-                    <img src="/assets/ico/user.svg" alt="Profil" />
+                <div class="mobile-avatar-placeholder" style="overflow: hidden; padding: 0;">
+                    <img src="<?= $_SESSION['user_avatar'] ?? '/assets/ico/user.svg' ?>" alt="Profil" style="width: 100%; height: 100%; object-fit: cover; filter: none !important;" />
                 </div>
                 <span class="mobile-pseudo"><?= htmlspecialchars($_SESSION['user_pseudo']) ?></span>
             </div>
@@ -97,7 +97,7 @@
             
             <a href="/Profile" class="mobile-nav-link secondary">Mon Terminal</a>
             <a href="/Ad/mine" class="mobile-nav-link secondary">Mes Ventes</a>
-            <a href="/Order/purchases" class="mobile-nav-link secondary">Mes Achats</a>
+            <a href="/Order/myPurchases" class="mobile-nav-link secondary">Mes Achats</a>
             
         <?php else: ?>
             <a href="/Auth/login" class="mobile-nav-link secondary text-cyan">Se connecter</a>

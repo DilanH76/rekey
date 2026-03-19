@@ -155,6 +155,16 @@ class UserRepository {
         return $users;
     }
 
+    /**
+     * Compte le nombre total d'utilisateurs inscrits
+     * @return int
+     */
+    public function countTotalUsers(): int {
+        $sql = "SELECT COUNT(*) FROM users";
+        $stmt = $this->pdo->query($sql);
+        return (int) $stmt->fetchColumn();
+    }
+
     // =========================================================
     // SECTION : MISE À JOUR (UPDATE)
     // =========================================================

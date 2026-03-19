@@ -55,7 +55,13 @@ class AuthController extends BaseController {
         
         try {
             // Le service fait tout le travail (vérification, hachage, sauvegarde en BDD)
-            $this->authService->registerUser($_POST);
+            $user = $this->authService->registerUser($_POST);
+
+            // AUTO-LOGIN : Je connecte l'utilisateur instantanément
+            $_SESSION['user_id'] = $user->getIdUser();
+            $_SESSION['user_pseudo'] = $user->getPseudo();
+            $_SESSION['is_admin'] = $user->getIsAdmin();
+            $_SESSION['user_avatar'] = $user->getAvatarBase64();
 
             // SUCCÈS : Je met le Post-it vert et je redirige vers le Login
             $_SESSION['flash'] = [
@@ -72,7 +78,7 @@ class AuthController extends BaseController {
                 'type' => 'error',
                 'message' => $err->getMessage()
             ];
-            header('Location: /Auth/register');
+            include __DIR__.'/../../template/register.php';
             exit;
         }
     }
@@ -107,6 +113,7 @@ class AuthController extends BaseController {
             $_SESSION['user_id'] = $user->getIdUser();
             $_SESSION['user_pseudo'] = $user->getPseudo();
             $_SESSION['is_admin'] = $user->getIsAdmin();
+            $_SESSION['user_avatar'] = $user->getAvatarBase64();
             
             // Je met un petit Post-it vert de bienvenue 
             $_SESSION['flash'] = [
@@ -122,7 +129,7 @@ class AuthController extends BaseController {
                 'type' => 'error',
                 'message' => $err->getMessage()
             ];
-            header('Location: /Auth/login');
+            include __DIR__ . '/../../template/login.php';
             exit;
         }
     }
