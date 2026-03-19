@@ -28,10 +28,9 @@ class PlatformService {
 
     /**
      * Traite la création d'une nouvelle plateforme
-     * @param array $data Données du formulaire ($_POST)
      * @throws Exception Si les champs sont vides
      */
-    public function createPlatform(array $data): void
+    public function createPlatform(string $label, string $iconSvg): void
     {
         $label = trim($data['label'] ?? '');
         $iconSvg = trim($data['icon_svg'] ?? '');

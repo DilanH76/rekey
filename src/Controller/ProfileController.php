@@ -83,19 +83,19 @@ class ProfileController extends BaseController {
     /**
      * Traite le formulaire de modification du profil (Infos classiques + Avatar)
      * URL : /Profile/update
-     * @param array|null $params Paramètres d'URL éventuels
      */
     public function update(?array $params) {
-        // Vérifier si l'utilisateur es connecté
         $this->requireAuth();
         $this->requirePost('/Profile');
 
         try {
-            // J'envoie tout le formulaire au sercie
-            $this->profileService->updateProfileData($_POST, $_FILES, $_SESSION['user_id']);
-            // Je met à jour le pseudo dans la session
-            $_SESSION['user_pseudo'] = trim($_POST['pseudo']);
-            // SUCCÈS
+            // Je récupère l'utilisateur fraîchement mis à jour par le Service
+            $updatedUser = $this->profileService->updateProfileData($_POST, $_FILES, $_SESSION['user_id']);
+            
+            // Je met à jour TOUTE la session pour que l'affichage (Header/Navbar) s'actualise instantanément 
+            $_SESSION['user_pseudo'] = $updatedUser->getPseudo();
+            $_SESSION['user_avatar'] = $updatedUser->getAvatarBase64();
+
             $_SESSION['flash'] = [
                 'type' => 'success',
                 'message' => 'Vos informations ont été mises à jour.'
@@ -104,7 +104,6 @@ class ProfileController extends BaseController {
             exit;
 
         } catch (Exception $err) {
-            // ERREUR 
             $_SESSION['flash'] = [
                 'type' => 'error',
                 'message' => $err->getMessage()

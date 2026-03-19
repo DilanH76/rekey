@@ -59,7 +59,13 @@ class UserRepository {
             $stmt->bindValue(':avatar', $avatar, PDO::PARAM_LOB);
         }   
 
-        return $stmt->execute();
+        $success = $stmt->execute();
+
+        if ($success) {
+            $user->setIdUser((int)$this->pdo->lastInsertId());
+        }
+
+        return $success;
     }
 
     // =========================================================

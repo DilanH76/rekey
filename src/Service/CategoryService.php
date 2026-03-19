@@ -28,10 +28,9 @@ class CategoryService {
 
     /**
      * Traite la création d'une nouvelle catégorie
-     * @param array $data Données du formulaire ($_POST)
      * @throws Exception Si le nom est vide ou invalide
      */
-    public function createCategory(array $data): void
+    public function createCategory(string $label): void
     {
         $label = trim($data['label'] ?? '');
 

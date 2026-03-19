@@ -49,7 +49,7 @@ ob_start();
 
             <div class="form-group">
                 <label for="description" class="form-label">Description courte</label>
-                <textarea id="description" name="description" class="form-control" rows="4" placeholder="État de la clé, langue du jeu, édition spéciale..."></textarea>
+                <textarea id="description" name="description" class="form-control" rows="4" placeholder="Langue du jeu, édition spéciale, DLC ..."></textarea>
             </div>
 
             <div class="form-row">

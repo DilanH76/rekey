@@ -61,11 +61,7 @@ class AuthService {
             throw new Exception("Ce pseudo est déjà utilisé.");
         }
 
-        // Je vérifie les mots de passes
-        if ($postData['password'] !== $postData['password_confirm']) {
-            throw new Exception("Les mots de passe ne correspondent pas.");
-        }
-        
+
         // Minimum 8 caractères, au moins une majuscule, une minuscule, un chiffre et un caractère spécial
         $regexPassword = '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/' ;
 
@@ -73,15 +69,26 @@ class AuthService {
             throw new Exception("Le mot de passe doit contenir au moins 8 caractères, dont une majuscule, une minuscule, un chiffre et un caractère spécial (@$!%*?&).");
         }
 
+        // Je vérifie les mots de passes
+        if ($postData['password'] !== $postData['password_confirm']) {
+            throw new Exception("Les mots de passe ne correspondent pas.");
+        }
+
         // Je hache le mot de passe
         $hashedPassword = password_hash($postData['password'], PASSWORD_DEFAULT);
+
+        // Nettoyage des données pour bloquer les failles XSS (Sanitization)
+        $cleanLastName = htmlspecialchars(trim($postData['last_name']));
+        $cleanFirstName = htmlspecialchars(trim($postData['first_name']));
+        $cleanPseudo = htmlspecialchars(trim($postData['pseudo']));
+        $cleanEmail = filter_var(trim($postData['email']), FILTER_SANITIZE_EMAIL);
         
-        // Je crée l'entité
+        // Je crée l'entité avec les données propres
         $user = new User(
-            $postData['last_name'],
-            $postData['first_name'],
-            $postData['pseudo'],
-            $postData['email'],
+            $cleanLastName,
+            $cleanFirstName,
+            $cleanPseudo,
+            $cleanEmail,
             $hashedPassword,
             new DateTime(),
             null // Avatar par défaut géré dans l'Entity User.
@@ -90,7 +97,7 @@ class AuthService {
         // Je dis au Repository de sauvegarder
         $this->userRepository->register($user);
 
-        return $this->userRepository->findByEmailOrPseudo($postData['email']);
+        return $user;
     }
     
     // =========================================================

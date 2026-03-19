@@ -6,6 +6,7 @@ use App\Repository\AdRepository;
 use App\Entity\Order;
 use \Exception;
 use \DateTime;
+use \PDO;
 
 /**
  * Service gérant la logique métier des commandes (transactions)
@@ -14,15 +15,16 @@ class OrderService {
 
     private OrderRepository $orderRepository;
     private AdRepository $adRepository;
+    private PDO $pdo; // PDO pour gérer les transactions
 
     /**
      * Constructeur avec injection de dépendances
-     * J'ai besoin des deux repositories : pour lire/modifier l'annonce, et écrire la commande
      */
-    public function __construct(OrderRepository $orderRepository, AdRepository $adRepository)
+    public function __construct(OrderRepository $orderRepository, AdRepository $adRepository, PDO $pdo)
     {
         $this->orderRepository = $orderRepository;
         $this->adRepository = $adRepository;
+        $this->pdo = $pdo; // Injection
     }
 
     // =========================================================
@@ -48,8 +50,7 @@ class OrderService {
             throw new Exception("Action refusée : Vous ne pouvez pas acheter votre propre jeu.");
         }
 
-        // Génération d'une référence de commande unique ( ex : CMD-20260312-A8F4)
-        // La fonction uniqid() génère une chaîne aléatoire unique.
+        // Génération d'une référence de commande unique
         $reference = 'CMD-'. date('Ymd') . '-' . strtoupper(substr(uniqid(), -4));
 
         $order = new Order(
@@ -59,17 +60,32 @@ class OrderService {
             $userId
         );
 
-        $successOrder = $this->orderRepository->create($order);
+        // Lancement de la transaction SQL (Tout ou Rien)
+        try {
+            $this->pdo->beginTransaction();
 
-        if (!$successOrder) {
-            throw new Exception("Une erreur est survenue lors de la validation du paiement.");
-        }
+            // Je crée la commande
+            $successOrder = $this->orderRepository->create($order);
+            if (!$successOrder) {
+                throw new Exception("Erreur lors de la validation du paiement.");
+            }
 
-        // Je met à jour en base de données
-        $successAd = $this->adRepository->markAsSold($adId);
+            // Je marque l'annonce comme vendue
+            $successAd = $this->adRepository->markAsSold($adId);
+            if (!$successAd) {
+                throw new Exception("Erreur lors de la mise à jour de l'annonce.");
+            }
 
-        if (!$successAd) {
-            throw new Exception("La commande est passée mais le statut de l'annonce n'a pas pu être mis à jour.");
+            // Si j'arrive ici sans erreur, je valide définitivement tout dans la BDD
+            $this->pdo->commit();
+
+        } catch (Exception $e) {
+            // Si la moindre chose a planté (ex: faille de concurrence, erreur SQL), 
+            // j'annule TOUT (la commande n'est pas sauvegardée)
+            $this->pdo->rollBack();
+            
+            // je relance l'exception pour que le contrôleur affiche le message d'erreur
+            throw new Exception("La transaction a échoué : " . $e->getMessage());
         }
     }
 

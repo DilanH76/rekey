@@ -57,18 +57,26 @@ class AdService {
      */
     public function createAd(array $postData, array $files, int $userId): void
     {
+        // Nettoyage immédiat des données contre les failles XSS
+        $cleanTitle = htmlspecialchars(trim($postData['title'] ?? ''));
+        $cleanDesc = htmlspecialchars(trim($postData['description'] ?? ''));
+        // On trim juste la clé, on évite htmlspecialchars au cas où elle contient des caractères spéciaux légitimes
+        $gameKey = trim($postData['game_key'] ?? ''); 
+
         // Verification de base
-        if (empty(trim($postData['title'])) || empty(trim($postData['game_key']))) {
+        if (empty($cleanTitle) || empty($gameKey)) {
             throw new Exception("Le titre et la clé du jeu sont obligatoires.");
         }
 
-        $price = (float) $postData['price'];
+        $price = (float) ($postData['price'] ?? 0);
         if ($price < 0) {
             throw new Exception("Le prix ne peut pas être négatif.");
         }
 
-        // Traitement de l'image de couverture (si elle existe)
+
+        // Si une exception est levée ici, le script s'arrête et l'annonce n'est pas créée.
         $coverBlob = null;
+        
         if (isset($files['cover_image']) && $files['cover_image']['error'] === UPLOAD_ERR_OK) {
             $file = $files['cover_image'];
 
@@ -87,15 +95,19 @@ class AdService {
 
             // Convertion en BLOB
             $coverBlob = file_get_contents($file['tmp_name']);
+            
+        } elseif (isset($files['cover_image']) && $files['cover_image']['error'] !== UPLOAD_ERR_NO_FILE) {
+            // S'il y a eu une erreur pendant l'upload (ex: fichier corrompu, coupure réseau)
+            throw new Exception("Une erreur est survenue lors du téléchargement de l'image.");
         }
 
         // Création de l'entité Ad
         $ad = new Ad(
-            trim($postData['title']),
-            trim($postData['description']),
+            $cleanTitle,
+            $cleanDesc,
             $price,
             $coverBlob,
-            trim($postData['game_key']),
+            $gameKey,
             'disponible', // Par défaut, une nouvelle annonce est disponible
             new DateTime(),
             (int) $postData['id_platform'],
@@ -152,7 +164,8 @@ class AdService {
     public function searchAds(string $query, ?int $idCategory = null, ?int $idPlatform = null, string $sort = 'date_desc', int $page = 1): array
     {   
         // Nettoyage de la recherche texte
-        $cleanedQuery = trim($query);
+        $cleanedQuery = htmlspecialchars(trim($query)); // MODIFICATION : Sanitize la recherche
+        
         // Calcul de la pagination ( ex : 12 annonces par page)
         $limit = 12;
         // Si je suis page 1, offset = 0. Si page 2, offset = 12, etc.
@@ -205,19 +218,23 @@ class AdService {
             throw new Exception("Action refusée : Vous ne pouvez modifier que vos propres annonces.");
         }
 
-        if (empty(trim($postData['title']))) {
+        // Nettoyage des données
+        $cleanTitle = htmlspecialchars(trim($postData['title'] ?? ''));
+        $cleanDesc = htmlspecialchars(trim($postData['description'] ?? ''));
+
+        if (empty($cleanTitle)) {
             throw new Exception("Le titre est obligatoire.");
         }
 
-        $price = (float) $postData['price'];
+        $price = (float) ($postData['price'] ?? 0);
         if ($price < 0) {
             throw new Exception("Le prix ne peut pas être négatif.");
         }
 
         $success = $this->adRepository->updateAdInfo(
             $adId,
-            trim($postData['title']),
-            trim($postData['description']),
+            $cleanTitle,
+            $cleanDesc,
             $price,
             (int) $postData['id_category'],
             (int) $postData['id_platform']

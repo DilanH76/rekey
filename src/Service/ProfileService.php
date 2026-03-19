@@ -7,16 +7,11 @@ use \Exception;
 
 /**
  * Service gérant la logique métier du profil utilisateur
- * (Récupération, mise à jour des infos/avatar, modification du mot de passe et suppression)
  */
 class ProfileService {
     
     private UserRepository $userRepository;
 
-    /**
-     * Constructeur avec injection de dépendance
-     * @param UserRepository $userRepository Le repository pour dialoguer avec la table users
-     */
     public function __construct(UserRepository $userRepository) {
         $this->userRepository = $userRepository;
     }
@@ -25,34 +20,19 @@ class ProfileService {
     // SECTION : LECTURE DES DONNÉES
     // =========================================================
 
-    /**
-     * Récupère la liste complète de tous les utilisateurs inscrits.
-     * @return array Un tableau d'objets User
-     */
     public function getAllUsers(): array 
     {
         return $this->userRepository->findAll();
     }
 
-    /**
-     * Récupère les données d'un utilisateur par son ID
-     * @param int $userId L'identifiant de l'utilisateur
-     * @return User L'objet Entity\User correspondant
-     * @throws Exception Si l'utilisateur n'existe pas en base de données
-     */
     public function getUserProfile(int $userId): User {
         $user = $this->userRepository->findById($userId);
-        
         if (!$user) {
             throw new Exception("Utilisateur introuvable.");
         }
-        
         return $user;
     }
 
-    /**
-     * Retourne le nombre total de membres
-     */
     public function countTotalUsers(): int {
         return $this->userRepository->countTotalUsers();
     }
@@ -63,21 +43,23 @@ class ProfileService {
 
     /**
      * Met à jour les informations générales et l'avatar du profil
-     * @param array $data Les données du formulaire ($_POST)
-     * @param array $files Les fichiers uploadés ($_FILES)
-     * @param int $userId L'identifiant de l'utilisateur
-     * @return void
-     * @throws Exception Si un pseudo/email est déjà pris, ou si l'avatar est invalide
+     * Retourne l'objet User mis à jour pour rafraîchir la session
      */
-    public function updateProfileData(array $data, array $files, int $userId): void {
-        // Je récupère l'utilisateur actuel grâce à la méthode que j'ai déjà
+    public function updateProfileData(array $data, array $files, int $userId): User {
         $user = $this->getUserProfile($userId);
-        // J'utilise ?? '' pour éviter une erreur si la clé n'exsite pas dans le $_POST
-        $newPseudo = trim($data['pseudo'] ?? '');
-        $newEmail  = trim($data['email'] ?? '');
+        
+        // Nettoyage Anti-XSS strict
+        $newPseudo = htmlspecialchars(trim($data['pseudo'] ?? ''));
+        $newEmail  = filter_var(trim($data['email'] ?? ''), FILTER_SANITIZE_EMAIL);
+        $newFirstName = htmlspecialchars(trim($data['first_name'] ?? ''));
+        $newLastName = htmlspecialchars(trim($data['last_name'] ?? ''));
+
+        // Vérification des champs vides
+        if (empty($newPseudo) || empty($newEmail) || empty($newFirstName) || empty($newLastName)) {
+            throw new Exception("Tous les champs texte sont obligatoires.");
+        }
 
         // Verification du pseudo
-        // Si le pseudo a changé, je vérifie qu'il n'est pas déjà pris
         if ($newPseudo !== $user->getPseudo()) {
             $existingUser = $this->userRepository->findByEmailOrPseudo($newPseudo);
             if ($existingUser !== null && $existingUser->getIdUser() !== $userId) {
@@ -86,7 +68,6 @@ class ProfileService {
         }
 
         // Verification de l'email
-        // Si l'email a changé, je vérifie qu'il n'est pas déjà pris
         if ($newEmail !== $user->getEmail()) {
             $existingUser = $this->userRepository->findByEmailOrPseudo($newEmail);
             if ($existingUser !== null && $existingUser->getIdUser() !== $userId) {
@@ -98,78 +79,64 @@ class ProfileService {
         if (isset($files['avatar']) && $files['avatar']['error'] === UPLOAD_ERR_OK ) {
             $file = $files['avatar'];
 
-            // Vérification de la taille
-            $maxSize = 2 * 1024 * 1024; // 2Mo en octets
+            $maxSize = 2 * 1024 * 1024; // 2Mo
             if ($file['size'] > $maxSize) {
                 throw new Exception("L'image est trop lourde (Maximum 2 Mo).");
             }
 
-            // Verification du format
             $allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
-            $fileType = mime_content_type($file['tmp_name']); // Lit le vrai type du fichier
+            $fileType = mime_content_type($file['tmp_name']); 
 
             if (!in_array($fileType, $allowedTypes)) {
                 throw new Exception("Format non supporté. Veuillez utiliser du JPG, PNG ou WEBP.");
             }
 
-            // Conversion en BLOB
             $blobData = file_get_contents($file['tmp_name']);
-            $user->setAvatar($blobData); // On met à jour l'entité
+            $user->setAvatar($blobData); 
         }   
 
-        // Je met à jour l'entité avec les nouvelles données du formulaire
+        // Mise à jour de l'entité avec les données nettoyées
         $user->setPseudo($newPseudo);
         $user->setEmail($newEmail);
-        $user->setFirstName(trim($data['first_name'] ?? ''));
-        $user->setLastName(trim($data['last_name'] ?? ''));
+        $user->setFirstName($newFirstName);
+        $user->setLastName($newLastName);
         
-        // Je envoie l'objet mis à jour au Repository pour la sauvegarde en BDD
         $success = $this->userRepository->updateProfile($user);
 
         if (!$success) {
             throw new Exception("Une erreur est survenue lors de la sauvegarde de votre profil.");
         }
+
+        // On retourne l'utilisateur pour le Controller
+        return $user;
     }
 
     // =========================================================
     // SECTION : SÉCURITÉ & SUPPRESSION
     // =========================================================
 
-    /**
-     * Gère la modification sécurisée du mot de passe
-     * @param int $userId L'identifiant de l'utilisateur
-     * @param array $data Les mots de passe saisis ($_POST)
-     * @return void
-     * @throws Exception Si les vérifications (ancien mdp, correspondance, regex) échouent
-     */
     public function changePassword(int $userId, array $data): void {
-        // Je récupère l'utilisateur actuel
         $user = $this->getUserProfile($userId);
 
         $oldPassword = $data['old_password'] ?? '';
         $newPassword = $data['new_password'] ?? '';
         $confirmPassword = $data['confirm_password'] ?? '';
         
-        // Je vérifie l'ancien mot de passe tapé correspond bien à celui en BDD
         if (!password_verify($oldPassword, $user->getPassword())) {
             throw new Exception("L'ancien mot de passe est incorrect.");
         }
 
-        // Je vérifie que les deux nouveaux mots de passe correspondent
         if ($newPassword !== $confirmPassword) {
             throw new Exception("Les nouveaux mots de passe ne correspondent pas.");
         }
 
-        // Je vérifie la robustesse avec la Regex
         $regexPassword = '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/';
         if (!preg_match($regexPassword, $newPassword)) {
             throw new Exception("Le nouveau mot de passe doit contenir au moins 8 caractères, dont une majuscule, une minuscule, un chiffre et un caractère spécial (@$!%*?&).");
         }
 
-        // Je hache le nouveau mot de passe
         $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
 
-        // Je l'envoie au Repository pour la sauvegarde
         $success = $this->userRepository->updatePassword($userId, $hashedPassword);
 
         if (!$success) {
@@ -177,16 +144,8 @@ class ProfileService {
         }
     }
 
-    /**
-     * Supprime définitivement le compte d'un utilisateur
-     * @param int $userId L'identifiant de l'utilisateur
-     * @return void
-     * @throws Exception Si la suppression échoue en base de données
-     */
     public function deleteAccount(int $userId): void {
-        // Je vérifie que l'utilisateur existe bien avant de le supprimer
         $user = $this->getUserProfile($userId);
-
         $success = $this->userRepository->delete($userId);
 
         if (!$success) {

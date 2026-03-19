@@ -20,10 +20,6 @@ class AdminController extends BaseController {
 
     /**
      * Constructeur avec injection des dépendances requises.
-     * @param AdService $adService Service gérant la logique métier des annonces
-     * @param ProfileService $profileService Service gérant la logique métier des utilisateurs
-     * @param CategoryService $categoryService Service gérant la logique métier des catégories (genres de jeux)
-     * @param PlatformService $platformService Service gérant la logique métier des plateformes (consoles/PC)
      */
     public function __construct(AdService $adService, ProfileService $profileService, CategoryService $categoryService, PlatformService $platformService)
     {
@@ -37,31 +33,17 @@ class AdminController extends BaseController {
     // SECTION : AFFICHAGE DES VUES
     // =========================================================
 
-    /**
-     * Méthode par défaut si on tape juste /Admin dans l'URL.
-     * Redirige automatiquement vers le tableau de bord.
-     * @param array|null $params
-     * @return void
-     */
     public function index(?array $params): void 
     {
         header('Location: /Admin/dashboard');
         exit;
     }
 
-    /**
-     * Affiche le tableau de bord principal de l'administration.
-     * Route : /Admin/dashboard
-     * * @param array|null $params Paramètres d'URL éventuels
-     * @return void
-     */
     public function dashboard(?array $params): void
     {
-        // Validation des droits d'accès
         $this->requireAdmin();
 
         try {
-            // statistiques globales (utilisateurs, annonces)
             $totalUsers = $this->profileService->countTotalUsers();
             $activeAds = $this->adService->countActiveAds();
             $totalSales = $this->adService->countSoldAds();
@@ -77,22 +59,12 @@ class AdminController extends BaseController {
         }
     }
 
-    /**
-     * Affiche la liste de tous les utilisateurs inscrits.
-     * Route : /Admin/users
-     * @param array|null $params
-     * @return void
-     */
     public function users(?array $params): void
     {
-        // Validation des droits d'accès
         $this->requireAdmin();
 
         try {
-            // Récupération des données via le Service
             $users = $this->profileService->getAllUsers();
-
-            // Affichage de la vue
             include __DIR__ . '/../../template/admin_users.php';
         } catch (Exception $err) {
             $_SESSION['flash'] = [
@@ -104,23 +76,13 @@ class AdminController extends BaseController {
         }
     }
 
-    /**
-     * Supprime un utilisateur de la base de données (Bannissement).
-     * Route : /Admin/deleteUser/{id}
-     * @param array|null $params Paramètres d'URL contenant l'ID de l'utilisateur
-     * @return void
-     */
     public function deleteUser(?array $params): void
     {
-        // Validation des droits d'accès
         $this->requireAdmin();
-
-        //Vérification de la méthode HTTP (sécurité contre les suppressions par simple lien GET)
         $this->requirePost('/Admin/users');
 
         $userIdToDelete = isset($params[0]) ? (int)$params[0] : 0;
 
-        // interdire l'auto-suppression depuis le pannel
         if ($userIdToDelete === $_SESSION['user_id']) {
             $_SESSION['flash'] = [
                 'type' => 'error', 
@@ -131,10 +93,7 @@ class AdminController extends BaseController {
         }
 
         try {
-
-            // Appel au Service pour la suppression
             $this->profileService->deleteAccount($userIdToDelete);
-
             $_SESSION['flash'] = [
                 'type' => 'success', 
                 'message' => 'L\'utilisateur a été définitivement banni et toutes ses annonces ont été supprimées.'
@@ -153,20 +112,12 @@ class AdminController extends BaseController {
     // SECTION : MODÉRATION DES ANNONCES
     // =========================================================
 
-    /**
-     * Affiche la liste de toutes les annonces pour la modération.
-     * Route : /Admin/ads
-     * @param array|null $params
-     * @return void
-     */
     public function ads(?array $params): void
     {
         $this->requireAdmin();
 
         try {
-            // Récupération de toutes les annonces sans exception
             $ads = $this->adService->getAllAdsForAdmin();
-
             include __DIR__ .'/../../template/admin_ads.php';
         } catch (Exception $err) {
             $_SESSION['flash'] = [
@@ -178,12 +129,6 @@ class AdminController extends BaseController {
         }
     }
 
-    /**
-     * Supprime une annonce depuis le panel d'administration.
-     * Route : /Admin/deleteAd/{id}
-     * @param array|null $params Paramètres d'URL contenant l'ID de l'annonce
-     * @return void
-     */
     public function deleteAd(?array $params): void
     {
         $this->requireAdmin();
@@ -211,21 +156,13 @@ class AdminController extends BaseController {
     // SECTION : GESTION DES CATÉGORIES ET PLATEFORMES
     // =========================================================
 
-    /**
-     * Affiche la page de gestion des Catégories et des Plateformes.
-     * Route : /Admin/categories
-     * @param array|null $params
-     * @return void
-     */
     public function categories(?array $params): void
     {
         $this->requireAdmin();
 
         try {
-            // Je récupère les deux listes pour les afficher
             $categories = $this->categoryService->getAllCategories();
             $platforms = $this->platformService->getAllPlatforms();
-
             include __DIR__.'/../../template/admin_categories.php';
         } catch (Exception $err) {
             $_SESSION['flash'] = [
@@ -239,8 +176,6 @@ class AdminController extends BaseController {
 
     /**
      * Traite l'ajout d'une nouvelle catégorie
-     * Route : /Admin/addCategory
-     * @param array|null $params
      */
     public function addCategory(?array $params): void
     {
@@ -248,7 +183,15 @@ class AdminController extends BaseController {
         $this->requirePost('Admin/categories');
 
         try {
-            $this->categoryService->createCategory($_POST);
+            // MODIFICATION : On nettoie et on extrait la valeur avant de l'envoyer au service
+            $label = htmlspecialchars(trim($_POST['label'] ?? ''));
+            if (empty($label)) {
+                throw new Exception("Le nom de la catégorie est obligatoire.");
+            }
+            
+            // On envoie juste le texte nettoyé
+            $this->categoryService->createCategory($label); 
+            
             $_SESSION['flash'] = [
                 'type' => 'success',
                 'message' => 'Catégorie ajoutée avec succès.'
@@ -262,9 +205,9 @@ class AdminController extends BaseController {
         header('Location: /Admin/categories');
         exit;
     }
+
     /**
      * Traite la suppression d'une catégorie
-     * Route : /Admin/deleteCategory/{id}
      */
     public function deleteCategory(?array $params): void
     {
@@ -291,7 +234,6 @@ class AdminController extends BaseController {
 
     /**
      * Traite l'ajout d'une nouvelle plateforme
-     * Route : /Admin/addPlatform
      */
     public function addPlatform(?array $params): void
     {
@@ -299,7 +241,17 @@ class AdminController extends BaseController {
         $this->requirePost('/Admin/categories');
 
         try {
-            $this->platformService->createPlatform($_POST);
+            // Je nettoie les valeurs avant de les envoyer
+            $label = htmlspecialchars(trim($_POST['label'] ?? ''));
+            $iconSvg = htmlspecialchars(trim($_POST['icon_svg'] ?? ''));
+
+            if (empty($label) || empty($iconSvg)) {
+                throw new Exception("Tous les champs sont obligatoires pour la plateforme.");
+            }
+            
+            // j'envoie les deux valeurs nettoyées au service
+            $this->platformService->createPlatform($label, $iconSvg);
+
             $_SESSION['flash'] = [
                 'type' => 'success', 
                 'message' => 'Plateforme ajoutée avec succès.'
@@ -316,7 +268,6 @@ class AdminController extends BaseController {
 
     /**
      * Traite la suppression d'une plateforme
-     * Route : /Admin/deletePlatform/{id}
      */
     public function deletePlatform(?array $params): void
     {
@@ -340,6 +291,5 @@ class AdminController extends BaseController {
         header('Location: /Admin/categories');
         exit;
     }
-
 }
 ?>

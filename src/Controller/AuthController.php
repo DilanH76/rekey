@@ -68,7 +68,7 @@ class AuthController extends BaseController {
                 'type' => 'success',
                 'message' => 'Inscription effectuée avec succès ! Vous pouvez vous connecter.'
             ];
-            header('Location: /Auth/login');
+            header('Location: /Home');
             exit;
 
         } catch (Exception $err) {
@@ -78,7 +78,7 @@ class AuthController extends BaseController {
                 'type' => 'error',
                 'message' => $err->getMessage()
             ];
-            include __DIR__.'/../../template/register.php';
+            header('Location: /Auth/register');
             exit;
         }
     }
@@ -129,7 +129,7 @@ class AuthController extends BaseController {
                 'type' => 'error',
                 'message' => $err->getMessage()
             ];
-            include __DIR__ . '/../../template/login.php';
+            header('Location: /Auth/login');
             exit;
         }
     }

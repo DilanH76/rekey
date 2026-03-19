@@ -106,7 +106,7 @@ session_start();
             $adService = new AdService($adRepository, $categoryRepository, $platformRepository);
 
             $orderRepository = new OrderRepository($pdo);
-            $orderService = new OrderService($orderRepository, $adRepository);
+            $orderService = new OrderService($orderRepository, $adRepository, $pdo);
 
             return new OrderController($orderService, $adService);
 
