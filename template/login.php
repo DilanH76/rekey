@@ -1,6 +1,10 @@
 <?php
 $pageTitle = 'ReKey - Connexion';
 ob_start();
+
+// AJOUT PRG : Récupération du login puis nettoyage
+$old = $_SESSION['old_input'] ?? [];
+unset($_SESSION['old_input']);
 ?>
 
 <div class="ambient-glow glow-cyan" style="top: 0; left: 0;"></div>
@@ -10,18 +14,18 @@ ob_start();
     <div class="auth-card">
         <h2>Bon retour !</h2>
         <p class="auth-subtitle">Connecte-toi pour accéder à tes clés et au marché.</p>
- 
+
         <form action="/Auth/processLogin" method="POST" class="auth-form">
 
             <div class="form-group">
                 <label for="login" class="form-label">Email ou Pseudo</label>
-                <input 
-                    type="text" 
-                    id="login" 
-                    name="login" 
+                <input
+                    type="text"
+                    id="login"
+                    name="login"
                     class="form-control"
-                    value="<?= isset($_POST['login']) ? htmlspecialchars($_POST['login']) : '' ?>"
-                    placeholder="exemple@gmail.com ou Gamer123" 
+                    value="<?= htmlspecialchars($old['login'] ?? '') ?>"
+                    placeholder="exemple@gmail.com ou Gamer123"
                     required 
                 />
             </div>
@@ -29,12 +33,12 @@ ob_start();
             <div class="form-group">
                 <label for="password" class="form-label">Mot de passe</label>
                 <div class="password-wrapper">
-                    <input 
-                        type="password" 
-                        id="password" 
-                        name="password" 
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
                         class="form-control"
-                        placeholder="••••••••" 
+                        placeholder="••••••••"
                         required 
                     />
                     <button type="button" class="toggle-password" aria-label="Afficher/Masquer le mot de passe">
@@ -62,7 +66,7 @@ ob_start();
     </div>
 </section>
 
-<?php 
-$content = ob_get_clean(); 
-require __DIR__ . '/layout.php'; 
+<?php
+$content = ob_get_clean();
+require __DIR__ . '/layout.php';
 ?>

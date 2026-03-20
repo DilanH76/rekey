@@ -72,12 +72,20 @@ class AuthController extends BaseController {
             exit;
 
         } catch (Exception $err) {
-            // ERREUR (ex: email déjà pris, mot de passe trop faible)
-            // Je met le Post-it rouge et je redirige vers l'inscription
+            // ERREUR : Je met le Post-it rouge
             $_SESSION['flash'] = [
                 'type' => 'error',
                 'message' => $err->getMessage()
             ];
+
+            // AJOUT PRG : Je sauvegarde les saisies dans la session (sauf les mots de passe)
+            $_SESSION['old_input'] = [
+                'pseudo'     => $_POST['pseudo'] ?? '',
+                'last_name'  => $_POST['last_name'] ?? '',
+                'first_name' => $_POST['first_name'] ?? '',
+                'email'      => $_POST['email'] ?? ''
+            ];
+
             header('Location: /Auth/register');
             exit;
         }
@@ -129,6 +137,12 @@ class AuthController extends BaseController {
                 'type' => 'error',
                 'message' => $err->getMessage()
             ];
+
+            // AJOUT PRG : Je sauvegarde l'email/pseudo saisi
+            $_SESSION['old_input'] = [
+                'login' => $_POST['login'] ?? ''
+            ];
+
             header('Location: /Auth/login');
             exit;
         }

@@ -4,6 +4,9 @@ ob_start();
 ?>
 
 <div class="settings-page">
+    <a href="/Home" class="back-link">
+        <span class="text-cyan">←</span> Retour
+    </a>
     <div class="settings-header" style="text-align: center;">
         <h1 style="background: linear-gradient(to right, #ffffff, var(--cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Conditions Générales de Vente & d'Utilisation</h1>
         <p style="color: var(--text-muted); margin-top: 1rem;">Dernière mise à jour : Février 2026</p>
@@ -26,7 +29,7 @@ ob_start();
     <div class="settings-card">
         <h2><span class="text-cyan">3.</span> Responsabilité du vendeur</h2>
         <p style="color: var(--text-muted); line-height: 1.8;">
-            Le vendeur garantit que la clé d'activation qu'il met en vente a été acquise légalement et correspond exactement à la description (plateforme, région) de son annonce. En cas de clé frauduleuse ou déjà utilisée, le compte du vendeur sera banni et la transaction annulée.
+            Le vendeur garantit que la clé d'activation qu'il met en vente a été acquise légalement et correspond exactement à la description (plateforme, région) de son annonce. En cas de clé frauduleuse, le compte du vendeur sera banni et la transaction annulée.
         </p>
     </div>
 

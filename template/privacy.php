@@ -3,7 +3,12 @@ $pageTitle = 'ReKey - Politique de Confidentialité';
 ob_start();
 ?>
 
+
 <div class="settings-page">
+    <a href="/Home" class="back-link">
+        <span class="text-cyan">←</span> Retour
+    </a>
+
     <div class="settings-header" style="text-align: center;">
         <h1 style="background: linear-gradient(to right, #ffffff, var(--cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Politique de Confidentialité (RGPD)</h1>
         <p style="color: var(--text-muted); margin-top: 1rem;">La protection de vos données est notre priorité.</p>

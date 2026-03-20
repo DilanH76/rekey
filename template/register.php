@@ -1,6 +1,10 @@
 <?php
 $pageTitle = 'ReKey - Inscription';
 ob_start();
+
+// AJOUT PRG : Récupération des anciennes saisies puis nettoyage
+$old = $_SESSION['old_input'] ?? [];
+unset($_SESSION['old_input']);
 ?>
 
 <div class="ambient-glow glow-rose" style="top: 0; left: 0;"></div>
@@ -15,24 +19,24 @@ ob_start();
 
             <div class="form-group">
                 <label for="pseudo" class="form-label">Pseudo</label>
-                <input type="text" id="pseudo" name="pseudo" class="form-control" value="<?= isset($_POST['pseudo']) ? htmlspecialchars($_POST['pseudo']) : '' ?>" placeholder="Gamer123" required />
+                <input type="text" id="pseudo" name="pseudo" class="form-control" value="<?= htmlspecialchars($old['pseudo'] ?? '') ?>" placeholder="Votre pseudo" required />
             </div>
 
             <div class="form-row">
                 <div class="form-group">
                     <label for="last_name" class="form-label">Nom</label>
-                    <input type="text" id="last_name" name="last_name" class="form-control" value="<?= isset($_POST['last_name']) ? htmlspecialchars($_POST['last_name']) : '' ?>" placeholder="Dupont" required />
+                    <input type="text" id="last_name" name="last_name" class="form-control" value="<?= htmlspecialchars($old['last_name'] ?? '') ?>" placeholder="Votre nom" required />
                 </div>
 
                 <div class="form-group">
                     <label for="first_name" class="form-label">Prénom</label>
-                    <input type="text" id="first_name" name="first_name" class="form-control" value="<?= isset($_POST['first_name']) ? htmlspecialchars($_POST['first_name']) : '' ?>" placeholder="Jean" required />
+                    <input type="text" id="first_name" name="first_name" class="form-control" value="<?= htmlspecialchars($old['first_name'] ?? '') ?>" placeholder="Votre prénom" required />
                 </div>
             </div>
 
             <div class="form-group">
                 <label for="email" class="form-label">Email</label>
-                <input type="email" id="email" name="email" class="form-control" value="<?= isset($_POST['email']) ? htmlspecialchars($_POST['email']) : '' ?>" placeholder="exemple@gmail.com" required />
+                <input type="email" id="email" name="email" class="form-control" value="<?= htmlspecialchars($old['email'] ?? '') ?>" placeholder="exemple@gmail.com" required />
             </div>
 
             <div class="form-row">
