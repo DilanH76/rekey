@@ -12,7 +12,8 @@ session_start();
         ProfileController,
         AdController,
         OrderController,
-        AdminController
+        AdminController,
+        LegalController
     };
     use App\Service\{
         DatabaseFactory,
@@ -126,6 +127,10 @@ session_start();
             $platformService = new PlatformService($platformRepository);
 
             return new AdminController($adService, $profileService, $categoryService, $platformService);
+        },
+
+        LegalController::class => function($pdo) {
+            return new LegalController();
         }
     ];
 

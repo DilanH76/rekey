@@ -50,7 +50,7 @@ class ProfileService {
         
         // Nettoyage Anti-XSS strict
         $newPseudo = htmlspecialchars(trim($data['pseudo'] ?? ''));
-        $newEmail  = filter_var(trim($data['email'] ?? ''), FILTER_SANITIZE_EMAIL);
+        $newEmail  = trim($data['email'] ?? ''); // Pas de htmlspecialchars car il y'a la regex
         $newFirstName = htmlspecialchars(trim($data['first_name'] ?? ''));
         $newLastName = htmlspecialchars(trim($data['last_name'] ?? ''));
 
@@ -66,6 +66,14 @@ class ProfileService {
                 throw new Exception("Ce pseudo est déjà utilisé.");
             }
         }
+
+        $regexEmail = '/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/';
+        if (!preg_match($regexEmail, $newEmail)) {
+            throw new Exception("L'adresse email n'est pas au bon format (ex: joueur@gmail.com).");
+        }
+
+        // Nettoyage après validation
+        $newEmail = filter_var($newEmail, FILTER_SANITIZE_EMAIL);
 
         // Verification de l'email
         if ($newEmail !== $user->getEmail()) {

@@ -49,8 +49,15 @@ class AuthService {
             throw new Exception("Tous les champs sont obligatoires. Merci de remplir le formulaire correctement.");
         }
 
+        $regexEmail = '/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/';
+        if (!preg_match($regexEmail, $postData['email'])) {
+            throw new Exception("L'adresse email n'est pas au bon format (ex: joueur@gmail.com).");
+        }
+
+        $cleanEmail = filter_var(trim($postData['email']), FILTER_SANITIZE_EMAIL);
+
         // Je vérifie si l'email existe déjà via le Repository
-        $existingEmail = $this->userRepository->findByEmailOrPseudo($postData['email']);
+        $existingEmail = $this->userRepository->findByEmailOrPseudo($cleanEmail);
         if ($existingEmail) {
             throw new Exception("Cet email est déjà utilisé.");
         }

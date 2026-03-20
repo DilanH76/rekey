@@ -177,19 +177,20 @@ class AdminController extends BaseController {
     /**
      * Traite l'ajout d'une nouvelle catégorie
      */
+    // TODO A REPARER CATEGORIES ET PLATFORM
     public function addCategory(?array $params): void
     {
         $this->requireAdmin();
         $this->requirePost('Admin/categories');
 
         try {
-            // MODIFICATION : On nettoie et on extrait la valeur avant de l'envoyer au service
+            // Je nettoie et on extrait la valeur avant de l'envoyer au service
             $label = htmlspecialchars(trim($_POST['label'] ?? ''));
             if (empty($label)) {
                 throw new Exception("Le nom de la catégorie est obligatoire.");
             }
             
-            // On envoie juste le texte nettoyé
+            // Je envoie juste le texte nettoyé
             $this->categoryService->createCategory($label); 
             
             $_SESSION['flash'] = [

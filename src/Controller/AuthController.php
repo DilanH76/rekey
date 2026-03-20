@@ -66,7 +66,7 @@ class AuthController extends BaseController {
             // SUCCÈS : Je met le Post-it vert et je redirige vers le Login
             $_SESSION['flash'] = [
                 'type' => 'success',
-                'message' => 'Inscription effectuée avec succès ! Vous pouvez vous connecter.'
+                'message' => 'Inscription effectuée avec succès !'
             ];
             header('Location: /Home');
             exit;

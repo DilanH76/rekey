@@ -32,13 +32,12 @@ class CategoryService {
      */
     public function createCategory(string $label): void
     {
-        $label = trim($data['label'] ?? '');
-
+        
         if (empty($label)) {
             throw new Exception("Le nom de la catégorie ne peut pas être vide.");
         }
 
-        // j'instancie la catégorie ( sans ID puisqu'elle n'existe pas encore)
+        // j'instancie la catégorie
         $category = new Category($label);
 
         if (!$this->categoryRepository->create($category)) {

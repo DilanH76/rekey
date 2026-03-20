@@ -32,9 +32,6 @@ class PlatformService {
      */
     public function createPlatform(string $label, string $iconSvg): void
     {
-        $label = trim($data['label'] ?? '');
-        $iconSvg = trim($data['icon_svg'] ?? '');
-
         if (empty($label) || empty($iconSvg)) {
             throw new Exception("Le nom et le chemin de l'icône SVG sont obligatoires.");
         }

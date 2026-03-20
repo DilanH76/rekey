@@ -25,8 +25,8 @@
             <ul>
                 <li><a href="#">FAQ & Aide</a></li>
                 <li><a href="#">Nous contacter</a></li>
-                <li><a href="#">Conditions générales (CGV)</a></li>
-                <li><a href="#">Politique de confidentialité</a></li>
+                <li><a href="/Legal/cgv">Conditions générales (CGV)</a></li>
+                <li><a href="/Legal/privacy">Politique de confidentialité</a></li>
             </ul>
         </div>
 

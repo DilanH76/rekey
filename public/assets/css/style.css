@@ -77,7 +77,7 @@ img, svg {
 /* ========================================= */
 .flash-message {
   position: fixed;
-  top: 6rem; 
+  top: 8rem; 
   left: 50%;
   transform: translateX(-50%);
   z-index: 2000;
@@ -108,8 +108,8 @@ img, svg {
 }
 
 @keyframes slideDownFade {
-  0% { top: 4rem; opacity: 0; transform: translateX(-50%) scale(0.95); }
-  100% { top: 6rem; opacity: 1; transform: translateX(-50%) scale(1); }
+  0% { top: 6rem; opacity: 0; transform: translateX(-50%) scale(0.95); }
+  100% { top: 8rem; opacity: 1; transform: translateX(-50%) scale(1); }
 }
 
 /* ========================================= */
@@ -156,13 +156,24 @@ header.scrolled {
   display: flex;
   align-items: center;
   flex-shrink: 0;
+  transition: all var(--transition-fast); /* Ajout de la transition */
 }
 
 .logo img {
   height: 2.5rem;
   width: auto;
-  transform: scale(1.2); /* Ajusté pour ne pas déborder de la pilule */
+  transform: scale(1.2); 
   transform-origin: left center;
+  transition: all var(--transition-fast); /* Ajout de la transition sur l'image */
+}
+
+/* Le fameux effet Hover Glow */
+.logo:hover {
+  transform: translateY(-2px); /* Léger bond vers le haut */
+}
+
+.logo:hover img {
+  filter: drop-shadow(0 0 10px var(--cyan-glow)) brightness(1.1); /* Lueur cyan et léger éclaircissement */
 }
 
 /* --- NAVIGATION CENTRALE --- */
@@ -769,34 +780,69 @@ select.form-control option {
   line-height: 1.6;
 }
 
-/* Badges Catégories (Ruban Horizontal) */
-.category-badges {
+/* --- Wrapper global pour les catégories avec flèches --- */
+.category-badges-wrapper {
+  position: relative;
   display: flex;
-  flex-wrap: nowrap; /* Force sur une seule ligne */
-  overflow-x: auto; /* Permet le scroll horizontal */
-  gap: 1rem;
+  align-items: center;
   margin-top: 5rem;
   margin-bottom: 2.5rem;
-  padding: 0 1rem 1rem 1rem;
-  max-width: 100%;
   width: 100%;
-  user-select: none;
+}
+
+/* --- Boutons flèches minimalistes (sans le rond) --- */
+.scroll-arrow {
+  display: none; /* Affiché uniquement sur grand écran via le media query */
+  background: transparent; /* PLUS DE FOND */
+  border: none;            /* PLUS DE BORDURE */
+  color: var(--text-muted); /* Couleur discrète par défaut */
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  z-index: 10;
+  transition: all var(--transition-fast);
+  flex-shrink: 0;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Au survol, la flèche s'illumine et s'agrandit légèrement */
+.scroll-arrow:hover {
+  color: var(--cyan);
+  transform: scale(1.2); /* Petit effet de zoom */
+  filter: drop-shadow(0 0 8px var(--cyan-glow)); /* Effet néon direct sur le SVG */
+}
+
+@media (min-width: 992px) {
+  .scroll-arrow {
+    display: flex;
+  }
+}
+
+/* --- Badges Catégories (Ruban Horizontal) --- */
+.category-badges {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  gap: 1rem;
+  padding: 0.5rem 1rem;
+  scroll-behavior: smooth; /* Permet un défilement fluide lors du clic sur les flèches */
   
-  /* Masque la barre de défilement pour un look épuré */
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+  /* Masque la barre de défilement */
+  -ms-overflow-style: none;
+  scrollbar-width: none;
   
-  /* Dégradé sur les bords pour l'effet d'infinité (optionnel mais très stylé) */
+  /* LE RETOUR DU FLOU (Mask Image) */
   -webkit-mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
   mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
 }
 
 .category-badges::-webkit-scrollbar {
-  display: none; /* Masque la barre sur Chrome/Safari/Opera */
+  display: none;
 }
 
 .badge-tech {
-  flex-shrink: 0; /* Empêche les boutons de s'écraser */
+  flex-shrink: 0;
   padding: 0.6rem 1.5rem;
   border-radius: var(--radius-pill);
   background: rgba(20, 25, 35, 0.4);
@@ -810,6 +856,9 @@ select.form-control option {
   -webkit-backdrop-filter: var(--glass-blur);
   transition: all var(--transition-fast);
   cursor: pointer;
+  /* LIGNE MAGIQUE : Empêche le navigateur de faire un "Drag & Drop" natif sur le lien */
+  user-select: none;
+  -webkit-user-drag: none; 
 }
 
 .badge-tech:hover, .badge-tech.active {

@@ -4,14 +4,19 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Si un message flash existe sur la page
     if (flashMessage) {
-        // On lance un minuteur de 4 secondes (4000 millisecondes)
+        // On lance un minuteur de 4 secondes (4000 millisecondes) avant de le cacher
         setTimeout(() => {
-            // On lance une transition douce pour le faire disparaître et remonter
-            flashMessage.style.transition = 'opacity 0.5s ease, top 0.5s ease';
-            flashMessage.style.opacity = '0';
-            flashMessage.style.top = '4rem';
+            // LIGNE IMPORTANTE : On désactive l'animation d'entrée pour que la transition puisse prendre le relais
+            flashMessage.style.animation = 'none'; 
             
-            // On attend 0.5s (le temps de l'animation) puis on le supprime complètement du HTML
+            // On applique la transition de sortie (fondu et remontée)
+            flashMessage.style.transition = 'opacity 0.5s ease, top 0.5s ease';
+            
+            // On déclenche le mouvement (opacité à 0 et on le fait remonter à 4rem, plus haut que le header)
+            flashMessage.style.opacity = '0';
+            flashMessage.style.top = '6rem';
+            
+            // On attend la fin de la transition (500ms) pour supprimer l'élément du HTML
             setTimeout(() => {
                 flashMessage.remove();
             }, 500);
@@ -62,19 +67,33 @@ document.addEventListener("click", (e) => {
   }
 });
 
-// --- DRAG TO SCROLL POUR LES CATÉGORIES (Desktop) ---
+// --- SCROLL HORIZONTAL (FLÈCHES + DRAG) ---
 const slider = document.querySelector('.category-badges');
-let isDown = false;
-let startX;
-let scrollLeft;
+const btnLeft = document.querySelector('.scroll-left');
+const btnRight = document.querySelector('.scroll-right');
 
 if (slider) {
+    let isDown = false;
+    let startX;
+    let scrollLeft;
+    let isDragging = false; // Pour savoir si on est en train de glisser ou de cliquer
+
+    // --- LOGIQUE DES FLÈCHES ---
+    if (btnLeft && btnRight) {
+        btnLeft.addEventListener('click', () => {
+            slider.scrollBy({ left: -200, behavior: 'smooth' });
+        });
+        btnRight.addEventListener('click', () => {
+            slider.scrollBy({ left: 200, behavior: 'smooth' });
+        });
+    }
+
+    // --- LOGIQUE DU DRAG A LA SOURIS ---
     slider.addEventListener('mousedown', (e) => {
         isDown = true;
+        isDragging = false; // On reset l'état de glissement
         slider.style.cursor = 'grabbing';
-        // Enregistre la position initiale de la souris
         startX = e.pageX - slider.offsetLeft;
-        // Enregistre le niveau de scroll actuel
         scrollLeft = slider.scrollLeft;
     });
 
@@ -86,20 +105,36 @@ if (slider) {
     slider.addEventListener('mouseup', () => {
         isDown = false;
         slider.style.cursor = 'grab';
+        // On enlève le flag de drag après un court délai pour permettre au clic de passer
+        setTimeout(() => { isDragging = false; }, 50);
     });
 
     slider.addEventListener('mousemove', (e) => {
-        if (!isDown) return; // Stop si la souris n'est pas cliquée
+        if (!isDown) return;
         e.preventDefault();
-        // Calcule le déplacement
+        
         const x = e.pageX - slider.offsetLeft;
-        const walk = (x - startX) * 2; // Multiplicateur pour la vitesse (x2)
-        // Applique le nouveau scroll
+        const walk = (x - startX) * 2;
+        
+        // Si on a bougé de plus de 5 pixels, on considère que c'est un drag
+        if (Math.abs(walk) > 5) {
+            isDragging = true; 
+        }
+        
         slider.scrollLeft = scrollLeft - walk;
     });
-    
-    // Curseur de base
-    slider.style.cursor = 'grab';
+
+    // --- EMPÊCHER LE CLIC SI ON A GLISSÉ ---
+    const badges = slider.querySelectorAll('.badge-tech');
+    badges.forEach(badge => {
+        badge.addEventListener('click', (e) => {
+            if (isDragging) {
+                // Si l'utilisateur était en train de glisser, on annule l'ouverture du lien
+                e.preventDefault();
+                e.stopPropagation();
+            }
+        });
+    });
 }
 
 // --- SMOOTH SCROLL POUR LES ANCRES ---

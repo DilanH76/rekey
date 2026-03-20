@@ -1,5 +1,5 @@
 <?php
-$pageTitle = 'ReKey - Inscription' ;
+$pageTitle = 'ReKey - Inscription';
 ob_start();
 ?>
 
@@ -12,7 +12,7 @@ ob_start();
         <p class="auth-subtitle">Crée ton compte pour acheter et vendre tes clés instantanément.</p>
 
         <form action="/Auth/processRegister" method="POST" class="auth-form">
-            
+
             <div class="form-group">
                 <label for="pseudo" class="form-label">Pseudo</label>
                 <input type="text" id="pseudo" name="pseudo" class="form-control" value="<?= isset($_POST['pseudo']) ? htmlspecialchars($_POST['pseudo']) : '' ?>" placeholder="Gamer123" required />
@@ -39,12 +39,13 @@ ob_start();
                 <div class="form-group">
                     <label for="password" class="form-label">Mot de passe</label>
                     <div class="password-wrapper">
-                        <input type="password" id="password" name="password" class="form-control" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@$!%*?&]).{8,}" 
-                                title="8 caractères minimum, avec au moins une majuscule, une minuscule, un chiffre et un caractère spécial." 
-                                placeholder="••••••••" required />
+                        <input type="password" id="password" name="password" class="form-control" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@$!%*?&]).{8,}"
+                            title="8 caractères minimum, avec au moins une majuscule, une minuscule, un chiffre et un caractère spécial."
+                            placeholder="••••••••" required />
                         <button type="button" class="toggle-password" tabindex="-1">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle>
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
                             </svg>
                         </button>
                     </div>
@@ -56,7 +57,8 @@ ob_start();
                         <input type="password" id="confirm-password" name="password_confirm" class="form-control" placeholder="••••••••" required />
                         <button type="button" class="toggle-password" tabindex="-1">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle>
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
                             </svg>
                         </button>
                     </div>
@@ -66,7 +68,7 @@ ob_start();
             <div class="form-group checkbox-group">
                 <input type="checkbox" id="cgu" name="cgu" required />
                 <label for="cgu">
-                    J'accepte les <a href="#">conditions d'utilisation</a>
+                    J'accepte les <a href="/Legal/cgv" target="_blank">conditions d'utilisation</a>
                 </label>
             </div>
 
@@ -81,7 +83,7 @@ ob_start();
     </div>
 </section>
 
-<?php 
-$content = ob_get_clean(); 
-require __DIR__ . '/layout.php'; 
+<?php
+$content = ob_get_clean();
+require __DIR__ . '/layout.php';
 ?>

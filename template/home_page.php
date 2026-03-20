@@ -26,15 +26,27 @@ ob_start();
 
 <section id="annonces" class="ads-container container" style="position: relative; z-index: 10;">
 
-    <div class="category-badges">
-        <a href="/Home#annonces" class="badge-tech <?= empty($_GET['category']) ? 'active' : '' ?>">Toutes les clés</a>
-        <?php foreach ($categories as $cat): ?>
-            <a href="/Home?category=<?= $cat->getIdCategory() ?>#annonces" 
-               class="badge-tech <?= (isset($_GET['category']) && $_GET['category'] == $cat->getIdCategory()) ? 'active' : '' ?>">
-                <?= htmlspecialchars($cat->getLabel()) ?>
-            </a>
-        <?php endforeach; ?>
+<!-- NOUVEAU WRAPPER AVEC FLÈCHES -->
+    <div class="category-badges-wrapper">
+        <button class="scroll-arrow scroll-left" aria-label="Défiler à gauche">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+        </button>
+
+        <div class="category-badges">
+            <a href="/Home#annonces" class="badge-tech <?= empty($_GET['category']) ? 'active' : '' ?>">Toutes les clés</a>
+            <?php foreach ($categories as $cat): ?>
+                <a href="/Home?category=<?= $cat->getIdCategory() ?>#annonces" 
+                   class="badge-tech <?= (isset($_GET['category']) && $_GET['category'] == $cat->getIdCategory()) ? 'active' : '' ?>">
+                    <?= htmlspecialchars($cat->getLabel()) ?>
+                </a>
+            <?php endforeach; ?>
+        </div>
+
+        <button class="scroll-arrow scroll-right" aria-label="Défiler à droite">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </button>
     </div>
+    <!-- FIN DU WRAPPER -->
     
     <?php if (empty($ads)): ?>
         <div class="empty-state" style="text-align: center; padding: 4rem 0;">
