@@ -1,6 +1,10 @@
 <?php
 $pageTitle = 'ReKey - Vendre un jeu';
 ob_start();
+
+// AJOUT PRG : Récupération des anciennes saisies
+$old = $_SESSION['old_input'] ?? [];
+unset($_SESSION['old_input']);
 ?>
 
 <div class="ambient-glow glow-cyan" style="top: 0; left: -10%;"></div>
@@ -18,7 +22,7 @@ ob_start();
             
             <div class="form-group">
                 <label for="title" class="form-label">Titre du jeu <span class="text-cyan">*</span></label>
-                <input type="text" id="title" name="title" class="form-control" required placeholder="Ex: Cyberpunk 2077">
+                <input type="text" id="title" name="title" class="form-control" required placeholder="Ex: Cyberpunk 2077" value="<?= htmlspecialchars($old['title'] ?? '') ?>">
             </div>
 
             <div class="form-row">
@@ -27,7 +31,7 @@ ob_start();
                     <select id="id_category" name="id_category" class="form-control" required>
                         <option value="">-- Choisir une catégorie --</option>
                         <?php foreach ($categories as $cat): ?>
-                            <option value="<?= $cat->getIdCategory() ?>">
+                            <option value="<?= $cat->getIdCategory() ?>" <?= ($old['id_category'] ?? '') == $cat->getIdCategory() ? 'selected' : '' ?>>
                                 <?= htmlspecialchars($cat->getLabel()) ?>
                             </option>
                         <?php endforeach; ?>
@@ -39,7 +43,7 @@ ob_start();
                     <select id="id_platform" name="id_platform" class="form-control" required>
                         <option value="">-- Choisir une plateforme --</option>
                         <?php foreach ($platforms as $plat): ?>
-                            <option value="<?= $plat->getIdPlatform() ?>">
+                            <option value="<?= $plat->getIdPlatform() ?>" <?= ($old['id_platform'] ?? '') == $plat->getIdPlatform() ? 'selected' : '' ?>>
                                 <?= htmlspecialchars($plat->getLabel()) ?>
                             </option>
                         <?php endforeach; ?>
@@ -49,13 +53,13 @@ ob_start();
 
             <div class="form-group">
                 <label for="description" class="form-label">Description courte</label>
-                <textarea id="description" name="description" class="form-control" rows="4" placeholder="Langue du jeu, édition spéciale, DLC ..."></textarea>
+                <textarea id="description" name="description" class="form-control" rows="4" placeholder="Langue du jeu, édition spéciale, DLC ..."><?= htmlspecialchars($old['description'] ?? '') ?></textarea>
             </div>
 
             <div class="form-row">
                 <div class="form-group">
                     <label for="price" class="form-label">Prix (€) <span class="text-cyan">*</span></label>
-                    <input type="number" id="price" name="price" class="form-control" step="0.01" min="0" required placeholder="Ex: 19.99">
+                    <input type="number" id="price" name="price" class="form-control" step="0.01" min="0" required placeholder="Ex: 19.99" value="<?= htmlspecialchars($old['price'] ?? '') ?>">
                 </div>
 
                 <div class="form-group">

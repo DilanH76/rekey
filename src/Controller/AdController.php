@@ -150,6 +150,15 @@ class AdController extends BaseController {
                 'message' => $err->getMessage()
             ];
             
+            // AJOUT PRG : On sauvegarde toutes les saisies (sauf la clé du jeu et l'image par sécurité)
+            $_SESSION['old_input'] = [
+                'title'       => $_POST['title'] ?? '',
+                'id_category' => $_POST['id_category'] ?? '',
+                'id_platform' => $_POST['id_platform'] ?? '',
+                'description' => $_POST['description'] ?? '',
+                'price'       => $_POST['price'] ?? ''
+            ];
+            
             // Je le renvoie sur le formulaire pour qu'il corrige
             header('Location: /Ad/add');
             exit;
