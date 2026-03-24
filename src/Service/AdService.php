@@ -60,7 +60,7 @@ class AdService {
         // Nettoyage immédiat des données contre les failles XSS
         $cleanTitle = htmlspecialchars(trim($postData['title'] ?? ''));
         $cleanDesc = htmlspecialchars(trim($postData['description'] ?? ''));
-        // On trim juste la clé, on évite htmlspecialchars au cas où elle contient des caractères spéciaux légitimes
+        // Je trim juste la clé, j'évite htmlspecialchars au cas où elle contient des caractères spéciaux légitimes
         $gameKey = trim($postData['game_key'] ?? ''); 
 
         // Verification de base

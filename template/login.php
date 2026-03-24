@@ -2,7 +2,7 @@
 $pageTitle = 'ReKey - Connexion';
 ob_start();
 
-// AJOUT PRG : Récupération du login puis nettoyage
+// Récupération du login puis nettoyage
 $old = $_SESSION['old_input'] ?? [];
 unset($_SESSION['old_input']);
 ?>

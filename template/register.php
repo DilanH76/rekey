@@ -2,7 +2,7 @@
 $pageTitle = 'ReKey - Inscription';
 ob_start();
 
-// AJOUT PRG : Récupération des anciennes saisies puis nettoyage
+// Récupération des anciennes saisies puis nettoyage
 $old = $_SESSION['old_input'] ?? [];
 unset($_SESSION['old_input']);
 ?>

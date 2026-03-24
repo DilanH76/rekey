@@ -4,19 +4,19 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Si un message flash existe sur la page
     if (flashMessage) {
-        // On lance un minuteur de 4 secondes (4000 millisecondes) avant de le cacher
+        // Je lance un minuteur de 4 secondes (4000 millisecondes) avant de le cacher
         setTimeout(() => {
-            // LIGNE IMPORTANTE : On désactive l'animation d'entrée pour que la transition puisse prendre le relais
+            // LIGNE IMPORTANTE : Je désactive l'animation d'entrée pour que la transition puisse prendre le relais
             flashMessage.style.animation = 'none'; 
             
-            // On applique la transition de sortie (fondu et remontée)
+            // J'applique la transition de sortie (fondu et remontée)
             flashMessage.style.transition = 'opacity 0.5s ease, top 0.5s ease';
             
-            // On déclenche le mouvement (opacité à 0 et on le fait remonter à 4rem, plus haut que le header)
+            // Je déclenche le mouvement (opacité à 0 et on le fait remonter à 4rem, plus haut que le header)
             flashMessage.style.opacity = '0';
             flashMessage.style.top = '6rem';
             
-            // On attend la fin de la transition (500ms) pour supprimer l'élément du HTML
+            // J'attend la fin de la transition (500ms) pour supprimer l'élément du HTML
             setTimeout(() => {
                 flashMessage.remove();
             }, 500);
@@ -57,7 +57,7 @@ closeBtn.addEventListener("click", () => {
   capsule.classList.remove("search-active");
 });
 
-// 3 Fermer si on clique ailleurs sur la page
+// 3 Fermer si je clique ailleurs sur la page
 document.addEventListener("click", (e) => {
   if (
     !capsule.contains(e.target) &&
@@ -76,7 +76,7 @@ if (slider) {
     let isDown = false;
     let startX;
     let scrollLeft;
-    let isDragging = false; // Pour savoir si on est en train de glisser ou de cliquer
+    let isDragging = false; // Pour savoir si je suis en train de glisser ou de cliquer
 
     // --- LOGIQUE DES FLÈCHES ---
     if (btnLeft && btnRight) {
@@ -91,7 +91,7 @@ if (slider) {
     // --- LOGIQUE DU DRAG A LA SOURIS ---
     slider.addEventListener('mousedown', (e) => {
         isDown = true;
-        isDragging = false; // On reset l'état de glissement
+        isDragging = false; // Je reset l'état de glissement
         slider.style.cursor = 'grabbing';
         startX = e.pageX - slider.offsetLeft;
         scrollLeft = slider.scrollLeft;
@@ -105,7 +105,7 @@ if (slider) {
     slider.addEventListener('mouseup', () => {
         isDown = false;
         slider.style.cursor = 'grab';
-        // On enlève le flag de drag après un court délai pour permettre au clic de passer
+        // J'enlève le flag de drag après un court délai pour permettre au clic de passer
         setTimeout(() => { isDragging = false; }, 50);
     });
 
@@ -116,7 +116,7 @@ if (slider) {
         const x = e.pageX - slider.offsetLeft;
         const walk = (x - startX) * 2;
         
-        // Si on a bougé de plus de 5 pixels, on considère que c'est un drag
+        // Si j'ai bougé de plus de 5 pixels, je considère que c'est un drag
         if (Math.abs(walk) > 5) {
             isDragging = true; 
         }
@@ -129,7 +129,7 @@ if (slider) {
     badges.forEach(badge => {
         badge.addEventListener('click', (e) => {
             if (isDragging) {
-                // Si l'utilisateur était en train de glisser, on annule l'ouverture du lien
+                // Si l'utilisateur était en train de glisser, j'annule l'ouverture du lien
                 e.preventDefault();
                 e.stopPropagation();
             }

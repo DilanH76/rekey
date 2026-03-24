@@ -115,7 +115,7 @@ class ProfileService {
             throw new Exception("Une erreur est survenue lors de la sauvegarde de votre profil.");
         }
 
-        // On retourne l'utilisateur pour le Controller
+        // Je retourne l'utilisateur pour le Controller
         return $user;
     }
 

@@ -127,7 +127,7 @@ class AdController extends BaseController {
         // Sécurité : l'utilisateur doit être connecté
         $this->requireAuth();
         
-        // Si on accède à l'URL sans POST (en tapant l'URL manuellement)
+        // Si j'accède à l'URL sans POST (en tapant l'URL manuellement)
         $this->requirePost('/Ad/add');
 
         try {
@@ -150,7 +150,7 @@ class AdController extends BaseController {
                 'message' => $err->getMessage()
             ];
             
-            // AJOUT PRG : On sauvegarde toutes les saisies (sauf la clé du jeu et l'image par sécurité)
+            // Je sauvegarde toutes les saisies (sauf la clé du jeu et l'image par sécurité)
             $_SESSION['old_input'] = [
                 'title'       => $_POST['title'] ?? '',
                 'id_category' => $_POST['id_category'] ?? '',

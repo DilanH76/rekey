@@ -14,7 +14,7 @@ class AuthController extends BaseController {
 
     /**
      * Constructeur avec injection de dépendance
-     * * @param AuthService $authService Le service métier gérant la logique d'authentification
+     * @param AuthService $authService Le service métier gérant la logique d'authentification
      */
     public function __construct(AuthService $authService)
     {
@@ -24,7 +24,7 @@ class AuthController extends BaseController {
     /**
      * Méthode par défaut du contrôleur
      * Redirige automatiquement vers la page de connexion
-     * * @param array|null $params Paramètres d'URL éventuels
+     * @param array|null $params Paramètres d'URL éventuels
      */
     public function index(?array $params) {
         header('Location: /Auth/login');
@@ -38,7 +38,7 @@ class AuthController extends BaseController {
     /**
      * Affiche le formulaire d'inscription
      * URL : /Auth/register 
-     * * @param array|null $params Paramètres d'URL éventuels
+     * @param array|null $params Paramètres d'URL éventuels
      */
     public function register(?array $params) {
         include __DIR__.'/../../template/register.php';
@@ -47,10 +47,10 @@ class AuthController extends BaseController {
     /**
      * Traite les données du formulaire d'inscription (POST)
      * URL : /Auth/processRegister
-     * * @param array|null $params Paramètres d'URL éventuels
+     * @param array|null $params Paramètres d'URL éventuels
      */
     public function processRegister(?array $params) {
-        // Sécurité : je m'assure que la requête vient bien d'un formulaire
+        // Sécurité : je m'assure que la requête vient bien du formulaire
         $this->requirePost('/Auth/register');
         
         try {
@@ -78,7 +78,7 @@ class AuthController extends BaseController {
                 'message' => $err->getMessage()
             ];
 
-            // AJOUT PRG : Je sauvegarde les saisies dans la session (sauf les mots de passe)
+            // Je sauvegarde les saisies dans la session (sauf les mots de passe)
             $_SESSION['old_input'] = [
                 'pseudo'     => $_POST['pseudo'] ?? '',
                 'last_name'  => $_POST['last_name'] ?? '',
@@ -98,7 +98,7 @@ class AuthController extends BaseController {
     /**
      * Affiche le formulaire de connexion
      * URL : /Auth/login
-     * * @param array|null $params Paramètres d'URL éventuels
+     * @param array|null $params Paramètres d'URL éventuels
      */
     public function login(?array $params) {
         include __DIR__ . '/../../template/login.php';
@@ -107,10 +107,10 @@ class AuthController extends BaseController {
     /**
      * Traite les données du formulaire de connexion (POST)
      * URL : /Auth/processLogin
-     * * @param array|null $params Paramètres d'URL éventuels
+     * @param array|null $params Paramètres d'URL éventuels
      */
     public function processLogin(?array $params) {
-        // Sécurité : je m'assure que la requête vient bien d'un formulaire
+        // Sécurité : je m'assure que la requête vient bien du formulaire
         $this->requirePost('/Auth/login');
 
         try {
@@ -138,7 +138,7 @@ class AuthController extends BaseController {
                 'message' => $err->getMessage()
             ];
 
-            // AJOUT PRG : Je sauvegarde l'email/pseudo saisi
+            // Je sauvegarde l'email/pseudo saisi
             $_SESSION['old_input'] = [
                 'login' => $_POST['login'] ?? ''
             ];
@@ -161,7 +161,7 @@ class AuthController extends BaseController {
         // Je détruit la session actuelle (efface user_id, user_pseudo, etc.)
         session_destroy();
         
-        // ASTUCE : Je redémarre une session vierge juste pour pouvoir coller le Post-it flash
+        // Je redémarre une session vierge juste pour pouvoir coller le Post-it flash
         session_start();
         $_SESSION['flash'] = [
             'type' => 'success',

@@ -177,7 +177,6 @@ class AdminController extends BaseController {
     /**
      * Traite l'ajout d'une nouvelle catégorie
      */
-    // TODO A REPARER CATEGORIES ET PLATFORM
     public function addCategory(?array $params): void
     {
         $this->requireAdmin();
@@ -190,7 +189,7 @@ class AdminController extends BaseController {
                 throw new Exception("Le nom de la catégorie est obligatoire.");
             }
             
-            // Je envoie juste le texte nettoyé
+            // J'envoie juste le texte nettoyé
             $this->categoryService->createCategory($label); 
             
             $_SESSION['flash'] = [

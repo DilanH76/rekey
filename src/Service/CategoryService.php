@@ -59,7 +59,7 @@ class CategoryService {
             throw new Exception("Le nom de la catégorie ne peut pas être vide.");
         }
 
-        // On instancie la catégorie avec son ID
+        // J'instancie la catégorie avec son ID
         $category = new Category($label, $id);
 
         if (!$this->categoryRepository->update($category)) {

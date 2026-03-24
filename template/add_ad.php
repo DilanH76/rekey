@@ -2,7 +2,7 @@
 $pageTitle = 'ReKey - Vendre un jeu';
 ob_start();
 
-// AJOUT PRG : Récupération des anciennes saisies
+// Récupération des anciennes saisies
 $old = $_SESSION['old_input'] ?? [];
 unset($_SESSION['old_input']);
 ?>
