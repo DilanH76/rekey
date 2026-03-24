@@ -31,10 +31,22 @@ class OrderController extends BaseController {
      * URL : /Order/checkout/5
      */
     public function checkout(?array $params) {
-        // Utilisateur connecté uniquement
-        $this->requireAuth();
-
         $adId = isset($params[0]) ? (int)$params[0] : 0;
+
+        // Redirection intelligente
+        // Je remplace le requireAuth() basique par une vérification personnalisée
+        if (!isset($_SESSION['user_id'])) {
+            // Je sauvegarde la page exacte de l'annonce
+            $_SESSION['redirect_url'] = '/Order/checkout/' . $adId; 
+            
+            $_SESSION['flash'] = [
+                'type' => 'error',
+                'message' => 'Connectez-vous ou inscrivez-vous pour acheter ce jeu.'
+            ];
+            header('Location: /Auth/login');
+            exit;
+        }
+
 
         try {
             $ad = $this->adService->getAdById($adId);

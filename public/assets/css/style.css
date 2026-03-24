@@ -861,6 +861,47 @@ select.form-control option {
   transform: translateY(-2px);
 }
 
+/* --- TRI PAR PRIX (SORT) --- */
+.sort-container {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 2rem;
+  padding: 0 1rem;
+}
+
+.sort-form {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.sort-label {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.sort-select.form-control {
+  width: auto;
+  padding: 0.4rem 1rem;
+  border-radius: 30px;
+  cursor: pointer;
+}
+
+/* Annuler le glow (effet néon de formulaire) au clic pour ce select spécifique */
+.sort-select.form-control:focus {
+  outline: none;
+  box-shadow: none;
+  border-color: rgba(255, 255, 255, 0.2); 
+}
+
+/* Ajouter un effet néon subtil au survol (Hover) */
+.sort-select.form-control:hover {
+  border-color: var(--neon-cyan); 
+  box-shadow: 0 0 8px rgba(0, 240, 255, 0.3);
+}
+
 /* ========================================= */
 /* 10. GRILLE D'ANNONCES (CARTES)            */
 /* ========================================= */

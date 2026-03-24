@@ -68,7 +68,12 @@ class AuthController extends BaseController {
                 'type' => 'success',
                 'message' => 'Inscription effectuée avec succès !'
             ];
-            header('Location: /Home');
+
+            // Redirection intelligente
+            // Je regarde s'il voulait acheter un jeu avant de s'inscrire
+            $destination = $_SESSION['redirect_url'] ?? '/Home';
+            unset($_SESSION['redirect_url']);
+            header('Location: ' . $destination);
             exit;
 
         } catch (Exception $err) {
@@ -128,7 +133,16 @@ class AuthController extends BaseController {
                 'type' => 'success',
                 'message' => 'Ravi de vous revoir, ' . htmlspecialchars($user->getPseudo()) . ' !'
             ];
-            header('Location: /Home');
+
+            // Redirection intelligente
+            // Je regarde si une destination était en attente, sinon on va sur Home
+            $destination = $_SESSION['redirect_url'] ?? '/Home';
+
+            // Je nettoie la session pour ne pas bloquer les futures connexions
+            unset($_SESSION['redirect_url']);
+
+            // Je redirige vers la bonne page
+            header('Location: ' . $destination);
             exit;
 
         } catch (Exception $err) {

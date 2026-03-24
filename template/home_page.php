@@ -47,6 +47,27 @@ ob_start();
         </button>
     </div>
     <!-- FIN DU WRAPPER -->
+
+    <div class="sort-container">
+        <form action="/Home#annonces" method="GET" class="sort-form">
+            <?php if (!empty($_GET['q'])): ?>
+                <input type="hidden" name="q" value="<?= htmlspecialchars($_GET['q']) ?>">
+            <?php endif; ?>
+            <?php if (!empty($_GET['category'])): ?>
+                <input type="hidden" name="category" value="<?= htmlspecialchars($_GET['category']) ?>">
+            <?php endif; ?>
+            <?php if (!empty($_GET['platform'])): ?>
+                <input type="hidden" name="platform" value="<?= htmlspecialchars($_GET['platform']) ?>">
+            <?php endif; ?>
+
+            <label for="sort" class="sort-label">Trier par :</label>
+            <select name="sort" id="sort" class="form-control sort-select" onchange="this.form.submit()">
+                <option value="date_desc" <?= (isset($_GET['sort']) && $_GET['sort'] === 'date_desc') ? 'selected' : '' ?>>Plus récentes</option>
+                <option value="price_asc" <?= (isset($_GET['sort']) && $_GET['sort'] === 'price_asc') ? 'selected' : '' ?>>Prix croissant</option>
+                <option value="price_desc" <?= (isset($_GET['sort']) && $_GET['sort'] === 'price_desc') ? 'selected' : '' ?>>Prix décroissant</option>
+            </select>
+        </form>
+    </div>
     
     <?php if (empty($ads)): ?>
         <div class="empty-state" style="text-align: center; padding: 4rem 0;">

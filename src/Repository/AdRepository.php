@@ -283,7 +283,7 @@ class AdRepository {
         return $ads;
     }
 
-/**
+    /**
      * Recherche dynamique avec filtres, tri et pagination
      * @param string $search Le texte recherché (vide si aucun)
      * @param int|null $idCategory L'ID de la catégorie (null si aucune)
@@ -310,8 +310,12 @@ class AdRepository {
         // J'entoure le mot recherché de "%" pour dire "Peu importe ce qu'il y'a avant ou après"
         // Exemple : Si $search ="cyber", ça trouvera "Cyberpunk2077"
         if (!empty($search)) {
-            $sql .= " AND a.title LIKE :search";
+            // Si je cherche, j'affiche TOUT ce qui correspond (Titre du jeu OU Pseudo), peu importe le statut
+            $sql .= " AND (a.title LIKE :search OR u.pseudo LIKE :search)";
             $params['search'] = "%" . $search . '%';
+        } else {
+            // Si je ne cherche rien (affichage par défaut de l'accueil), je ne montre que les jeux dispos
+            $sql .= " AND a.status = 'disponible'";
         }
 
         if ($idCategory !== null) {
@@ -413,13 +417,18 @@ class AdRepository {
      */
     public function countAdsWithFilters(string $search, ?int $idCategory, ?int $idPlatform): int
     {
-        $sql = "SELECT COUNT(*) FROM ads a WHERE 1=1";
+        $sql = "SELECT COUNT(*) FROM ads a
+                INNER JOIN users u ON a.id_user = u.id_user 
+                WHERE 1=1";
         $params = [];
 
-        // Exactement les mêmes conditions que la méthode searchAndFilter
         if (!empty($search)) {
-            $sql .=" AND a.title LIKE :search";
+            // Je compte TOUT ce qui correspond à la recherche (Titre ou Pseudo)
+            $sql .= " AND (a.title LIKE :search OR u.pseudo LIKE :search)";
             $params['search'] = "%" . $search . "%";
+        } else {
+            // Sinon je ne compte que les annonces dispos
+            $sql .= " AND a.status = 'disponible'";
         }
 
         if ($idCategory !== null) {
