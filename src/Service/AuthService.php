@@ -48,6 +48,10 @@ class AuthService {
         ) {
             throw new Exception("Tous les champs sont obligatoires. Merci de remplir le formulaire correctement.");
         }
+        // Vérification des CGU
+        if (empty($postData['cgu'])) {
+            throw new Exception("Vous devez accepter les conditions d'utilisation pour créer un compte.");
+        }
 
         $regexEmail = '/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/';
         if (!preg_match($regexEmail, $postData['email'])) {
