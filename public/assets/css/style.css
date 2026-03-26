@@ -1035,6 +1035,69 @@ select.form-control option {
   border: 1px solid var(--border-light);
 }
 
+/* Carte vendue : on change l'ambiance */
+.ad-card.status-vendu {
+  border-color: rgba(255, 51, 102, 0.2); /* Bordure rougeâtre discrète */
+  opacity: 0.85; /* On rend la carte un peu plus terne */
+}
+
+/* On désactive le zoom et on met un halo rouge au survol */
+.ad-card.status-vendu:hover {
+  transform: translateY(-4px); /* Bouge moins qu'une carte active */
+  border-color: rgba(255, 51, 102, 0.4);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5), 0 0 15px rgba(255, 51, 102, 0.2);
+}
+
+.ad-card.status-vendu:hover .ad-card-image img {
+  transform: none; /* Pas de zoom sur l'image si c'est vendu */
+}
+
+/* L'image devient grise */
+.ad-card.status-vendu .ad-card-image img {
+  filter: grayscale(100%) brightness(0.6);
+}
+
+/* Le prix est barré et grisé */
+.ad-card.status-vendu .ad-price {
+  background: var(--bg-dark);
+  color: var(--text-muted);
+  text-decoration: line-through;
+  box-shadow: none;
+  border: 1px solid var(--border-light);
+}
+
+/* L'indicateur LED en bas à droite */
+.ad-status-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.dot-green {
+  background-color: var(--success);
+  box-shadow: 0 0 10px var(--success);
+}
+
+.dot-red {
+  background-color: var(--danger);
+  box-shadow: 0 0 10px var(--danger);
+}
+
+.status-text {
+  color: var(--text-main);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
 /* ========================================= */
 /* 11. PAGE DÉTAIL D'UNE ANNONCE (AD SHOW)   */
 /* ========================================= */

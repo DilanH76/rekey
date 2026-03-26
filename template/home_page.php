@@ -78,12 +78,13 @@ ob_start();
 
         <div class="ad-grid">
             <?php foreach ($ads as $ad): ?>
+                <?php $isSold = ($ad->getStatus() === 'vendu'); ?>
                 <a href="/Ad/show/<?= $ad->getIdAds() ?>" class="ad-card-link">
-                    <article class="ad-card">
+                    <article class="ad-card <?= $isSold ? 'status-vendu' : '' ?>">
                         <div class="ad-card-image">
                             <img src="<?= $ad->getCoverImageBase64() ?>" alt="Cover de <?= htmlspecialchars($ad->getTitle()) ?>">
                             <span class="ad-price"><?= number_format($ad->getPrice(), 2, ',', ' ') ?> €</span>
-                        </div>
+                            </div>
                         <div class="ad-card-content">
                             <div class="ad-card-header">
                                 <h2 class="ad-title"><?= htmlspecialchars($ad->getTitle()) ?></h2>
@@ -99,7 +100,11 @@ ob_start();
                                     <img src="<?= $ad->getUser()->getAvatarBase64() ?>" alt="Avatar" class="seller-avatar">
                                     <span><?= htmlspecialchars($ad->getUser()->getPseudo()) ?></span>
                                 </div>
-                                <span class="ad-date"><?= $ad->getCreatedAt()->format('d/m/Y') ?></span>
+                                
+                                <div class="ad-status-indicator">
+                                    <span class="status-dot <?= $isSold ? 'dot-red' : 'dot-green' ?>"></span>
+                                    <span class="status-text"><?= ucfirst(htmlspecialchars($ad->getStatus())) ?></span>
+                                </div>
                             </div>
                         </div>
                     </article>
