@@ -95,7 +95,7 @@
                 <a href="/Admin/dashboard" class="mobile-nav-link secondary" style="color: var(--rose);">Administration</a>
             <?php endif; ?>
             
-            <a href="/Profile" class="mobile-nav-link secondary">Mon Terminal</a>
+            <a href="/Profile" class="mobile-nav-link secondary">Mon Profil</a>
             <a href="/Ad/mine" class="mobile-nav-link secondary">Mes Ventes</a>
             <a href="/Order/myPurchases" class="mobile-nav-link secondary">Mes Achats</a>
             

@@ -231,14 +231,15 @@ class AdService {
             throw new Exception("Le prix ne peut pas être négatif.");
         }
 
-        $success = $this->adRepository->updateAdInfo(
-            $adId,
-            $cleanTitle,
-            $cleanDesc,
-            $price,
-            (int) $postData['id_category'],
-            (int) $postData['id_platform']
-        );
+        // Je modifie directement l'objet $ad que j'ai récupéré au début de la fonction
+        $ad->setTitle($cleanTitle);
+        $ad->setDescription($cleanDesc);
+        $ad->setPrice($price);
+        $ad->setIdCategory((int) $postData['id_category']);
+        $ad->setIdPlatform((int) $postData['id_platform']);
+
+        // J'envoie l'objet complet au Repository
+        $success = $this->adRepository->updateAdInfo($ad);
 
         if (!$success) {
             throw new Exception("Une erreur est survenue lors de la mise à jour de l'annonce.");

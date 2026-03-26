@@ -467,8 +467,10 @@ class AdRepository {
 
     /**
      * Met à jour les informations textuelles d'une annonce
+     * @param Ad $ad L'objet annonce contenant les nouvelles informations
+     * @return bool
      */
-    public function updateAdInfo(int $adId, string $title, string $description, float $price, int $idCategory, int $idPlatform): bool
+    public function updateAdInfo(Ad $ad): bool
     {
         $sql ="UPDATE ads SET
                     title = :title,
@@ -481,12 +483,12 @@ class AdRepository {
         $stmt = $this->pdo->prepare($sql);
 
         return $stmt->execute([
-            'title' => $title,
-            'description' => $description,
-            'price' => $price,
-            'id_category' => $idCategory,
-            'id_platform' => $idPlatform,
-            'id_ads' => $adId
+            'title' => $ad->getTitle(),
+            'description' => $ad->getDescription(),
+            'price' => $ad->getPrice(),
+            'id_category' => $ad->getIdCategory(),
+            'id_platform' => $ad->getIdPlatform(),
+            'id_ads' => $ad->getIdAds()
         ]);
     }
 
