@@ -1037,19 +1037,19 @@ select.form-control option {
 
 /* Carte vendue : on change l'ambiance */
 .ad-card.status-vendu {
-  border-color: rgba(255, 51, 102, 0.2); /* Bordure rougeâtre discrète */
-  opacity: 0.85; /* On rend la carte un peu plus terne */
+  border-color: rgba(255, 51, 102, 0.2);
+  opacity: 0.85;
 }
 
 /* On désactive le zoom et on met un halo rouge au survol */
 .ad-card.status-vendu:hover {
-  transform: translateY(-4px); /* Bouge moins qu'une carte active */
+  transform: translateY(-4px);
   border-color: rgba(255, 51, 102, 0.4);
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5), 0 0 15px rgba(255, 51, 102, 0.2);
 }
 
 .ad-card.status-vendu:hover .ad-card-image img {
-  transform: none; /* Pas de zoom sur l'image si c'est vendu */
+  transform: none;
 }
 
 /* L'image devient grise */
