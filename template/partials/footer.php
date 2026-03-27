@@ -27,6 +27,7 @@
                 <li><a href="#">Nous contacter</a></li>
                 <li><a href="/Legal/cgv">Conditions générales (CGV)</a></li>
                 <li><a href="/Legal/privacy">Politique de confidentialité</a></li>
+                <li><a href="/Legal/mentions_legales">Mentions légales</a></li>
             </ul>
         </div>
 

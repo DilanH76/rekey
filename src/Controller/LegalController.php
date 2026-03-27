@@ -15,5 +15,10 @@ class LegalController extends BaseController {
     {
         include __DIR__ . '/../../template/privacy.php';
     }
+
+    public function mentions_legales(?array $params): void
+    {
+        include __DIR__ . '/../../template/mentions_legales.php';
+    }
 }
 ?>
