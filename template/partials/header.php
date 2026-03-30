@@ -6,19 +6,19 @@
     <div class="nav-center-capsule">
         <nav class="platform-nav">
             <a href="/Home?platform=1#annonces" class="nav-link">
-                <img src="/assets/ico/monitor.svg" class="nav-icon" />
+                <img src="/assets/ico/monitor.svg" class="nav-icon" alt="PC" />
                 <span>PC</span>
             </a>
             <a href="/Home?platform=2#annonces" class="nav-link">
-                <img src="/assets/ico/playstation.svg" class="nav-icon" />
+                <img src="/assets/ico/playstation.svg" class="nav-icon" alt="PlayStation" />
                 <span>PlayStation</span>
             </a>
             <a href="/Home?platform=3#annonces" class="nav-link">
-                <img src="/assets/ico/xbox.svg" class="nav-icon" />
+                <img src="/assets/ico/xbox.svg" class="nav-icon" alt="Xbox" />
                 <span>Xbox</span>
             </a>
             <a href="/Home?platform=4#annonces" class="nav-link">
-                <img src="/assets/ico/nintendo.svg" class="nav-icon" />
+                <img src="/assets/ico/nintendo.svg" class="nav-icon" alt="Nintendo" />
                 <span>Nintendo</span>
             </a>
         </nav>

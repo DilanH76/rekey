@@ -10,6 +10,12 @@
     <link rel="icon" type="image/svg+xml" href="/assets/ico/Rekey2.webp" />
     
     <title><?= $pageTitle ?? 'ReKey' ?></title>
+    <meta name="description" content="<?= htmlspecialchars($pageDesc ?? 'ReKey est la plateforme nouvelle génération pour acheter et vendre vos clés de jeux vidéo (PC, PlayStation, Xbox, Nintendo) au meilleur prix.') ?>" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="<?= $pageTitle ?? 'ReKey' ?>" />
+    <meta property="og:description" content="<?= htmlspecialchars($pageDesc ?? 'ReKey est la plateforme nouvelle génération pour acheter et vendre vos clés de jeux vidéo au meilleur prix.') ?>" />
+    <meta property="og:url" content="https://www.rekey.fr<?= $_SERVER['REQUEST_URI'] ?? '' ?>" />
+    <meta property="og:image" content="<?= $pageImage ?? 'https://www.rekey.fr/assets/ico/Rekey2.webp' ?>" />
 </head>
 <body>
 

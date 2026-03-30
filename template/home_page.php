@@ -1,5 +1,6 @@
 <?php
 $pageTitle = 'ReKey - Accueil';
+$pageDesc = 'Découvrez le catalogue ReKey et trouvez votre prochaine aventure au meilleur prix. Vendez les clés que vous n\'utilisez plus en toute sécurité.';
 ob_start();
 ?>
 

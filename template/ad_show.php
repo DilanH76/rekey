@@ -1,5 +1,6 @@
 <?php
 $pageTitle = 'ReKey - ' . htmlspecialchars($ad->getTitle());
+$pageDesc = 'Achetez la clé numérique pour ' . $ad->getTitle() . ' sur ' . $ad->getPlatform()->getLabel() . ' à seulement ' . number_format($ad->getPrice(), 2, ',', ' ') . ' €. Paiement sécurisé et livraison immédiate.';
 ob_start();
 ?>
 
@@ -30,12 +31,12 @@ ob_start();
             </div>
 
             <div class="ad-description-box">
-                <h3><span class="text-cyan">/</span> Notes du vendeur</h3>
+                <h3><span class="text-cyan">/</span> Description</h3>
                 <div class="ad-description-content">
                     <?php if (!empty($ad->getDescription())): ?>
                         <p><?= nl2br(htmlspecialchars($ad->getDescription())) ?></p>
                     <?php else: ?>
-                        <p class="empty-desc">Aucune note supplémentaire fournie par le vendeur.</p>
+                        <p class="empty-desc">Aucune description supplémentaire fournie par le vendeur.</p>
                     <?php endif; ?>
                 </div>
             </div>

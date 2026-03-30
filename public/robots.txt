@@ -1,0 +1,16 @@
+# Fichier robots.txt pour ReKey
+
+# Règle pour tous les robots
+User-agent: *
+
+# Pages et dossiers interdits à l'indexation
+Disallow: /Admin/
+Disallow: /Profile/
+Disallow: /Order/
+Disallow: /Auth/
+
+# Autoriser tout le reste (notamment la page Home et les annonces)
+Allow: /
+
+# Lien vers le plan du site pour aider les robots
+Sitemap: https://www.rekey.fr/sitemap.xml
