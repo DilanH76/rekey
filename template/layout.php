@@ -11,6 +11,13 @@
     
     <title><?= $pageTitle ?? 'ReKey' ?></title>
     <meta name="description" content="<?= htmlspecialchars($pageDesc ?? 'ReKey est la plateforme nouvelle génération pour acheter et vendre vos clés de jeux vidéo (PC, PlayStation, Xbox, Nintendo) au meilleur prix.') ?>" />
+
+    <?php 
+        $currentPath = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+        $canonicalUrl = "https://www.rekey.fr" . $currentPath;
+    ?>
+    <link rel="canonical" href="<?= htmlspecialchars($canonicalUrl) ?>" />
+
     <meta property="og:type" content="website" />
     <meta property="og:title" content="<?= $pageTitle ?? 'ReKey' ?>" />
     <meta property="og:description" content="<?= htmlspecialchars($pageDesc ?? 'ReKey est la plateforme nouvelle génération pour acheter et vendre vos clés de jeux vidéo au meilleur prix.') ?>" />
