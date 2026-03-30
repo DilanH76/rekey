@@ -1,5 +1,5 @@
 <?php
-$pageTitle = 'ReKey - Terminal de Bord';
+$pageTitle = 'ReKey - Mon Profil';
 ob_start();
 ?>
 
