@@ -1,0 +1,1 @@
+{"version":1,"defects":[],"times":{"App\\Tests\\AdServiceTest::testCreateAdThrowsExceptionIfPriceIsNegative":0.014,"App\\Tests\\OrderServiceTest::testProcessCheckoutThrowsExceptionIfUserBuysOwnAd":0.01}}
