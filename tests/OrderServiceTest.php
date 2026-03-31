@@ -43,14 +43,14 @@ class OrderServiceTest extends TestCase
         $orderService = new OrderService($orderRepoMock, $adRepoMock, $pdoMock);
 
         // ==========================================
-        // 2. ATTENTE (Expect)
+        // ATTENTE (Expect)
         // ==========================================
         
         $this->expectException(Exception::class);
         $this->expectExceptionMessage("Action refusée : Vous ne pouvez pas acheter votre propre jeu.");
 
         // ==========================================
-        // 3. ACTION (Act)
+        // ACTION (Act)
         // ==========================================
         
         $adIdToBuy = 99; // L'annonce ciblée

@@ -12,7 +12,10 @@ class AdServiceTest extends TestCase
 {
     public function testCreateAdThrowsExceptionIfPriceIsNegative(): void
     {
-        // Preparation
+        // ==========================================
+        // PRÉPARATION (Arrange) 
+        // ==========================================
+
         // Le AdService à besoin de 3 Repositories pour être insatancié.
         // Je crée des "Mocks" (des doublons vides) car je ne veut pas toucher à la vraie Base de Données.
         $adRepoMock = $this->createMock(AdRepository::class);
@@ -31,11 +34,17 @@ class AdServiceTest extends TestCase
         $filesData = []; // Pas besoin d'image pour ce test
         $userId = 1;
 
-        // Attente (expect)
+        // ==========================================
+        // ATTENTE (Expect)
+        // ==========================================
+
         $this->expectException(Exception::class);
         $this->expectExceptionMessage("Le prix ne peut pas être négatif.");
 
-        // Action
+        // ==========================================
+        // ACTION (Act)
+        // ==========================================
+        
         // Je lance la méthode
         $adService->createAd($postData, $filesData, $userId);
     }
