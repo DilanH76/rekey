@@ -40,6 +40,7 @@ ob_start();
                     <td style="text-align: right;">
                         <?php if ($u->getIdUser() !== $_SESSION['user_id']): ?>
                             <form action="/Admin/deleteUser/<?= $u->getIdUser() ?>" method="POST" onsubmit="return confirm('Êtes-vous sûr de vouloir bannir définitivement ce membre ?');" style="display:inline;">
+                                <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
                                 <button type="submit" class="btn btn-danger" style="padding: 0.4rem 0.8rem; font-size: 0.8rem;">Bannir</button>
                             </form>
                         <?php else: ?>

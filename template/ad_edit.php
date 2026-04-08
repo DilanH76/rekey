@@ -16,6 +16,7 @@ ob_start();
             </div>
             
             <form action="/Ad/delete/<?= $ad->getIdAds() ?>" method="POST" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette annonce ? Cette action est définitive et irréversible.');">
+                <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
                 <button type="submit" class="btn btn-danger">
                     Supprimer l'annonce
                 </button>
@@ -23,6 +24,7 @@ ob_start();
         </div>
 
         <form action="/Ad/update/<?= $ad->getIdAds() ?>" method="POST" class="ad-form">
+            <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
             
             <div class="form-row">
                 <div class="form-group" style="flex: 2;">

@@ -19,6 +19,7 @@ unset($_SESSION['old_input']);
         </div>
 
         <form action="/Ad/store" method="POST" enctype="multipart/form-data" class="ad-form">
+            <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
             
             <div class="form-group">
                 <label for="title" class="form-label">Titre du jeu <span class="text-cyan">*</span></label>

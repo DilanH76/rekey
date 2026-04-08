@@ -52,6 +52,7 @@ ob_start();
             </div>
 
             <form action="/Order/process/<?= $ad->getIdAds() ?>" method="POST" class="ad-form">
+                <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
                 
                 <div class="form-group">
                     <label for="card_name" class="form-label">Nom sur la carte</label>

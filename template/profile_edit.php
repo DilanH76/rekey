@@ -24,6 +24,7 @@ ob_start();
         </h2>
 
         <form action="/Profile/update" method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
 
             <div class="form-group">
                 <label for="avatar" class="form-label">Photo de profil (Optionnel)</label>
@@ -66,6 +67,7 @@ ob_start();
         </h2>
 
         <form action="/Profile/updatePassword" method="POST">
+            <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
 
             <div class="form-group">
                 <label for="old_password" class="form-label">Mot de passe actuel</label>
@@ -100,6 +102,7 @@ ob_start();
         </p>
 
         <form action="/Profile/deleteAccount" method="POST" onsubmit="return confirm('Êtes-vous absolument sûr de vouloir supprimer votre compte ReKey ? Cette action est définitive.');">
+            <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
             <button type="submit" class="btn btn-danger">
                 Supprimer définitivement mon compte
             </button>

@@ -15,6 +15,7 @@ ob_start();
         <h2 style="color: var(--cyan); margin-bottom: 1.5rem; text-transform: uppercase; font-size: 1.2rem;">Genres de jeux</h2>
         
         <form action="/Admin/addCategory" method="POST" style="display: flex; gap: 0.5rem; margin-bottom: 2rem;">
+            <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
             <input type="text" name="label" placeholder="Ex: RPG" class="form-control" required style="padding: 0.6rem 1rem;">
             <button type="submit" class="btn btn-neon" style="padding: 0.6rem 1.2rem;">Ajouter</button>
         </form>
@@ -25,6 +26,7 @@ ob_start();
                     <span style="font-weight: 600;"><?= htmlspecialchars($cat->getLabel()) ?></span>
                     
                     <form action="/Admin/deleteCategory/<?= $cat->getIdCategory() ?>" method="POST" onsubmit="return confirm('Supprimer cette catégorie ?');">
+                        <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
                         <button type="submit" style="background: none; border: none; color: var(--danger); cursor: pointer; text-decoration: underline; font-weight: 600;">Supprimer</button>
                     </form>
                 </li>
@@ -36,6 +38,7 @@ ob_start();
         <h2 style="color: var(--cyan); margin-bottom: 1.5rem; text-transform: uppercase; font-size: 1.2rem;">Consoles & PC</h2>
         
         <form action="/Admin/addPlatform" method="POST" style="display: flex; flex-direction: column; gap: 0.8rem; margin-bottom: 2rem;">
+            <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
             <input type="text" name="label" placeholder="Nom (ex: PS6)" class="form-control" required style="padding: 0.6rem 1rem;">
             <input type="text" name="icon_svg" placeholder="Chemin icône (ex: /assets/ico/ps6.svg)" class="form-control" required style="padding: 0.6rem 1rem;">
             <button type="submit" class="btn btn-neon" style="padding: 0.6rem 1.2rem; justify-content: center;">Ajouter la plateforme</button>
@@ -50,6 +53,7 @@ ob_start();
                     </div>
                     
                     <form action="/Admin/deletePlatform/<?= $plat->getIdPlatform() ?>" method="POST" onsubmit="return confirm('Supprimer cette plateforme ?');">
+                        <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
                         <button type="submit" style="background: none; border: none; color: var(--danger); cursor: pointer; text-decoration: underline; font-weight: 600;">Supprimer</button>
                     </form>
                 </li>

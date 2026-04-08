@@ -41,6 +41,13 @@ abstract class BaseController {
     protected function requirePost(string $redirect = '/Home'): void 
     {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            // Vérification de l'existence et de la validité du token
+            if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
+                // Erreur 403 : Accès interdit ou tentative de fraude
+                header('HTTP/1.1 403 Forbidden');
+                exit("Erreur de sécurité : Jeton CSRF invalide.");
+            }
+
             header("Location: $redirect");
             exit;
         }

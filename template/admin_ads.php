@@ -49,6 +49,7 @@ ob_start();
                     </td>
                     <td style="text-align: right;">
                         <form action="/Admin/deleteAd/<?= $ad->getIdAds() ?>" method="POST" onsubmit="return confirm('Attention : Cette action est irréversible. Confirmer la suppression ?');" style="display:inline;">
+                            <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
                             <button type="submit" class="btn btn-danger" style="padding: 0.4rem 0.8rem; font-size: 0.8rem;">Supprimer</button>
                         </form>
                     </td>
