@@ -21,7 +21,22 @@ Le projet a été développé **sans framework**, sur une architecture en couche
 
 ## Aperçu
 
-> *Captures d'écran à ajouter : page d'accueil, fiche annonce, dépôt d'annonce, back-office.*
+**Catalogue** — filtres par catégorie, tri, statut de chaque annonce
+
+![Catalogue des annonces](docs/catalogue.png)
+
+**Fiche annonce**
+
+![Fiche d'une annonce](docs/fiche-annonce.png)
+
+<table>
+  <tr>
+    <td width="50%"><strong>Dépôt d'une annonce</strong><br><img src="docs/depot-annonce.png" alt="Formulaire de dépôt d'annonce"></td>
+    <td width="50%"><strong>Back-office</strong><br><img src="docs/back-office.png" alt="Tableau de bord d'administration"></td>
+  </tr>
+</table>
+
+<sub>Captures réalisées en local avec un jeu de données de démonstration.</sub>
 
 ## Fonctionnalités
 
@@ -119,4 +134,4 @@ Les données sont fictives : le site n'a jamais été mis en ligne et ne traite 
 
 ---
 
-**Dilan Houlbrèque** — [dufayelec76.fr](https://dufayelec76.fr) · dilan.hlbrq@gmail.com
+**Dilan Houlbrèque** — Développeur web full-stack, Le Havre · [github.com/DilanH76](https://github.com/DilanH76) · dilan.hlbrq@gmail.com
